@@ -1,0 +1,781 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		886D5BAFE19D85D85BA5AF19 /* Pods_Healf_healthFreinds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F04A0B48EB9E197C0D72D7 /* Pods_Healf_healthFreinds.framework */; };
+		EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31862B8F7CB500038795 /* HomeViewController.swift */; };
+		EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31882B8F7DEB00038795 /* TapBar.swift */; };
+		EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */; };
+		EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */; };
+		EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */; };
+		EE98B1D92B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D72B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld */; };
+		EE98B1DB2B4FDFC60025C4F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE98B1DA2B4FDFC60025C4F8 /* Assets.xcassets */; };
+		EE98B1DE2B4FDFC60025C4F8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE98B1DC2B4FDFC60025C4F8 /* LaunchScreen.storyboard */; };
+		EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1E82B4FE4190025C4F8 /* UIColor+.swift */; };
+		EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */; };
+		EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */; };
+		EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */; };
+		EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03072B90CDD4003ECF95 /* PostedCell.swift */; };
+		EECC030A2B90CED5003ECF95 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03092B90CED5003ECF95 /* UIView+.swift */; };
+		EECC030E2B91B000003ECF95 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC030D2B91B000003ECF95 /* SearchViewController.swift */; };
+		EECC03112B91B725003ECF95 /* UISearchBar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03102B91B725003ECF95 /* UISearchBar+.swift */; };
+		EECC03142B91C908003ECF95 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03132B91C908003ECF95 /* MapViewController.swift */; };
+		EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03152B92C23F003ECF95 /* PopupViewController.swift */; };
+		EECC03182B92C260003ECF95 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03172B92C260003ECF95 /* PopupView.swift */; };
+		EECC031A2B92CA84003ECF95 /* WriteHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03192B92CA84003ECF95 /* WriteHistoryViewController.swift */; };
+		EECC031C2B92F4D9003ECF95 /* UITextView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC031B2B92F4D9003ECF95 /* UITextView+.swift */; };
+		EECC031E2B92FFBE003ECF95 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC031D2B92FFBE003ECF95 /* SearchResultCell.swift */; };
+		EECC03212B933A52003ECF95 /* PostedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03202B933A52003ECF95 /* PostedViewController.swift */; };
+		EECC03242B934A34003ECF95 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03232B934A34003ECF95 /* ChatViewController.swift */; };
+		EECC03262B934C3E003ECF95 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03252B934C3E003ECF95 /* ChatCell.swift */; };
+		EECC03292B934F39003ECF95 /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03282B934F38003ECF95 /* MypageViewController.swift */; };
+		EECC032B2B95EA9D003ECF95 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */; };
+		EECC032D2B95F286003ECF95 /* CompleteSignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */; };
+		EECC03502B96FAA3003ECF95 /* ChatDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */; };
+		EECC03522B96FABC003ECF95 /* ChatDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03512B96FABC003ECF95 /* ChatDetailCell.swift */; };
+		EECC03562B96FB00003ECF95 /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03552B96FB00003ECF95 /* ChatDetailModel.swift */; };
+		EEDD81022B70CE490022302E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = EEDD81012B70CE490022302E /* Then */; };
+		EEDD81052B70CE860022302E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EEDD81042B70CE860022302E /* SnapKit */; };
+		EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD81062B70D0D40022302E /* UITextField+.swift */; };
+		EEDD81092B70E55B0022302E /* NaviHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD81082B70E55B0022302E /* NaviHelper.swift */; };
+		EEDD810C2B70E6B80022302E /* SignuplViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD810B2B70E6B80022302E /* SignuplViewController.swift */; };
+		EEFA6DE62B980EDA00147708 /* ChatList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DE52B980EDA00147708 /* ChatList.swift */; };
+		EEFA6DE82B980F0100147708 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DE72B980F0100147708 /* Message.swift */; };
+		EEFA6DEA2B980F1E00147708 /* ImageMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DE92B980F1E00147708 /* ImageMediaItem.swift */; };
+		EEFA6DEC2B980F3500147708 /* StreamError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DEB2B980F3500147708 /* StreamError.swift */; };
+		EEFA6DEE2B980F4800147708 /* ChatFirestoreStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DED2B980F4800147708 /* ChatFirestoreStream.swift */; };
+		EEFA6DF02B980F6800147708 /* ChatListFirestoreStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DEF2B980F6800147708 /* ChatListFirestoreStream.swift */; };
+		EEFA6DF22B980F7C00147708 /* DatabaseRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6DF12B980F7C00147708 /* DatabaseRepresentation.swift */; };
+		EEFA6DF52B98103B00147708 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = EEFA6DF42B98103B00147708 /* MessageKit */; };
+		EEFA6E022B9815DD00147708 /* Sender.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6E012B9815DD00147708 /* Sender.swift */; };
+		EEFA6E042B9815FF00147708 /* UserDefaultManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEFA6E032B9815FF00147708 /* UserDefaultManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		53F04A0B48EB9E197C0D72D7 /* Pods_Healf_healthFreinds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Healf_healthFreinds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D075295CE6650C33762E674C /* Pods-Healf-healthFreinds.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Healf-healthFreinds.release.xcconfig"; path = "Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds.release.xcconfig"; sourceTree = "<group>"; };
+		D2FD194A45994E076F03B802 /* Pods-Healf-healthFreinds.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Healf-healthFreinds.debug.xcconfig"; path = "Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds.debug.xcconfig"; sourceTree = "<group>"; };
+		EE0D31862B8F7CB500038795 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		EE0D31882B8F7DEB00038795 /* TapBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBar.swift; sourceTree = "<group>"; };
+		EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Healf-healthFreinds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		EE98B1D82B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Healf_healthFreinds.xcdatamodel; sourceTree = "<group>"; };
+		EE98B1DA2B4FDFC60025C4F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EE98B1DD2B4FDFC60025C4F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		EE98B1DF2B4FDFC60025C4F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE98B1E82B4FE4190025C4F8 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
+		EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		EECC03072B90CDD4003ECF95 /* PostedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostedCell.swift; sourceTree = "<group>"; };
+		EECC03092B90CED5003ECF95 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
+		EECC030D2B91B000003ECF95 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		EECC03102B91B725003ECF95 /* UISearchBar+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchBar+.swift"; sourceTree = "<group>"; };
+		EECC03132B91C908003ECF95 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		EECC03152B92C23F003ECF95 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
+		EECC03172B92C260003ECF95 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
+		EECC03192B92CA84003ECF95 /* WriteHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteHistoryViewController.swift; sourceTree = "<group>"; };
+		EECC031B2B92F4D9003ECF95 /* UITextView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+.swift"; sourceTree = "<group>"; };
+		EECC031D2B92FFBE003ECF95 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
+		EECC03202B933A52003ECF95 /* PostedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostedViewController.swift; sourceTree = "<group>"; };
+		EECC03232B934A34003ECF95 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		EECC03252B934C3E003ECF95 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		EECC03282B934F38003ECF95 /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
+		EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteSignupViewController.swift; sourceTree = "<group>"; };
+		EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailViewController.swift; sourceTree = "<group>"; };
+		EECC03512B96FABC003ECF95 /* ChatDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailCell.swift; sourceTree = "<group>"; };
+		EECC03552B96FB00003ECF95 /* ChatDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
+		EEDD81062B70D0D40022302E /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
+		EEDD81082B70E55B0022302E /* NaviHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviHelper.swift; sourceTree = "<group>"; };
+		EEDD810B2B70E6B80022302E /* SignuplViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignuplViewController.swift; sourceTree = "<group>"; };
+		EEFA6DE52B980EDA00147708 /* ChatList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatList.swift; sourceTree = "<group>"; };
+		EEFA6DE72B980F0100147708 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		EEFA6DE92B980F1E00147708 /* ImageMediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMediaItem.swift; sourceTree = "<group>"; };
+		EEFA6DEB2B980F3500147708 /* StreamError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamError.swift; sourceTree = "<group>"; };
+		EEFA6DED2B980F4800147708 /* ChatFirestoreStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatFirestoreStream.swift; sourceTree = "<group>"; };
+		EEFA6DEF2B980F6800147708 /* ChatListFirestoreStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListFirestoreStream.swift; sourceTree = "<group>"; };
+		EEFA6DF12B980F7C00147708 /* DatabaseRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DatabaseRepresentation.swift; path = ../../../../../Documents/DatabaseRepresentation.swift; sourceTree = "<group>"; };
+		EEFA6E012B9815DD00147708 /* Sender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sender.swift; sourceTree = "<group>"; };
+		EEFA6E032B9815FF00147708 /* UserDefaultManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EE98B1C82B4FDFC30025C4F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EEDD81022B70CE490022302E /* Then in Frameworks */,
+				EEDD81052B70CE860022302E /* SnapKit in Frameworks */,
+				886D5BAFE19D85D85BA5AF19 /* Pods_Healf_healthFreinds.framework in Frameworks */,
+				EEFA6DF52B98103B00147708 /* MessageKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1C0875A5A6F0C6329933BF1F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D2FD194A45994E076F03B802 /* Pods-Healf-healthFreinds.debug.xcconfig */,
+				D075295CE6650C33762E674C /* Pods-Healf-healthFreinds.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		82105B6894CA9B233652E046 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				53F04A0B48EB9E197C0D72D7 /* Pods_Healf_healthFreinds.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EE0D31842B8F7C8A00038795 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				EECC030B2B91AFD4003ECF95 /* Home */,
+				EECC030C2B91AFDE003ECF95 /* Search */,
+				EECC031F2B933A32003ECF95 /* PostedViewController */,
+				EECC03122B91C8F8003ECF95 /* Map */,
+				EECC03222B934A1F003ECF95 /* Chat */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		EE0D31852B8F7C9800038795 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		EE98B1C22B4FDFC30025C4F8 = {
+			isa = PBXGroup;
+			children = (
+				EE98B1CD2B4FDFC30025C4F8 /* Healf-healthFreinds */,
+				EE98B1CC2B4FDFC30025C4F8 /* Products */,
+				1C0875A5A6F0C6329933BF1F /* Pods */,
+				82105B6894CA9B233652E046 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		EE98B1CC2B4FDFC30025C4F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EE98B1CD2B4FDFC30025C4F8 /* Healf-healthFreinds */ = {
+			isa = PBXGroup;
+			children = (
+				EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */,
+				EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */,
+				EEDD810A2B70E5780022302E /* helpers */,
+				EE98B1EA2B4FE4220025C4F8 /* Extension */,
+				EE98B1E72B4FE3E40025C4F8 /* Helper */,
+				EEFA6DE42B980E9B00147708 /* Model */,
+				EEFA6DE32B980E3600147708 /* View */,
+				EE98B1DA2B4FDFC60025C4F8 /* Assets.xcassets */,
+				EE98B1DC2B4FDFC60025C4F8 /* LaunchScreen.storyboard */,
+				EE98B1DF2B4FDFC60025C4F8 /* Info.plist */,
+				EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */,
+				EE98B1D72B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld */,
+			);
+			path = "Healf-healthFreinds";
+			sourceTree = "<group>";
+		};
+		EE98B1E72B4FE3E40025C4F8 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		EE98B1EA2B4FE4220025C4F8 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EE98B1E82B4FE4190025C4F8 /* UIColor+.swift */,
+				EEDD81062B70D0D40022302E /* UITextField+.swift */,
+				EECC03102B91B725003ECF95 /* UISearchBar+.swift */,
+				EECC03092B90CED5003ECF95 /* UIView+.swift */,
+				EECC031B2B92F4D9003ECF95 /* UITextView+.swift */,
+				EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */,
+				EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		EECC030B2B91AFD4003ECF95 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				EE0D31862B8F7CB500038795 /* HomeViewController.swift */,
+				EECC03192B92CA84003ECF95 /* WriteHistoryViewController.swift */,
+				EECC03072B90CDD4003ECF95 /* PostedCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		EECC030C2B91AFDE003ECF95 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				EECC030D2B91B000003ECF95 /* SearchViewController.swift */,
+				EECC031D2B92FFBE003ECF95 /* SearchResultCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		EECC03122B91C8F8003ECF95 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				EECC03132B91C908003ECF95 /* MapViewController.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		EECC031F2B933A32003ECF95 /* PostedViewController */ = {
+			isa = PBXGroup;
+			children = (
+				EECC03202B933A52003ECF95 /* PostedViewController.swift */,
+			);
+			path = PostedViewController;
+			sourceTree = "<group>";
+		};
+		EECC03222B934A1F003ECF95 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				EECC034E2B96FA32003ECF95 /* ChatList */,
+				EECC03532B96FAC9003ECF95 /* ChatDetail */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		EECC03272B934F27003ECF95 /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				EECC03282B934F38003ECF95 /* MypageViewController.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		EECC034E2B96FA32003ECF95 /* ChatList */ = {
+			isa = PBXGroup;
+			children = (
+				EECC03232B934A34003ECF95 /* ChatViewController.swift */,
+				EECC03252B934C3E003ECF95 /* ChatCell.swift */,
+			);
+			path = ChatList;
+			sourceTree = "<group>";
+		};
+		EECC03532B96FAC9003ECF95 /* ChatDetail */ = {
+			isa = PBXGroup;
+			children = (
+				EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */,
+				EECC03512B96FABC003ECF95 /* ChatDetailCell.swift */,
+			);
+			path = ChatDetail;
+			sourceTree = "<group>";
+		};
+		EEDD810A2B70E5780022302E /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				EEDD81082B70E55B0022302E /* NaviHelper.swift */,
+				EECC03152B92C23F003ECF95 /* PopupViewController.swift */,
+				EECC03172B92C260003ECF95 /* PopupView.swift */,
+				EE0D31882B8F7DEB00038795 /* TapBar.swift */,
+			);
+			path = helpers;
+			sourceTree = "<group>";
+		};
+		EEDD810D2B70E6C10022302E /* Signup */ = {
+			isa = PBXGroup;
+			children = (
+				EEDD810B2B70E6B80022302E /* SignuplViewController.swift */,
+				EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */,
+			);
+			path = Signup;
+			sourceTree = "<group>";
+		};
+		EEFA6DE32B980E3600147708 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EEDD810D2B70E6C10022302E /* Signup */,
+				EE0D31852B8F7C9800038795 /* Login */,
+				EE0D31842B8F7C8A00038795 /* Main */,
+				EECC03272B934F27003ECF95 /* MyPage */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EEFA6DE42B980E9B00147708 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EECC03552B96FB00003ECF95 /* ChatDetailModel.swift */,
+				EEFA6DE52B980EDA00147708 /* ChatList.swift */,
+				EEFA6DE72B980F0100147708 /* Message.swift */,
+				EEFA6DEB2B980F3500147708 /* StreamError.swift */,
+				EEFA6E032B9815FF00147708 /* UserDefaultManager.swift */,
+				EEFA6E012B9815DD00147708 /* Sender.swift */,
+				EEFA6DE92B980F1E00147708 /* ImageMediaItem.swift */,
+				EEFA6DED2B980F4800147708 /* ChatFirestoreStream.swift */,
+				EEFA6DEF2B980F6800147708 /* ChatListFirestoreStream.swift */,
+				EEFA6DF12B980F7C00147708 /* DatabaseRepresentation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EE98B1CA2B4FDFC30025C4F8 /* Healf-healthFreinds */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE98B1E22B4FDFC60025C4F8 /* Build configuration list for PBXNativeTarget "Healf-healthFreinds" */;
+			buildPhases = (
+				CBB2AF5AD60CBD02996D2A9D /* [CP] Check Pods Manifest.lock */,
+				EE98B1C72B4FDFC30025C4F8 /* Sources */,
+				EE98B1C82B4FDFC30025C4F8 /* Frameworks */,
+				EE98B1C92B4FDFC30025C4F8 /* Resources */,
+				944D17FE5333888ECF83A35C /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Healf-healthFreinds";
+			packageProductDependencies = (
+				EEDD81012B70CE490022302E /* Then */,
+				EEDD81042B70CE860022302E /* SnapKit */,
+				EEFA6DF42B98103B00147708 /* MessageKit */,
+			);
+			productName = "Healf-healthFreinds";
+			productReference = EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EE98B1C32B4FDFC30025C4F8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					EE98B1CA2B4FDFC30025C4F8 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+				};
+			};
+			buildConfigurationList = EE98B1C62B4FDFC30025C4F8 /* Build configuration list for PBXProject "Healf-healthFreinds" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EE98B1C22B4FDFC30025C4F8;
+			packageReferences = (
+				EEDD81002B70CE490022302E /* XCRemoteSwiftPackageReference "Then" */,
+				EEDD81032B70CE860022302E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				EEFA6DF32B98103B00147708 /* XCRemoteSwiftPackageReference "MessageKit" */,
+			);
+			productRefGroup = EE98B1CC2B4FDFC30025C4F8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EE98B1CA2B4FDFC30025C4F8 /* Healf-healthFreinds */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EE98B1C92B4FDFC30025C4F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE98B1DE2B4FDFC60025C4F8 /* LaunchScreen.storyboard in Resources */,
+				EE98B1DB2B4FDFC60025C4F8 /* Assets.xcassets in Resources */,
+				EECC032B2B95EA9D003ECF95 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		944D17FE5333888ECF83A35C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CBB2AF5AD60CBD02996D2A9D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Healf-healthFreinds-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EE98B1C72B4FDFC30025C4F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EEDD810C2B70E6B80022302E /* SignuplViewController.swift in Sources */,
+				EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */,
+				EECC03522B96FABC003ECF95 /* ChatDetailCell.swift in Sources */,
+				EE98B1D92B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld in Sources */,
+				EECC032D2B95F286003ECF95 /* CompleteSignupViewController.swift in Sources */,
+				EEFA6DE62B980EDA00147708 /* ChatList.swift in Sources */,
+				EEFA6DE82B980F0100147708 /* Message.swift in Sources */,
+				EECC03212B933A52003ECF95 /* PostedViewController.swift in Sources */,
+				EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */,
+				EEFA6DF22B980F7C00147708 /* DatabaseRepresentation.swift in Sources */,
+				EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */,
+				EEFA6DF02B980F6800147708 /* ChatListFirestoreStream.swift in Sources */,
+				EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */,
+				EEFA6E022B9815DD00147708 /* Sender.swift in Sources */,
+				EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */,
+				EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */,
+				EEFA6DEC2B980F3500147708 /* StreamError.swift in Sources */,
+				EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */,
+				EEFA6DEE2B980F4800147708 /* ChatFirestoreStream.swift in Sources */,
+				EECC031C2B92F4D9003ECF95 /* UITextView+.swift in Sources */,
+				EEDD81092B70E55B0022302E /* NaviHelper.swift in Sources */,
+				EECC030A2B90CED5003ECF95 /* UIView+.swift in Sources */,
+				EECC031E2B92FFBE003ECF95 /* SearchResultCell.swift in Sources */,
+				EECC030E2B91B000003ECF95 /* SearchViewController.swift in Sources */,
+				EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */,
+				EECC03182B92C260003ECF95 /* PopupView.swift in Sources */,
+				EEFA6DEA2B980F1E00147708 /* ImageMediaItem.swift in Sources */,
+				EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */,
+				EECC03292B934F39003ECF95 /* MypageViewController.swift in Sources */,
+				EECC03242B934A34003ECF95 /* ChatViewController.swift in Sources */,
+				EECC03142B91C908003ECF95 /* MapViewController.swift in Sources */,
+				EECC03562B96FB00003ECF95 /* ChatDetailModel.swift in Sources */,
+				EECC031A2B92CA84003ECF95 /* WriteHistoryViewController.swift in Sources */,
+				EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */,
+				EEFA6E042B9815FF00147708 /* UserDefaultManager.swift in Sources */,
+				EECC03502B96FAA3003ECF95 /* ChatDetailViewController.swift in Sources */,
+				EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */,
+				EECC03262B934C3E003ECF95 /* ChatCell.swift in Sources */,
+				EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */,
+				EECC03112B91B725003ECF95 /* UISearchBar+.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		EE98B1DC2B4FDFC60025C4F8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EE98B1DD2B4FDFC60025C4F8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		EE98B1E02B4FDFC60025C4F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		EE98B1E12B4FDFC60025C4F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EE98B1E32B4FDFC60025C4F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2FD194A45994E076F03B802 /* Pods-Healf-healthFreinds.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Healf-healthFreinds/Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yongheon.Healf-healthFreinds";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		EE98B1E42B4FDFC60025C4F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D075295CE6650C33762E674C /* Pods-Healf-healthFreinds.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Healf-healthFreinds/Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yongheon.Healf-healthFreinds";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EE98B1C62B4FDFC30025C4F8 /* Build configuration list for PBXProject "Healf-healthFreinds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE98B1E02B4FDFC60025C4F8 /* Debug */,
+				EE98B1E12B4FDFC60025C4F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EE98B1E22B4FDFC60025C4F8 /* Build configuration list for PBXNativeTarget "Healf-healthFreinds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE98B1E32B4FDFC60025C4F8 /* Debug */,
+				EE98B1E42B4FDFC60025C4F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EEDD81002B70CE490022302E /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		EEDD81032B70CE860022302E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		EEFA6DF32B98103B00147708 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MessageKit/MessageKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EEDD81012B70CE490022302E /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEDD81002B70CE490022302E /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		EEDD81042B70CE860022302E /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEDD81032B70CE860022302E /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		EEFA6DF42B98103B00147708 /* MessageKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEFA6DF32B98103B00147708 /* XCRemoteSwiftPackageReference "MessageKit" */;
+			productName = MessageKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		EE98B1D72B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				EE98B1D82B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodel */,
+			);
+			currentVersion = EE98B1D82B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodel */;
+			path = Healf_healthFreinds.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = EE98B1C32B4FDFC30025C4F8 /* Project object */;
+}
