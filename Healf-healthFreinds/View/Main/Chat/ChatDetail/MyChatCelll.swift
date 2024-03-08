@@ -46,6 +46,8 @@ final class ChatDetailCell: UITableViewCell {
     }
     
     chatInfoLabel.backgroundColor = .black
+    chatInfoLabel.textColor = .white
+    chatInfoLabel.numberOfLines = 0
     chatInfoLabel.snp.makeConstraints {
       $0.top.equalTo(chatUserProfileImageView)
       $0.leading.equalTo(chatUserProfileImageView.snp.trailing).offset(10)

@@ -11,16 +11,16 @@ import SnapKit
 import FirebaseFirestoreInternal
 import FirebaseAuth
 import FirebaseDatabase
+import ObjectMapper
 
 final class ChatDetailViewController: NaviHelper{
   var destinationUid: String? // 내가 보낼 uid
   
   var uid: String?
   var chatRoomUid: String?
+  var comments: [ChatModel.Comment] = []
+  var userModel: UserModel?
   
-  let db = Firestore.firestore()
-
-  var messages: [MessageDTO] = []
   
   private lazy var messageTextfield: UITextField = {
     let textfield = UITextField()
@@ -50,7 +50,6 @@ final class ChatDetailViewController: NaviHelper{
     
     view.backgroundColor = .white
     
-    loadMessages()
     
     uid = Auth.auth().currentUser?.uid
     navigationItemSetting()
@@ -95,86 +94,95 @@ final class ChatDetailViewController: NaviHelper{
   }
   
   func createRoom(){
-    checkChatRoom()
+//    checkChatRoom()
+//    
+//    guard chatRoomUid == nil else { return }
     
-    guard chatRoomUid == nil else { return }
+    let createRoomInfo = [ "UserData": [ "\(uid!)": true,
+                                         "\(destinationUid!)": true] ]
     
-    let createRoomInfo = [ "UserData": [ "\(uid!)": true, "\(destinationUid!)": true] ]
+    if (chatRoomUid == nil) {
+      self.sendMessageButton.isEnabled = false
+      Database.database().reference().child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
+        if err == nil {
+          self.checkChatRoom()
+  
+        }
+      }
+    } else {
+      let value: Dictionary<String,Any> = [
+          "uid": uid!,
+          "message": messageTextfield.text!
+        ]
+      Database.database().reference().child("chatrooms").child(chatRoomUid!).child("comments").childByAutoId().setValue(value)
+
+    }
     
-    Database.database().reference().child("chatrooms").childByAutoId().setValue(createRoomInfo)
+  
   }
 
   
   func checkChatRoom(){
-    Database.database().reference().child("chatrooms").queryOrdered(byChild: "UserData/"+uid!).queryEqual(toValue: true).observeSingleEvent(of: DataEventType.value, with: { (datasnapshot) in
+    Database.database()
+      .reference()
+      .child("chatrooms")
+      .queryOrdered(byChild: "UserData/"+uid!)
+      .queryEqual(toValue: true)
+      .observeSingleEvent(of: DataEventType.value, with: { (datasnapshot) in
       for item in datasnapshot.children.allObjects as! [DataSnapshot]{
-        self.chatRoomUid = item.key
+        if let chatRoomdic = item.value as? [String: AnyObject] {
+          let chatModel = ChatModel(JSON: chatRoomdic)
+          if (chatModel?.users[self.destinationUid!] == true){
+            self.chatRoomUid = item.key
+            self.sendMessageButton.isEnabled = true
+            self.getDestinationInfo()
+          }
+        }
       }
     })
   }
   
-  // MARK: - sendMessage
-  func sendMessage(_ sender: UIButton){
-    if let messageBody = messageTextfield.text,
-       let messageSender = Auth.auth().currentUser?.email {
-      db.collection("messages").addDocument(data: [
-        "sender": messageSender,
-        "body": messageBody,
-        "date": Date().timeIntervalSince1970]) { (error) in
-          if let e = error {
-            print(e.localizedDescription)
-          } else {
-            print("Succes save data")
-            
-            DispatchQueue.main.async {
-              self.messageTextfield.text = ""
-            }
-          }
-        }
-    }
+  func getDestinationInfo(){
+    Database.database()
+      .reference()
+      .child("UserData")
+      .child(self.destinationUid!)
+      .observeSingleEvent(of: DataEventType.value, with: {(dataSnapshot) in
+      self.userModel = UserModel()
+      self.userModel?.setValuesForKeys(dataSnapshot.value as! [String: Any])
+      self.getMessageList()
+    })
   }
   
-  private func loadMessages(){
-    guard let currentUserEmail = Auth.auth().currentUser?.email else {
-      print("Current user's email is not available.")
-      return
-    }
-    
-    
-    db.collection("messages")
-      .order(by: "date")
-      .addSnapshotListener { querySnapshot, error in
-        self.messages = []
+  func getMessageList(){
+    Database.database()
+      .reference()
+      .child("chatrooms")
+      .child(self.chatRoomUid!)
+      .child("comments")
+      .observe(DataEventType.value, with: { (datasnapshot) in
+      
+      self.comments.removeAll()
+      
+      for item in datasnapshot.children.allObjects as! [DataSnapshot] {
+        let comment = ChatModel.Comment(JSON: item.value as! [String: AnyObject])
+        self.comments.append(comment!)
         
-        if let e = error {
-          print(e.localizedDescription)
-        } else {
-          if let snapshotDocuments = querySnapshot?.documents {
-            snapshotDocuments.forEach { (doc) in
-              let data = doc.data()
-              if let sender = data["sender"] as? String,
-                 let body = data["body"] as? String {
-                self.messages.append(MessageDTO(sender: sender, body: body))
-                
-                DispatchQueue.main.async {
-                  self.chatTableView.reloadData()
-                  self.chatTableView.scrollToRow(at: IndexPath(row: self.messages.count - 1, section: 0),
-                                                 at: .top,
-                                                 animated: false)
-                }
-              }
-            }
-          }
-        }
+//        if let value = item.value as? [String: AnyObject] {
+//            let comment = ChatModel.Comment(JSON: value)
+//          self.comments.append(comment!)
+//        }
       }
-    
+      self.chatTableView.reloadData()
+    })
   }
+
 }
 
 // MARK: - tableView setting
 extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return messages.count
+    return comments.count
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -184,22 +192,16 @@ extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let messageCell = tableView.dequeueReusableCell(withIdentifier: "ChatDetailCell",
                                                     for: indexPath) as! ChatDetailCell
-    
-    let message = messages[indexPath.row]
-    
-    if message.sender == Auth.auth().currentUser?.email {
+    messageCell.chatInfoLabel.text = self.comments[indexPath.row].message
+    if self.comments[indexPath.row].uid == uid {
       messageCell.chatUserProfileImageView.isHidden = true
-      messageCell.myProfileImageView.isHidden = false
-      messageCell.chatInfoLabel.backgroundColor = .lightGray
-      messageCell.chatInfoLabel.textColor = .black
+
     } else {
       messageCell.chatUserProfileImageView.isHidden = false
-      messageCell.myProfileImageView.isHidden = true
-      messageCell.chatInfoLabel.backgroundColor = .black
-      messageCell.chatInfoLabel.textColor = .white
     }
     
-    messageCell.chatInfoLabel.text = messages[indexPath.row].body
+    
+
     return messageCell
   }
 }

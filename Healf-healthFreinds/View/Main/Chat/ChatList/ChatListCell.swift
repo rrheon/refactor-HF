@@ -3,7 +3,7 @@ import UIKit
 
 import SnapKit
 
-final class ChatCell: UITableViewCell {
+final class ChatListCell: UITableViewCell {
 
   static let cellId = "ChatCell"
   
