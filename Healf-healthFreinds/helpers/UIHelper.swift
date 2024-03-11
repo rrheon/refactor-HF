@@ -37,14 +37,14 @@ final class UIHelper {
   }
   
   // MARK: - 여백있는 라벨 만들기
-  func createBasePaddingLabel(_ title: String) -> UILabel{
+  func createBasePaddingLabel(_ title: String, backgroundColor: UIColor, textColor: UIColor) -> UILabel{
     let label = BasePaddingLabel(padding: UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8))
     label.text = title
     label.layer.cornerRadius = 5
     label.font = .boldSystemFont(ofSize: 12)
     label.clipsToBounds = true
-    label.backgroundColor = .mainBlue
-    label.textColor = .white
+    label.backgroundColor = backgroundColor
+    label.textColor = textColor
     return label
   }
  
@@ -73,8 +73,8 @@ final class UIHelper {
     return button
   }
   
-  // MARK: - 운동(혼자 or 같이) 버튼 만들기
-  func createMethodButton(_ title: String) -> UIButton {
+  // MARK: - 선택버튼 만들기
+  func createSelectButton(_ title: String) -> UIButton {
     let button = UIButton()
     button.setTitle(title, for: .normal)
     button.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
@@ -90,7 +90,12 @@ final class UIHelper {
     let button = UIButton()
     button.setTitle(title, for: .normal)
     button.setTitleColor(.black, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 15)
     button.setImage(UIImage(named: image), for: .normal)
+    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    button.contentHorizontalAlignment = .leading
+
+button.widthAnchor.constraint(equalToConstant: 100).isActive = true
     return button
   }
   
@@ -103,6 +108,31 @@ final class UIHelper {
     textField.autocapitalizationType = .none
     textField.addBottomLine(withColor: .underlineGray, height: 1)
     return textField
+  }
+  
+  // MARK: - textfield
+  func createGeneralTextField(_ placeHolder: String) -> UITextField {
+    let textField = UITextField()
+    textField.placeholder = placeHolder
+    textField.font = .systemFont(ofSize: 15)
+    textField.autocorrectionType = .no
+    textField.autocapitalizationType = .none
+    textField.layer.borderWidth = 1
+    textField.layer.borderColor = UIColor.black.cgColor
+    return textField
+  }
+  
+  // MARK: - textView만들기
+  func createGeneralTextView(_ placeHolder: String) -> UITextView {
+    let textView = UITextView()
+    textView.text = placeHolder
+    textView.textColor = UIColor.lightGray
+    textView.font = UIFont.systemFont(ofSize: 15)
+    textView.layer.borderWidth = 0.5
+    textView.layer.borderColor = UIColor.lightGray.cgColor
+    textView.layer.cornerRadius = 5.0
+    textView.adjustUITextViewHeight()
+    return textView
   }
   
   // MARK: - 스택뷰 만들기

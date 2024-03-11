@@ -12,8 +12,8 @@ import SnapKit
 import FirebaseFirestoreInternal
 
 final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
-  private lazy var aloneButton = UIHelper.shared.createMethodButton("혼자 했어요")
-  private lazy var togetherButton = UIHelper.shared.createMethodButton("같이 했어요")
+  private lazy var aloneButton = UIHelper.shared.createSelectButton("혼자 했어요")
+  private lazy var togetherButton = UIHelper.shared.createSelectButton("같이 했어요")
   private lazy var selectAloneOrTogetherStackView = UIHelper.shared.createStackView(axis: .horizontal,
                                                                                     spacing: 10)
   
@@ -41,19 +41,7 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
                                                                             spacing: 10)
   
   private lazy var commentLabel = UIHelper.shared.createSingleLineLabel("오늘의 코멘트 📝")
-  private lazy var commentTextView: UITextView = {
-    let tv = UITextView()
-    tv.text = "텍스트를 입력하세요"
-    tv.textColor = UIColor.lightGray
-    tv.font = UIFont.systemFont(ofSize: 15)
-    tv.layer.borderWidth = 0.5
-    tv.layer.borderColor = UIColor.lightGray.cgColor
-    tv.layer.cornerRadius = 5.0
-    tv.adjustUITextViewHeight()
-    tv.delegate = self
-    return tv
-  }()
-  
+  private lazy var commentTextView = UIHelper.shared.createGeneralTextView("코멘트를 입력하세요.")
   private lazy var completeButton = UIHelper.shared.createHealfButton("🙌 오늘 운동 끝!", .mainBlue, .white)
   
   let db = Firestore.firestore()
@@ -73,6 +61,7 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
   override func navigationItemSetting() {
     super.navigationItemSetting()
     
+    navigationItem.rightBarButtonItem = .none
     settingNavigationTitle(title: "오늘의 운동을 기록하세요 ✍🏻")
   }
   
@@ -144,6 +133,7 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
       $0.height.equalTo(40)
     }
     
+    friendInfoStackView.backgroundColor = .clear
     friendInfoStackView.snp.makeConstraints {
       $0.top.equalTo(friendImageView)
       $0.leading.equalTo(friendImageView.snp.trailing).offset(10)
@@ -170,9 +160,11 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
     }
     
     choiceWorkoutStackView.alignment = .leading
+    choiceWorkoutStackView.distribution = .fill
+    choiceWorkoutStackView.backgroundColor = .clear
     choiceWorkoutStackView.snp.makeConstraints {
       $0.top.equalTo(choiceWorkoutTypeLabel.snp.bottom).offset(10)
-      $0.leading.equalTo(aloneOrTogetherLabel)
+      $0.leading.equalTo(choiceWorkoutTypeLabel.snp.leading)
     }
     
     commentLabel.snp.makeConstraints {
@@ -180,6 +172,7 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
       $0.leading.equalTo(aloneOrTogetherLabel)
     }
     
+    commentTextView.delegate = self
     commentTextView.snp.makeConstraints {
       $0.top.equalTo(commentLabel.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)

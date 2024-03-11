@@ -24,6 +24,7 @@ final class SearchViewController: NaviHelper, UISearchBarDelegate {
   }
   
   override func navigationItemSetting() {
+    super.navigationItemSetting()
     redesignNavigation("SearchTextImg")
   }
   
@@ -101,6 +102,6 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView,
                       layout collectionViewLayout: UICollectionViewLayout,
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: 350, height: 247)
+    return CGSize(width: 350, height: 185)
   }
 }

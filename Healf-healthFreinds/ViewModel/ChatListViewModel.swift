@@ -12,6 +12,7 @@ import ObjectMapper
 
 final class ChatListViewModel {
   
+  // MARK: - 채팅방 리스트 가져오기
   func getChatListData(currentUserUID: String, completion: @escaping (String, String) -> Void){
     // 자기자신 빼기, 비어있을 경우 모두 출력되는 오류
     Database.database().reference().child("chatrooms").observe(DataEventType.value, with: { (snapshot) in
@@ -45,11 +46,11 @@ final class ChatListViewModel {
                   .child("UserData")
                   .child(userId)
                   .observeSingleEvent(of: .value, with: { (userSnapshot) in
-                  if let userData = userSnapshot.value as? [String: Any] {
-                    let nickname = userData["nickname"] as? String ?? "Unknown"
-                    completion(userId, nickname)
-                  }
-                })
+                    if let userData = userSnapshot.value as? [String: Any] {
+                      let nickname = userData["nickname"] as? String ?? "Unknown"
+                      completion(userId, nickname)
+                    }
+                  })
               }
             }
           }
@@ -57,5 +58,4 @@ final class ChatListViewModel {
       }
     })
   }
- 
 }

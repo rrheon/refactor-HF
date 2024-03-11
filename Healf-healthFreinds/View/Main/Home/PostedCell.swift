@@ -7,7 +7,8 @@ final class PostedCell: UICollectionViewCell {
   
   static var id: String { NSStringFromClass(Self.self).components(separatedBy: ".").last ?? "" }
 
-  private lazy var locationLabel = UIHelper.shared.createBasePaddingLabel("인천")
+  private lazy var locationLabel = UIHelper.shared.createBasePaddingLabel("인천",
+                                                                          backgroundColor: .mainBlue,     textColor: .white)
   private lazy var titleLabel = UIHelper.shared.createSingleLineLabel("운동 같이해요")
 
   private lazy var profileImageView = UIImageView(image: UIImage(named: "PersonImg"))

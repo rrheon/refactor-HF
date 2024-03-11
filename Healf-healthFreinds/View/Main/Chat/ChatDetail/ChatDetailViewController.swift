@@ -11,7 +11,7 @@ import SnapKit
 import FirebaseFirestoreInternal
 import FirebaseAuth
 import FirebaseDatabase
-import ObjectMapper
+//import ObjectMapper
 
 final class ChatDetailViewController: NaviHelper{
   var destinationUid: String? // 내가 보낼 uid
@@ -21,15 +21,7 @@ final class ChatDetailViewController: NaviHelper{
   var comments: [ChatModel.Comment] = []
   var userModel: UserModel?
   
-  
-  private lazy var messageTextfield: UITextField = {
-    let textfield = UITextField()
-    textfield.placeholder = "메세지를 입력해주세요."
-    textfield.layer.borderWidth = 1
-    textfield.layer.borderColor = UIColor.black.cgColor
-    return textfield
-  }()
-  
+  private lazy var messageTextfield = UIHelper.shared.createGeneralTextField("메세지를 입력해주세요.")
   private lazy var sendMessageButton = UIHelper.shared.createHealfButton("전송", .mainBlue, .white)
   
   private lazy var chatTableView: UITableView = {
@@ -93,20 +85,20 @@ final class ChatDetailViewController: NaviHelper{
     }
   }
   
+  
   func createRoom(){
-//    checkChatRoom()
-//    
-//    guard chatRoomUid == nil else { return }
-    
     let createRoomInfo = [ "UserData": [ "\(uid!)": true,
                                          "\(destinationUid!)": true] ]
     
     if (chatRoomUid == nil) {
       self.sendMessageButton.isEnabled = false
-      Database.database().reference().child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
+      Database.database()
+        .reference()
+        .child("chatrooms")
+        .childByAutoId()
+        .setValue(createRoomInfo) { err, ref in
         if err == nil {
           self.checkChatRoom()
-  
         }
       }
     } else {
@@ -115,10 +107,7 @@ final class ChatDetailViewController: NaviHelper{
           "message": messageTextfield.text!
         ]
       Database.database().reference().child("chatrooms").child(chatRoomUid!).child("comments").childByAutoId().setValue(value)
-
     }
-    
-  
   }
 
   
@@ -167,11 +156,6 @@ final class ChatDetailViewController: NaviHelper{
       for item in datasnapshot.children.allObjects as! [DataSnapshot] {
         let comment = ChatModel.Comment(JSON: item.value as! [String: AnyObject])
         self.comments.append(comment!)
-        
-//        if let value = item.value as? [String: AnyObject] {
-//            let comment = ChatModel.Comment(JSON: value)
-//          self.comments.append(comment!)
-//        }
       }
       self.chatTableView.reloadData()
     })
@@ -193,15 +177,8 @@ extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
     let messageCell = tableView.dequeueReusableCell(withIdentifier: "ChatDetailCell",
                                                     for: indexPath) as! ChatDetailCell
     messageCell.chatInfoLabel.text = self.comments[indexPath.row].message
-    if self.comments[indexPath.row].uid == uid {
-      messageCell.chatUserProfileImageView.isHidden = true
-
-    } else {
-      messageCell.chatUserProfileImageView.isHidden = false
-    }
-    
-    
-
+    messageCell.chatUserProfileImageView.isHidden = self.comments[indexPath.row].uid == uid ? true : false
+  
     return messageCell
   }
 }

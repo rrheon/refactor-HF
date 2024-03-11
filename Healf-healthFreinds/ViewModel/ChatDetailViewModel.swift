@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import FirebaseFirestoreInternal
+import FirebaseAuth
+import FirebaseDatabase
+
+final class ChatDetailViewModel {
+
+}

@@ -24,12 +24,19 @@ class NaviHelper: UIViewController {
                                      target: self,
                                      action: #selector(leftButtonTapped))
     
-    
-    self.navigationController?.navigationBar.barTintColor = .white
+    let plusImg = UIImage(named: "PlusImg")?.withRenderingMode(.alwaysOriginal)
+    let plusButton = UIBarButtonItem(image: plusImg,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(rightButtonTapped))
+    plusButton.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
+
+//    self.navigationController?.navigationBar.barTintColor = .white
     self.navigationController?.navigationBar.backgroundColor = .white
     self.navigationController?.navigationBar.isTranslucent = false
     
     self.navigationItem.leftBarButtonItem = leftButton
+    self.navigationItem.rightBarButtonItem = plusButton
   }
   
   // MARK: - 네비게이션 바 제목설정
@@ -43,6 +50,12 @@ class NaviHelper: UIViewController {
   
   @objc func leftButtonTapped(_ sender: UIBarButtonItem) {
     self.navigationController?.popViewController(animated: true)
+  }
+  
+  @objc func rightButtonTapped(_ sender: UIBarButtonItem){
+    let createPostVC = CreatePostViewController()
+    createPostVC.hidesBottomBarWhenPushed = true
+    self.navigationController?.pushViewController(createPostVC, animated: true)
   }
   
   func redesignNavigation(_ imageName: String){

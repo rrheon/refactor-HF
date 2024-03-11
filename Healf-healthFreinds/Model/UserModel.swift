@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+// 따로 빼기
+class UserModel: NSObject {
+  @objc var nickname: String?
+  @objc var uid: String?
+}

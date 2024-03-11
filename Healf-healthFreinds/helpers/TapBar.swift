@@ -22,7 +22,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     let mapVC = MapViewController()
     let mapVCwithNavi = UINavigationController(rootViewController: mapVC)
     
-    let chatVC = ChatViewController()
+    let chatVC = ChatListViewController()
     let chatVCwithNavi = UINavigationController(rootViewController: chatVC)
     
     let mypageVC = MypageViewController()

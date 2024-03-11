@@ -13,21 +13,15 @@ extension UIView {
     backView.layer.masksToBounds = true
     backView.layer.cornerRadius = 10
     
-    self.layer.borderWidth = 1
-    self.layer.cornerRadius = 5
-    self.layer.borderColor = UIColor.lightGray.cgColor
-    
     layer.masksToBounds = false
     
     backView.layer.shadowOpacity = 0.1
     backView.layer.shadowOffset = CGSize(width: 0, height: 10)
     backView.layer.shadowRadius = 4
-    backView.layer.shadowColor = UIColor.white.cgColor
+    backView.layer.shadowColor = UIColor.cellShadow.cgColor
     
     // Set the shadow path for the view
     backView.layer.shadowPath = UIBezierPath(roundedRect: backView.bounds, cornerRadius: backView.layer.cornerRadius).cgPath
-    
-
   }
   
 }

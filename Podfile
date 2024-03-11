@@ -16,5 +16,6 @@ pod 'FirebaseFirestore'
 pod 'FirebaseStorage'
 pod 'MessageKit'
 pod 'Firebase/Database'
+pod 'ObjectMapper'
 
 end

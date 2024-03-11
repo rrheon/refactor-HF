@@ -1,4 +1,5 @@
 {
+  "originHash" : "c0abf45b1b58745202d368262dabcb878f3ace0f79ec7713187fdf19dcb1abc9",
   "pins" : [
     {
       "identity" : "inputbaraccessoryview",
@@ -37,5 +38,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

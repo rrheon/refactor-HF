@@ -835,6 +835,7 @@ PODS:
   - NMapsGeometry (1.0.1)
   - NMapsMap (3.17.0):
     - NMapsGeometry
+  - ObjectMapper (4.2.0)
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (100.0.0)
   - SnapKit (5.6.0)
@@ -849,6 +850,7 @@ DEPENDENCIES:
   - FirebaseStorage
   - MessageKit
   - NMapsMap
+  - ObjectMapper
   - SnapKit (~> 5.6.0)
   - Then
 
@@ -882,6 +884,7 @@ SPEC REPOS:
     - nanopb
     - NMapsGeometry
     - NMapsMap
+    - ObjectMapper
     - PromisesObjC
     - RecaptchaInterop
     - SnapKit
@@ -916,11 +919,12 @@ SPEC CHECKSUMS:
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   NMapsGeometry: 53c573ead66466681cf123f99f698dc8071a4b83
   NMapsMap: a5b909a31b6f3d27a670f6eb2ddc913c38975474
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 3d563becd9c6ef5c6109f689aa2ae1635bd2c06c
+PODFILE CHECKSUM: b622bf70ac08e12cfdc29e55d9a3fd1d744eae81
 
 COCOAPODS: 1.15.2
