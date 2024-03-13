@@ -7,7 +7,7 @@
 
 import Foundation
 
-// 따로 빼기
+// 나중에 프로필사진도 넣어야함
 class UserModel: NSObject {
   @objc var nickname: String?
   @objc var uid: String?

@@ -8,12 +8,12 @@
 import UIKit
 
 import SnapKit
-import FirebaseFirestoreInternal
-import FirebaseAuth
-import FirebaseDatabase
-//import ObjectMapper
 
-final class ChatDetailViewController: NaviHelper{
+import FirebaseAuth
+
+final class ChatDetailViewController: NaviHelper {
+  let chatDetailViewModel = ChatDetailViewModel()
+  
   var destinationUid: String? // 내가 보낼 uid
   
   var uid: String?
@@ -42,13 +42,13 @@ final class ChatDetailViewController: NaviHelper{
     
     view.backgroundColor = .white
     
-    
     uid = Auth.auth().currentUser?.uid
     navigationItemSetting()
     settingNavigationTitle(title: "작성자 이름")
     
     setupLayout()
     makeUI()
+  
     checkChatRoom()
   }
   
@@ -76,7 +76,7 @@ final class ChatDetailViewController: NaviHelper{
     }
     
     sendMessageButton.addAction(UIAction { _ in
-      self.createRoom()
+      self.sendMessage()
     }, for: .touchUpInside)
     sendMessageButton.snp.makeConstraints {
       $0.trailing.equalToSuperview().offset(-20)
@@ -85,82 +85,30 @@ final class ChatDetailViewController: NaviHelper{
     }
   }
   
-  
-  func createRoom(){
-    let createRoomInfo = [ "UserData": [ "\(uid!)": true,
-                                         "\(destinationUid!)": true] ]
-    
-    if (chatRoomUid == nil) {
-      self.sendMessageButton.isEnabled = false
-      Database.database()
-        .reference()
-        .child("chatrooms")
-        .childByAutoId()
-        .setValue(createRoomInfo) { err, ref in
-        if err == nil {
-          self.checkChatRoom()
-        }
-      }
-    } else {
-      let value: Dictionary<String,Any> = [
-          "uid": uid!,
-          "message": messageTextfield.text!
-        ]
-      Database.database().reference().child("chatrooms").child(chatRoomUid!).child("comments").childByAutoId().setValue(value)
-    }
+  func sendMessage(){
+    guard let uid = uid,
+          let message = messageTextfield.text,
+          let chatRoomUid = chatRoomUid else { return }
+    chatDetailViewModel.sendMessage(uid, message, chatRoomUid)
   }
-
   
   func checkChatRoom(){
-    Database.database()
-      .reference()
-      .child("chatrooms")
-      .queryOrdered(byChild: "UserData/"+uid!)
-      .queryEqual(toValue: true)
-      .observeSingleEvent(of: DataEventType.value, with: { (datasnapshot) in
-      for item in datasnapshot.children.allObjects as! [DataSnapshot]{
-        if let chatRoomdic = item.value as? [String: AnyObject] {
-          let chatModel = ChatModel(JSON: chatRoomdic)
-          if (chatModel?.users[self.destinationUid!] == true){
-            self.chatRoomUid = item.key
-            self.sendMessageButton.isEnabled = true
-            self.getDestinationInfo()
-          }
+    chatDetailViewModel.checkChatRoom(uid!, destinationUid!) { key in
+      self.chatRoomUid = key
+      
+      self.chatDetailViewModel.getDestinationInfo(self.destinationUid!) { dataSnapshot in
+        self.userModel = UserModel()
+        self.userModel?.setValuesForKeys(dataSnapshot)
+        
+        self.chatDetailViewModel.getMessageList(self.chatRoomUid ?? "") { comment in
+          self.comments.removeAll()
+          
+          self.comments.append(contentsOf: comment)
+          self.chatTableView.reloadData()
         }
       }
-    })
+    }
   }
-  
-  func getDestinationInfo(){
-    Database.database()
-      .reference()
-      .child("UserData")
-      .child(self.destinationUid!)
-      .observeSingleEvent(of: DataEventType.value, with: {(dataSnapshot) in
-      self.userModel = UserModel()
-      self.userModel?.setValuesForKeys(dataSnapshot.value as! [String: Any])
-      self.getMessageList()
-    })
-  }
-  
-  func getMessageList(){
-    Database.database()
-      .reference()
-      .child("chatrooms")
-      .child(self.chatRoomUid!)
-      .child("comments")
-      .observe(DataEventType.value, with: { (datasnapshot) in
-      
-      self.comments.removeAll()
-      
-      for item in datasnapshot.children.allObjects as! [DataSnapshot] {
-        let comment = ChatModel.Comment(JSON: item.value as! [String: AnyObject])
-        self.comments.append(comment!)
-      }
-      self.chatTableView.reloadData()
-    })
-  }
-
 }
 
 // MARK: - tableView setting

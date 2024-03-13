@@ -3,48 +3,37 @@ import UIKit
 
 import SnapKit
 
-final class PostedViewController: NaviHelper {
-
-  // 작성일, 위치, 제목
-  private lazy var postedDateLabel = UIHelper.shared.createSingleLineLabel("2024-03-02")
-  private lazy var postedLocationLabel = UIHelper.shared.createSingleLineLabel("인천 송도")
-  private lazy var postedTitleLabel = UIHelper.shared.createSingleLineLabel("운동 같이해요~",
-                                                                            .black, .boldSystemFont(ofSize: 20))
-  // 인원수 관련
-  private lazy var memberNumberLabel = UIHelper.shared.createSingleLineLabel("인원수")
-  private lazy var memberImageView = UIImageView(image: UIImage(named: "PersonImg"))
-  private lazy var memeberNumberCountLabel = UIHelper.shared.createSingleLineLabel("1/2명")
-  private lazy var memberNumberStackView = UIHelper.shared.createStackView(axis: .vertical, spacing: 8)
+final class PostedViewController: UIViewController {
+  private lazy var timeTitleLabel = UIHelper.shared.createSingleLineLabel("시간대 ⏰")
+  private lazy var postedTimeLabel = UIHelper.shared.createSingleLineLabel("08:00~10:00")
+  private lazy var timeStackView = UIHelper.shared.createStackView(axis: .vertical, spacing: 8)
   
   // 운동종류
-  private lazy var workoutTitleLabel = UIHelper.shared.createSingleLineLabel("운동종류")
-  private lazy var workoutImageView = UIImageView(image: UIImage(named: "PersonImg"))
+  private lazy var workoutTitleLabel = UIHelper.shared.createSingleLineLabel("운동 종류 🏋🏻")
   private lazy var workoutInfoLabel = UIHelper.shared.createSingleLineLabel("유산소")
   private lazy var workoutStackView = UIHelper.shared.createStackView(axis: .vertical, spacing: 8)
   
   // 성별 관련
-  private lazy var genderLabel = UIHelper.shared.createSingleLineLabel("성별")
-  private lazy var genderImageView = UIImageView(image: UIImage(named: "GenderMixImg"))
+  private lazy var genderLabel = UIHelper.shared.createSingleLineLabel("성별 🚻")
   private lazy var fixedGenderLabel = UIHelper.shared.createSingleLineLabel("무관")
   private lazy var genderStackView = UIHelper.shared.createStackView(axis: .vertical, spacing: 8)
-  private lazy var workoutInfoStackView = UIHelper.shared.createStackView(axis: .horizontal, spacing: 10)
-  private lazy var totlaWorkoutInfoStackView = UIHelper.shared.createStackView(axis: .vertical, spacing: 10)
   
+  private lazy var workoutInfoStackView = UIHelper.shared.createStackView(axis: .horizontal, spacing: 10)
+    
   private lazy var produceLabel = UIHelper.shared.createMultipleLineLabel("소개\n운동할 사람 모집합니다.")
   
   // 작성자 정보
-  private lazy var writerLabel = UIHelper.shared.createSingleLineLabel("작성자")
   private lazy var writerProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
   private lazy var writerNickNameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
   
-  private lazy var participateButton = UIHelper.shared.createHealfButton("참여하기", .mainBlue, .white)
+  private lazy var participateButton = UIHelper.shared.createHealfButton("메시지 보내기 ✉️", .mainBlue, .white)
+    
+  var destinationUid: String?
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    navigationItemSetting()
-    
+  
     view.backgroundColor = .white
     
     setUpLayout()
@@ -53,18 +42,15 @@ final class PostedViewController: NaviHelper {
   
   // MARK: - setUpLayout
   func setUpLayout(){
-    
     [
-      memberNumberLabel,
-      memberImageView,
-      memeberNumberCountLabel
+      timeTitleLabel,
+      postedTimeLabel
     ].forEach {
-      memberNumberStackView.addArrangedSubview($0)
+      timeStackView.addArrangedSubview($0)
     }
     
     [
       workoutTitleLabel,
-      workoutImageView,
       workoutInfoLabel
     ].forEach {
       workoutStackView.addArrangedSubview($0)
@@ -72,14 +58,13 @@ final class PostedViewController: NaviHelper {
     
     [
       genderLabel,
-      genderImageView,
       fixedGenderLabel
     ].forEach {
       genderStackView.addArrangedSubview($0)
     }
     
     [
-      memberNumberStackView,
+      timeStackView,
       workoutStackView,
       genderStackView
     ].forEach {
@@ -88,19 +73,8 @@ final class PostedViewController: NaviHelper {
     }
     
     [
-     postedDateLabel,
-     postedLocationLabel,
-     postedTitleLabel,
-     workoutInfoStackView
-    ].forEach {
-      totlaWorkoutInfoStackView.addArrangedSubview($0)
-    }
-    
-    
-    [
-      totlaWorkoutInfoStackView,
+      workoutInfoStackView,
       produceLabel,
-      writerLabel,
       writerProfileImageView,
       writerNickNameLabel,
       participateButton
@@ -112,47 +86,65 @@ final class PostedViewController: NaviHelper {
   
   // MARK: - makeUI
   func makeUI(){
-    totlaWorkoutInfoStackView.snp.makeConstraints {
+    workoutInfoStackView.snp.makeConstraints {
       $0.top.equalToSuperview().offset(50)
       $0.leading.trailing.equalToSuperview()
     }
     
-    workoutInfoStackView.distribution = .fillProportionally
+    workoutInfoStackView.distribution = .fillEqually
+    
     [
-      memberNumberStackView,
+      timeStackView,
       workoutStackView,
       genderStackView,
       workoutInfoStackView
     ].forEach {
-      $0.backgroundColor = .gray
+      $0.backgroundColor = UIColor.init(hexCode: "#F6F6F6")
     }
     
     produceLabel.textAlignment = .left
     produceLabel.snp.makeConstraints {
       $0.top.equalTo(workoutInfoStackView.snp.bottom).offset(30)
-      $0.leading.equalTo(postedDateLabel)
+      $0.leading.equalToSuperview().offset(20)
     }
-    
-    writerLabel.snp.makeConstraints {
-      $0.top.equalTo(view.snp.bottom).offset(-200)
-      $0.leading.equalTo(postedDateLabel)
-    }
-    
+  
     writerProfileImageView.snp.makeConstraints {
-      $0.top.equalTo(writerLabel.snp.bottom).offset(20)
-      $0.leading.equalTo(postedDateLabel)
+      $0.bottom.equalTo(view.snp.bottom).offset(-50)
+      $0.leading.equalTo(produceLabel)
     }
     
     writerNickNameLabel.snp.makeConstraints {
-      $0.top.equalTo(writerProfileImageView.snp.centerY)
+      $0.top.equalTo(writerProfileImageView.snp.top).offset(10)
       $0.leading.equalTo(writerProfileImageView.snp.trailing).offset(10)
     }
     
+    participateButton.addAction(UIAction { _ in
+      self.participateButtonTapped()
+    }, for: .touchUpInside)
     participateButton.snp.makeConstraints {
-      $0.top.equalTo(writerProfileImageView.snp.bottom).offset(30)
-      $0.leading.equalTo(postedDateLabel)
+      $0.top.equalTo(writerProfileImageView)
       $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(48)
+      $0.height.equalTo(41)
+      $0.width.equalTo(151)
     }
+  }
+  
+  func participateButtonTapped(){
+    print("버튼탭탭")
+    // 여기서 상대방 uid를 얻어와야함
+    let test = ChatDetailViewModel()
+    test.createRoom(destinationUid ?? "")
+  }
+}
+
+extension PostedViewController: postedDataConfigurable {
+  func configure(with data: CreatePostModel) {
+    postedTimeLabel.text = data.time
+    workoutInfoLabel.text = data.workoutTypes.joined(separator: ", ")
+    fixedGenderLabel.text = data.gender
+    produceLabel.text = data.info
+    writerNickNameLabel.text = data.userNickname
+    
+    destinationUid = data.userUid
   }
 }

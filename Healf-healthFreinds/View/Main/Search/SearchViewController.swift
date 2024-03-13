@@ -4,13 +4,16 @@ import UIKit
 import SnapKit
 
 final class SearchViewController: NaviHelper, UISearchBarDelegate {
-  
+
   // MARK: - 서치바
   private let searchBar = UISearchBar.createSearchBar(placeholder: "원하는 지역을 입력해주세요.")
   private lazy var resultCollectionView = UIHelper.shared.createCollectionView(scrollDirection: .vertical,
                                                                                spacing: 20)
   private let scrollView = UIScrollView()
   private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
+  
+  let searchViewModel = SearchViewModel()
+  var userPostsArray: [CreatePostModel] = []
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -19,8 +22,12 @@ final class SearchViewController: NaviHelper, UISearchBarDelegate {
     
     navigationItemSetting()
     
-    setUpLayout()
-    makeUI()
+    searchViewModel.loadAllPostsFromDatabase { result in
+      self.userPostsArray = result
+
+      self.setUpLayout()
+      self.makeUI()
+    }
   }
   
   override func navigationItemSetting() {
@@ -67,33 +74,55 @@ final class SearchViewController: NaviHelper, UISearchBarDelegate {
     
     scrollView.addSubview(resultCollectionView)
   }
-
-}
   
+}
+
 // MARK: - collectionView
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView,
                       numberOfItemsInSection section: Int) -> Int {
-    return 4
+    return self.userPostsArray.count
   }
   
-  func collectionView(_ collectionView: UICollectionView,
-                      didSelectItemAt indexPath: IndexPath) {
-    let postedVC = PostedViewController()
-    postedVC.hidesBottomBarWhenPushed = true
-    self.navigationController?.pushViewController(postedVC, animated: true)
-
-  }
+//  func collectionView(_ collectionView: UICollectionView,
+//                      didSelectItemAt indexPath: IndexPath) {
+//    moveToPostedVC(userPostsArray[indexPath.row])
+//  }
   
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCell.id,
                                                   for: indexPath) as! SearchResultCell
-  
+    cell.configure(with: userPostsArray[indexPath.row])
+    cell.delegate = self
     
     return cell
+  }
+  
+  func moveToPostedVC(_ userData: CreatePostModel) {
+    let postedVC = PostedViewController()
+    postedVC.configure(with: userData)
+
+    if #available(iOS 15.0, *) {
+      if let sheet = postedVC.sheetPresentationController {
+        if #available(iOS 16.0, *) {
+          sheet.detents = [.custom(resolver: { context in
+            return 400.0
+          })]
+        } else {
+          // Fallback on earlier versions
+        }
+        sheet.largestUndimmedDetentIdentifier = nil
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        sheet.prefersEdgeAttachedInCompactHeight = true
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        sheet.preferredCornerRadius = 20
+      }
+    } else {
+    }
+    self.present(postedVC, animated: true, completion: nil)
   }
 }
 
@@ -103,5 +132,11 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
                       layout collectionViewLayout: UICollectionViewLayout,
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: 350, height: 185)
+  }
+}
+
+extension SearchViewController: ParticipateButtonDelegate {
+  func participateButtonTapped(postedData: CreatePostModel) {
+    moveToPostedVC(postedData)
   }
 }

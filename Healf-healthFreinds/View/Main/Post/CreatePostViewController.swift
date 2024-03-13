@@ -8,9 +8,6 @@
 import UIKit
 
 import SnapKit
-import FirebaseFirestoreInternal
-import FirebaseAuth
-import FirebaseDatabase
 
 final class CreatePostViewController: NaviHelper {
   private lazy var setTimeLabel = UIHelper.shared.createSingleLineLabel("시간대 ⏰")
@@ -40,10 +37,10 @@ final class CreatePostViewController: NaviHelper {
   private lazy var enterPostButton = UIHelper.shared.createHealfButton("매칭 등록하기 📬",
                                                                        .mainBlue, .white)
   
-  let db = Firestore.firestore()
-  let uid = Auth.auth().currentUser?.uid
-  let ref = Database.database().reference()
-
+  let createPostViewModel = CreatePostViewModel()
+  var workoutTypes: [String] = []
+  var selectedGender: String = ""
+  
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -55,12 +52,7 @@ final class CreatePostViewController: NaviHelper {
     setupLayout()
     makeUI()
     
-    //    loadUserPostsFromFirestore(uid: uid ?? "") { result in
-    //      print(result)
-    //    }
-    loadUserPostsFromDatabase(uid: uid ?? "") { re in
-      print(re)
-    }
+    registerButtonFunc()
   }
   
   override func navigationItemSetting() {
@@ -72,7 +64,6 @@ final class CreatePostViewController: NaviHelper {
   
   // MARK: - setupLayout
   func setupLayout(){
-    
     [
       cardioButton,
       chestButton,
@@ -82,7 +73,6 @@ final class CreatePostViewController: NaviHelper {
     ].forEach {
       choiceWorkoutStackView.addArrangedSubview($0)
     }
-    
     
     [
       selectMaleButton,
@@ -163,7 +153,7 @@ final class CreatePostViewController: NaviHelper {
     }
     
     writerProfileImageView.snp.makeConstraints {
-      $0.top.equalTo(writeDetailInfoTextView.snp.bottom).offset(100)
+      $0.top.equalTo(writeDetailInfoTextView.snp.bottom).offset(50)
       $0.leading.equalTo(setTimeLabel)
     }
     
@@ -172,9 +162,6 @@ final class CreatePostViewController: NaviHelper {
       $0.leading.equalTo(writerProfileImageView.snp.trailing).offset(10)
     }
     
-    enterPostButton.addAction(UIAction { _ in
-      self.createPost()
-    }, for: .touchUpInside)
     enterPostButton.snp.makeConstraints {
       $0.centerY.equalTo(writerProfileImageView)
       $0.trailing.equalToSuperview().offset(-20)
@@ -183,39 +170,61 @@ final class CreatePostViewController: NaviHelper {
     }
   }
   
-  func createPost(){
-    let postId = Database.database().reference().child("users").child(uid ?? "").child("posts").childByAutoId().key ?? ""
-
-    let userInfo = [
-      "time": "2",
-      "exerciseType": "유산소",
-      "gender": "여자만",
-      "info": "test"
-    ]
-    Database.database().reference().child("users").child(uid ?? "").child("posts").child(postId).setValue(userInfo)
-
-  }
-  
-  // 특정 유저의 게시물 불러오기
-  func loadUserPostsFromDatabase(uid: String, completion: @escaping ([String: Any]) -> Void) {
-    ref.child("users").child(uid).child("posts").observeSingleEvent(of: .value) { snapshot in
-      guard let value = snapshot.value as? [String: Any] else {
-        print("Failed to load user posts")
-        return
-      }
-      completion(value)
+  func registerButtonFunc(){
+    enterPostButton.addAction(UIAction { _ in
+      self.registerPost()
+    }, for: .touchUpInside)
+    
+    let genderButtons = [selectAllButton, selectMaleButton, selectFemaleButton]
+    genderButtons.forEach { button in
+      button.addAction(UIAction { _ in
+        self.genderButtonTapped(button)
+      }, for: .touchUpInside)
+    }
+    
+    let workoutTypeButtons = [cardioButton, chestButton, backButton,
+                              lowerBodyButton, shoulderButton]
+    workoutTypeButtons.forEach { button in
+      button.addAction(UIAction { _ in
+        self.workoutTypeButtonTapped(button)
+      }, for: .touchUpInside)
     }
   }
   
-  // 모든 사용자의 모든 게시물 불러오기
-  func loadAllPostsFromDatabase(completion: @escaping ([String: Any]) -> Void) {
-    ref.child("users").observeSingleEvent(of: .value) { snapshot in
-      guard let value = snapshot.value as? [String: Any] else {
-        print("Failed to load posts")
-        return
-      }
-      completion(value)
+  func workoutTypeButtonTapped(_ sender: UIButton) {
+    guard let workout = sender.titleLabel?.text else { return }
+    
+    if sender.currentImage == UIImage(named: "CheckboxImg") {
+      sender.setImage(UIImage(named: "EmptyCheckboxImg"), for: .normal)
+      workoutTypes.removeAll { $0 == workout }
+    } else {
+      sender.setImage(UIImage(named: "CheckboxImg"), for: .normal)
+      workoutTypes.append(workout)
     }
+  }
+  
+  func genderButtonTapped(_ sender: UIButton) {
+    [
+      selectAllButton,
+      selectMaleButton,
+      selectFemaleButton
+    ].forEach {
+      $0.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
+      $0.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
+    }
+    
+    sender.layer.borderColor = UIColor.mainBlue.cgColor
+    sender.setTitleColor(.mainBlue, for: .normal)
+    
+    guard let gender = sender.titleLabel?.text else { return }
+    selectedGender = gender
+  }
+  
+  func registerPost(){
+    guard let time = setTimeTextfield.text,
+          let info = writeDetailInfoTextView.text else { return }
+    
+    self.createPostViewModel.createPost(time, self.workoutTypes, self.selectedGender, info)
   }
 }
 

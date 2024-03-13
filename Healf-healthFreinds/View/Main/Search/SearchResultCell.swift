@@ -9,9 +9,14 @@ import UIKit
 
 import SnapKit
 
+protocol ParticipateButtonDelegate {
+  func participateButtonTapped(postedData: CreatePostModel)
+}
+
 final class SearchResultCell: UICollectionViewCell {
   
   static var id: String { NSStringFromClass(Self.self).components(separatedBy: ".").last ?? "" }
+  var delegate: ParticipateButtonDelegate?
   
   private lazy var profileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
   private lazy var nickNameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
@@ -31,7 +36,6 @@ final class SearchResultCell: UICollectionViewCell {
     
     addSubviews()
     configure()
-    
   }
   
   @available(*, unavailable)
@@ -88,3 +92,15 @@ final class SearchResultCell: UICollectionViewCell {
   }
 }
 
+extension SearchResultCell: postedDataConfigurable {
+  func configure(with data: CreatePostModel) {
+    
+    nickNameLabel.text = data.userNickname
+    titleLabel.text = data.info
+    postedDate.text = data.postedDate
+    
+    participateButton.addAction(UIAction { _ in
+      self.delegate?.participateButtonTapped(postedData: data)
+    }, for: .touchUpInside)
+  }
+}

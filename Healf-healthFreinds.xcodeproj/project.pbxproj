@@ -21,6 +21,9 @@
 		EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */; };
 		EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */; };
 		EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */; };
+		EEC434E42B9FE53C00FED4EB /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */; };
+		EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */; };
+		EEC9DE712BA05A5900437A6A /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC9DE702BA05A5900437A6A /* SearchViewModel.swift */; };
 		EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03072B90CDD4003ECF95 /* PostedCell.swift */; };
 		EECC030A2B90CED5003ECF95 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03092B90CED5003ECF95 /* UIView+.swift */; };
 		EECC030E2B91B000003ECF95 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC030D2B91B000003ECF95 /* SearchViewController.swift */; };
@@ -71,6 +74,9 @@
 		EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
+		EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostModel.swift; sourceTree = "<group>"; };
+		EEC9DE702BA05A5900437A6A /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		EECC03072B90CDD4003ECF95 /* PostedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostedCell.swift; sourceTree = "<group>"; };
 		EECC03092B90CED5003ECF95 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		EECC030D2B91B000003ECF95 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -279,6 +285,7 @@
 			children = (
 				EED75DC92B9AC54600594C68 /* UserModel.swift */,
 				EED75DCB2B9AC54E00594C68 /* ChatModel.swift */,
+				EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -320,6 +327,8 @@
 			children = (
 				EED75DC62B9AC1EF00594C68 /* ChatListViewModel.swift */,
 				EED75DCD2B9AC76900594C68 /* ChatDetailViewModel.swift */,
+				EEC9DE702BA05A5900437A6A /* SearchViewModel.swift */,
+				EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -454,11 +463,13 @@
 				EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */,
 				EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */,
 				EECC03522B96FABC003ECF95 /* MyChatCelll.swift in Sources */,
+				EEC9DE712BA05A5900437A6A /* SearchViewModel.swift in Sources */,
 				EECD22532B9AD64400D88DC6 /* CreatePostViewController.swift in Sources */,
 				EE98B1D92B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld in Sources */,
 				EECC032D2B95F286003ECF95 /* CompleteSignupViewController.swift in Sources */,
 				EECC03212B933A52003ECF95 /* PostedViewController.swift in Sources */,
 				EED75DCE2B9AC76900594C68 /* ChatDetailViewModel.swift in Sources */,
+				EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */,
 				EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */,
 				EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */,
 				EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */,
@@ -476,6 +487,7 @@
 				EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */,
 				EECC03292B934F39003ECF95 /* MypageViewController.swift in Sources */,
 				EECC03242B934A34003ECF95 /* ChatListViewController.swift in Sources */,
+				EEC434E42B9FE53C00FED4EB /* CreatePostViewModel.swift in Sources */,
 				EECC03142B91C908003ECF95 /* MapViewController.swift in Sources */,
 				EECC031A2B92CA84003ECF95 /* WriteHistoryViewController.swift in Sources */,
 				EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */,
