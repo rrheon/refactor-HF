@@ -6,16 +6,15 @@
 //
 
 import Foundation
-import FirebaseDatabase
-import FirebaseAuth
-import ObjectMapper
 
-final class ChatListViewModel {
+import FirebaseDatabase
+
+final class ChatListViewModel: CommonViewModel {
   
   // MARK: - 채팅방 리스트 가져오기
   func getChatListData(currentUserUID: String, completion: @escaping (String, String) -> Void){
     // 자기자신 빼기, 비어있을 경우 모두 출력되는 오류
-    Database.database().reference().child("chatrooms").observe(DataEventType.value, with: { (snapshot) in
+    ref.child("chatrooms").observe(DataEventType.value, with: { (snapshot) in
       var currentUserParticipated = false // 현재 사용자가 참여한 채팅방인지 여부를 나타내는 변수
       
       for child in snapshot.children {
@@ -41,10 +40,7 @@ final class ChatListViewModel {
               let userParticipated = userSnapshot.value as! Bool
               if userParticipated && userId != currentUserUID {
                 // 사용자의 UID를 키로 사용하여 닉네임 가져오기
-                Database.database()
-                  .reference()
-                  .child("UserData")
-                  .child(userId)
+                self.ref.child("UserData").child(userId)
                   .observeSingleEvent(of: .value, with: { (userSnapshot) in
                     if let userData = userSnapshot.value as? [String: Any] {
                       let nickname = userData["nickname"] as? String ?? "Unknown"

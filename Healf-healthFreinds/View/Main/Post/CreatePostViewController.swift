@@ -186,20 +186,10 @@ final class CreatePostViewController: NaviHelper {
                               lowerBodyButton, shoulderButton]
     workoutTypeButtons.forEach { button in
       button.addAction(UIAction { _ in
-        self.workoutTypeButtonTapped(button)
+        self.workoutTypeButtonTapped(button) { workouts in
+          self.workoutTypes.append(contentsOf: workouts)
+        }
       }, for: .touchUpInside)
-    }
-  }
-  
-  func workoutTypeButtonTapped(_ sender: UIButton) {
-    guard let workout = sender.titleLabel?.text else { return }
-    
-    if sender.currentImage == UIImage(named: "CheckboxImg") {
-      sender.setImage(UIImage(named: "EmptyCheckboxImg"), for: .normal)
-      workoutTypes.removeAll { $0 == workout }
-    } else {
-      sender.setImage(UIImage(named: "CheckboxImg"), for: .normal)
-      workoutTypes.append(workout)
     }
   }
   

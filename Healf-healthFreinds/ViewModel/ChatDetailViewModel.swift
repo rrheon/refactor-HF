@@ -11,37 +11,35 @@ import FirebaseFirestoreInternal
 import FirebaseAuth
 import FirebaseDatabase
 
-final class ChatDetailViewModel {
+final class ChatDetailViewModel: CommonViewModel {
+  static let shared = ChatDetailViewModel()
+  
   var chatRoomUid: String?
   var comments: [ChatModel.Comment] = []
   var userModel: UserModel?
   
-  func createRoom(_ destinationUid: String = ""){
-    let uid = Auth.auth().currentUser?.uid
-    let createRoomInfo = [ "UserData": [ "\(uid!)": true,
-                                         "\(destinationUid)": true] ]
-    Database.database()
-      .reference()
-      .child("chatrooms")
-      .childByAutoId()
-      .setValue(createRoomInfo) { err, ref in
-        if err == nil {
-          self.checkChatRoom(uid!, destinationUid) { re in
-            print(re)
+  func createRoom(_ destinationUid: String = "", completion: @escaping () -> Void){
+    if uid == destinationUid {
+      print("나 자신임")
+      return
+    } else {
+      let createRoomInfo = [ "UserData": [ "\(uid!)": true,
+                                           "\(destinationUid)": true] ]
+      ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
+          if err == nil {
+            self.checkChatRoom(self.uid!, destinationUid) { _ in
+              completion()
+            }
           }
         }
-        
-      }
+    }
   }
+  
   // 체크 쳇룸 함수-> 쳇룸아이디 바다와야함 ->갯 목적지 uid 함수 -> 유저 모델에 값넣기-> 겟 메세지리스트 함수-> 메세지 추가 -> 챗 테이블 리로드
   func checkChatRoom(_ uid: String,
                      _ destinationUid: String,
                      completion: @escaping (String) -> Void){
-    Database.database()
-      .reference()
-      .child("chatrooms")
-      .queryOrdered(byChild: "UserData/"+uid)
-      .queryEqual(toValue: true)
+    ref.child("chatrooms").queryOrdered(byChild: "UserData/"+uid).queryEqual(toValue: true)
       .observeSingleEvent(of: DataEventType.value, with: { (datasnapshot) in
       for item in datasnapshot.children.allObjects as! [DataSnapshot]{
         if let chatRoomdic = item.value as? [String: AnyObject] {
@@ -57,10 +55,7 @@ final class ChatDetailViewModel {
   
   func getDestinationInfo(_ destinationUid: String,
                           completion: @escaping ([String: Any]) -> Void){
-    Database.database()
-      .reference()
-      .child("UserData")
-      .child(destinationUid)
+    ref.child("UserData").child(destinationUid)
       .observeSingleEvent(of: DataEventType.value, with: {(dataSnapshot) in
         completion(dataSnapshot.value as! [String: Any])
 //      self.userModel = UserModel()
@@ -73,11 +68,7 @@ final class ChatDetailViewModel {
 
   func getMessageList(_ chatRoomUid: String,
                       completion: @escaping ([ChatModel.Comment]) -> Void){
-    Database.database()
-      .reference()
-      .child("chatrooms")
-      .child(chatRoomUid)
-      .child("comments")
+    ref.child("chatrooms").child(chatRoomUid).child("comments")
       .observe(DataEventType.value, with: { (datasnapshot) in
       
       self.comments.removeAll()
@@ -96,6 +87,6 @@ final class ChatDetailViewModel {
         "uid": uid,
         "message": message
       ]
-    Database.database().reference().child("chatrooms").child(chatRoomUid).child("comments").childByAutoId().setValue(value)
+    ref.child("chatrooms").child(chatRoomUid).child("comments").childByAutoId().setValue(value)
   }
 }

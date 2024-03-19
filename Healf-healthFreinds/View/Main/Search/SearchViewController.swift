@@ -100,30 +100,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     return cell
   }
-  
-  func moveToPostedVC(_ userData: CreatePostModel) {
-    let postedVC = PostedViewController()
-    postedVC.configure(with: userData)
-
-    if #available(iOS 15.0, *) {
-      if let sheet = postedVC.sheetPresentationController {
-        if #available(iOS 16.0, *) {
-          sheet.detents = [.custom(resolver: { context in
-            return 400.0
-          })]
-        } else {
-          // Fallback on earlier versions
-        }
-        sheet.largestUndimmedDetentIdentifier = nil
-        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        sheet.prefersEdgeAttachedInCompactHeight = true
-        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-        sheet.preferredCornerRadius = 20
-      }
-    } else {
-    }
-    self.present(postedVC, animated: true, completion: nil)
-  }
 }
 
 // 셀의 각각의 크기

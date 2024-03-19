@@ -9,7 +9,6 @@ import UIKit
 
 import Cosmos
 import SnapKit
-import FirebaseFirestoreInternal
 
 final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
   private lazy var aloneButton = UIHelper.shared.createSelectButton("혼자 했어요")
@@ -44,7 +43,9 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
   private lazy var commentTextView = UIHelper.shared.createGeneralTextView("코멘트를 입력하세요.")
   private lazy var completeButton = UIHelper.shared.createHealfButton("🙌 오늘 운동 끝!", .mainBlue, .white)
   
-  let db = Firestore.firestore()
+  let writeHistoryViewModel = WriteHistoryViewModel()
+  var aloneOrTogether: String?
+  var workoutTypes: [String] = []
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -56,6 +57,9 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
     
     setupLayout()
     makeUI()
+    settingCosmosView()
+    
+    registerButtonFunc()
   }
   
   override func navigationItemSetting() {
@@ -121,31 +125,31 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
       $0.leading.equalToSuperview().offset(20)
       $0.trailing.equalToSuperview().offset(-20)
     }
-    
+
+    aloneOrTogetherLabel.isHidden = true
     aloneOrTogetherLabel.snp.makeConstraints {
       $0.top.equalTo(selectAloneOrTogetherStackView.snp.bottom).offset(10)
       $0.leading.equalTo(selectAloneOrTogetherStackView)
     }
     
+    friendImageView.isHidden = true
     friendImageView.snp.makeConstraints {
       $0.top.equalTo(aloneOrTogetherLabel.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
       $0.height.equalTo(40)
     }
     
+    friendInfoStackView.isHidden = true
     friendInfoStackView.backgroundColor = .clear
     friendInfoStackView.snp.makeConstraints {
-      $0.top.equalTo(friendImageView)
+      $0.top.equalTo(friendImageView).offset(-10)
       $0.leading.equalTo(friendImageView.snp.trailing).offset(10)
     }
     
     ratingLabel.snp.makeConstraints {
-      $0.top.equalTo(friendInfoStackView.snp.bottom).offset(10)
+      $0.top.equalTo(selectAloneOrTogetherStackView.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
     }
-    
-    cosmosView.rating = 4
-    cosmosView.settings.starSize = 40
     
     cosmosBackView.alignment = .center
     cosmosBackView.snp.makeConstraints {
@@ -180,9 +184,6 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
       $0.height.equalTo(120)
     }
     
-    completeButton.addAction(UIAction { _ in
-      self.completButtonTapped()
-    }, for: .touchUpInside)
     completeButton.snp.makeConstraints {
       $0.top.equalTo(commentTextView.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
@@ -191,11 +192,105 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
     }
   }
   
+  // MARK: - settingCosmosView
+  func settingCosmosView(){
+    cosmosView.rating = 4
+    cosmosView.settings.starSize = 30
+    cosmosView.settings.starMargin = 10
+    cosmosView.settings.fillMode = .precise
+
+    cosmosView.settings.filledImage = UIImage(named: "FilledStarImg")
+    cosmosView.settings.emptyImage = UIImage(named: "EmptyStarImg")
+  }
+  
+  // MARK: - registerButtonFunc
+  func registerButtonFunc(){
+    let selectButton = [aloneButton, togetherButton]
+    selectButton.forEach { button in
+      button.addAction(UIAction { _ in
+        self.aloneOrTogetherButtonTapped(button)
+      }, for: .touchUpInside)
+    }
+    
+    let workoutTypeButtons = [cardioButton, chestButton, backButton,
+                              lowerBodyButton, shoulderButton]
+    workoutTypeButtons.forEach { button in
+      button.addAction(UIAction { _ in
+        self.workoutTypeButtonTapped(button) { workouts in
+          self.workoutTypes.append(contentsOf: workouts)
+        }
+      }, for: .touchUpInside)
+    }
+    
+    completeButton.addAction(UIAction { _ in
+      self.completButtonTapped()
+    }, for: .touchUpInside)
+  }
+
+  // 같이 일때 화면 이동해서 유저 선택
+//    totalSelectMajorStackView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 70, right: 20) 스택뷰의 바텀 눌리고 줄이고로 공간생성하기
+  // MARK: - updateRatingLabel
+  func updateRatingLabelPosition(isTogetherSelected: Bool) {
+    aloneOrTogetherLabel.isHidden = !isTogetherSelected
+    friendImageView.isHidden = !isTogetherSelected
+    friendInfoStackView.isHidden = !isTogetherSelected
+    
+    let topOffset: CGFloat = isTogetherSelected ? 150 : 10
+    ratingLabel.snp.remakeConstraints {
+      $0.top.equalTo(selectAloneOrTogetherStackView.snp.bottom).offset(topOffset)
+      $0.leading.equalTo(aloneOrTogetherLabel)
+    }
+  }
+  
+  // MARK: - aloneButtonTapped
+  func aloneOrTogetherButtonTapped(_ sender: UIButton){
+    [
+      aloneButton,
+      togetherButton
+    ].forEach {
+      $0.layer.borderColor = UIColor(hexCode: "#D8DCDE").cgColor
+      $0.setTitleColor(UIColor(hexCode: "#A1AAB0"), for: .normal)
+    }
+    sender.layer.borderColor = UIColor.mainBlue.cgColor
+    sender.setTitleColor(.mainBlue, for: .normal)
+    
+    let isTogetherSelected = (sender == togetherButton)
+    if isTogetherSelected {
+      let selectPersonVC = SelectPersonViewController()
+      selectPersonVC.delegate = self
+      navigationController?.pushViewController(selectPersonVC, animated: true)
+    }
+    updateRatingLabelPosition(isTogetherSelected: isTogetherSelected)
+    
+    guard let userChecked = sender.titleLabel?.text else { return }
+    aloneOrTogether = userChecked
+  }
+  
   // MARK: - completButtonTapped
   func completButtonTapped(){
-    let myNewDoc = db.collection("users").document()
-    myNewDoc.setData(["firstname":"John", "lastname":"Qoo", "age":30, "id": myNewDoc.documentID])
-    db.collection("allergies").document(myNewDoc.documentID).setData(["allergies":"peanuts"])
+    let digit: Double = pow(10, 2)
+    let rate = round(cosmosView.rating * digit) / digit
+    
+    guard let aloneOrTogether = aloneOrTogether,
+          let comment = commentTextView.text else { return }
+    // 같이 한 경우 해당 유저의 닉네임과 프사도 같이? 혹은 uid?
+    if aloneOrTogether == "같이 했어요" {
+      guard let userNickname = friendNameLabel.text else { return }
+      writeHistoryViewModel.createPost(userNickname, rate, workoutTypes, comment, vc: self)
+    } else {
+      writeHistoryViewModel.createPost(aloneOrTogether, rate, workoutTypes, comment, vc: self)
+    }
+  }
+  
+  func popupVC(){
+    navigationController?.popViewController(animated: true)
 
+
+  }
+}
+
+extension WriteHistoryViewController: SelectPersonProtocol {
+  func selectPersonProtocol(_ nickname: String) {
+    friendNameLabel.text = nickname
   }
 }

@@ -11,6 +11,12 @@
 		EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31862B8F7CB500038795 /* HomeViewController.swift */; };
 		EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31882B8F7DEB00038795 /* TapBar.swift */; };
 		EE33D44A2B99D340002BA16C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE33D4492B99D340002BA16C /* GoogleService-Info.plist */; };
+		EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */; };
+		EE4E36692BA27D5200FB60FC /* CommonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */; };
+		EE4E366B2BA41B6F00FB60FC /* SelectPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E366A2BA41B6F00FB60FC /* SelectPersonViewController.swift */; };
+		EE4E36802BA6E98C00FB60FC /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E367F2BA6E98C00FB60FC /* UIViewController+.swift */; };
+		EE4E36822BA6F4E100FB60FC /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36812BA6F4E100FB60FC /* HomeViewModel.swift */; };
+		EE4E36842BA8330700FB60FC /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36832BA8330700FB60FC /* HistoryModel.swift */; };
 		EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */; };
 		EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */; };
 		EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */; };
@@ -62,6 +68,12 @@
 		EE0D31862B8F7CB500038795 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		EE0D31882B8F7DEB00038795 /* TapBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBar.swift; sourceTree = "<group>"; };
 		EE33D4492B99D340002BA16C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteHistoryViewModel.swift; sourceTree = "<group>"; };
+		EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonViewModel.swift; sourceTree = "<group>"; };
+		EE4E366A2BA41B6F00FB60FC /* SelectPersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPersonViewController.swift; sourceTree = "<group>"; };
+		EE4E367F2BA6E98C00FB60FC /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
+		EE4E36812BA6F4E100FB60FC /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		EE4E36832BA8330700FB60FC /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Healf-healthFreinds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -201,6 +213,7 @@
 				EE98B1E82B4FE4190025C4F8 /* UIColor+.swift */,
 				EEDD81062B70D0D40022302E /* UITextField+.swift */,
 				EECC03102B91B725003ECF95 /* UISearchBar+.swift */,
+				EE4E367F2BA6E98C00FB60FC /* UIViewController+.swift */,
 				EECC03092B90CED5003ECF95 /* UIView+.swift */,
 				EECC031B2B92F4D9003ECF95 /* UITextView+.swift */,
 				EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */,
@@ -213,8 +226,9 @@
 			isa = PBXGroup;
 			children = (
 				EE0D31862B8F7CB500038795 /* HomeViewController.swift */,
-				EECC03192B92CA84003ECF95 /* WriteHistoryViewController.swift */,
 				EECC03072B90CDD4003ECF95 /* PostedCell.swift */,
+				EECC03192B92CA84003ECF95 /* WriteHistoryViewController.swift */,
+				EE4E366A2BA41B6F00FB60FC /* SelectPersonViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -285,6 +299,7 @@
 			children = (
 				EED75DC92B9AC54600594C68 /* UserModel.swift */,
 				EED75DCB2B9AC54E00594C68 /* ChatModel.swift */,
+				EE4E36832BA8330700FB60FC /* HistoryModel.swift */,
 				EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */,
 			);
 			path = Model;
@@ -325,6 +340,9 @@
 		EEFA6DE42B980E9B00147708 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */,
+				EE4E36812BA6F4E100FB60FC /* HomeViewModel.swift */,
+				EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */,
 				EED75DC62B9AC1EF00594C68 /* ChatListViewModel.swift */,
 				EED75DCD2B9AC76900594C68 /* ChatDetailViewModel.swift */,
 				EEC9DE702BA05A5900437A6A /* SearchViewModel.swift */,
@@ -462,6 +480,7 @@
 				EEDD810C2B70E6B80022302E /* SignuplViewController.swift in Sources */,
 				EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */,
 				EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */,
+				EE4E36822BA6F4E100FB60FC /* HomeViewModel.swift in Sources */,
 				EECC03522B96FABC003ECF95 /* MyChatCelll.swift in Sources */,
 				EEC9DE712BA05A5900437A6A /* SearchViewModel.swift in Sources */,
 				EECD22532B9AD64400D88DC6 /* CreatePostViewController.swift in Sources */,
@@ -473,9 +492,12 @@
 				EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */,
 				EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */,
 				EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */,
+				EE4E36802BA6E98C00FB60FC /* UIViewController+.swift in Sources */,
+				EE4E36842BA8330700FB60FC /* HistoryModel.swift in Sources */,
 				EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */,
 				EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */,
 				EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */,
+				EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */,
 				EECC031C2B92F4D9003ECF95 /* UITextView+.swift in Sources */,
 				EEDD81092B70E55B0022302E /* NaviHelper.swift in Sources */,
 				EECC030A2B90CED5003ECF95 /* UIView+.swift in Sources */,
@@ -487,7 +509,9 @@
 				EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */,
 				EECC03292B934F39003ECF95 /* MypageViewController.swift in Sources */,
 				EECC03242B934A34003ECF95 /* ChatListViewController.swift in Sources */,
+				EE4E36692BA27D5200FB60FC /* CommonViewModel.swift in Sources */,
 				EEC434E42B9FE53C00FED4EB /* CreatePostViewModel.swift in Sources */,
+				EE4E366B2BA41B6F00FB60FC /* SelectPersonViewController.swift in Sources */,
 				EECC03142B91C908003ECF95 /* MapViewController.swift in Sources */,
 				EECC031A2B92CA84003ECF95 /* WriteHistoryViewController.swift in Sources */,
 				EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */,

@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct HistoryModel {
+  let comment: String
+  let date: String
+  let rate: Double
+  let together: String
+  let workoutTypes: [String]
+}

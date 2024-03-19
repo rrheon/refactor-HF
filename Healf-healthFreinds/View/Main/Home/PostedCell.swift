@@ -6,21 +6,30 @@ import SnapKit
 final class PostedCell: UICollectionViewCell {
   
   static var id: String { NSStringFromClass(Self.self).components(separatedBy: ".").last ?? "" }
+  var delegate: ParticipateButtonDelegate?
 
-  private lazy var locationLabel = UIHelper.shared.createBasePaddingLabel("인천",
-                                                                          backgroundColor: .mainBlue,     textColor: .white)
-  private lazy var titleLabel = UIHelper.shared.createSingleLineLabel("운동 같이해요")
-
-  private lazy var profileImageView = UIImageView(image: UIImage(named: "PersonImg"))
-  private lazy var countMemeberLabel = UIHelper.shared.createSingleLineLabel("0/14")
+  private lazy var profileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
+  private lazy var nickNameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
   
-  private lazy var genderImageView = UIImageView(image: UIImage(named: "GenderMixImg"))
-  private lazy var genderLabel = UIHelper.shared.createSingleLineLabel("무관")
+  private lazy var locationLabel = UIHelper.shared.createBasePaddingLabel("📍송도 1동",
+                                                                          backgroundColor: .mainBlue,
+                                                                          textColor: .white)
+  
+  private lazy var workoutTimeLabel = UIHelper.shared.createSingleLineLabel("🕖 평일 18:00 - 21:00",
+                                                                            .black,
+                                                                            .boldSystemFont(ofSize: 12))
+  private lazy var workoutInfoLabel = UIHelper.shared.createSingleLineLabel("🏋🏻 유산소, 하체운동 위주",
+                                                                            .black,
+                                                                            .boldSystemFont(ofSize: 12))
+  private lazy var genderLabel = UIHelper.shared.createSingleLineLabel("🚻 성별 무관",
+                                                                       .black,
+                                                                       .boldSystemFont(ofSize: 12))
 
   
   override init(frame: CGRect) {
     super.init(frame: frame)
     
+    self.backgroundColor = .white
     
     setViewShadow(backView: self)
     
@@ -35,11 +44,11 @@ final class PostedCell: UICollectionViewCell {
   
   private func addSubviews() {
     [
-      locationLabel,
-      titleLabel,
       profileImageView,
-      countMemeberLabel,
-      genderImageView,
+      nickNameLabel,
+      locationLabel,
+      workoutTimeLabel,
+      workoutInfoLabel,
       genderLabel
     ].forEach {
       addSubview($0)
@@ -47,43 +56,40 @@ final class PostedCell: UICollectionViewCell {
   }
   
   private func configure() {
-    locationLabel.snp.makeConstraints {
+    profileImageView.snp.makeConstraints {
       $0.top.equalToSuperview().offset(20)
       $0.leading.equalToSuperview().offset(20)
     }
     
-    titleLabel.snp.makeConstraints {
-      $0.top.equalTo(locationLabel.snp.bottom).offset(10)
-      $0.leading.equalTo(locationLabel)
-    }
-    
-    profileImageView.snp.makeConstraints {
-      $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-      $0.leading.equalTo(titleLabel)
-    }
-    
-    countMemeberLabel.snp.makeConstraints {
-      $0.centerY.equalTo(profileImageView)
-      $0.leading.equalTo(profileImageView.snp.trailing).offset(5)
-    }
-    
-    genderImageView.snp.makeConstraints {
+    nickNameLabel.snp.makeConstraints {
       $0.top.equalTo(profileImageView)
-      $0.leading.equalTo(profileImageView.snp.trailing).offset(50)
+      $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
+    }
+    
+    locationLabel.snp.makeConstraints {
+      $0.top.equalTo(nickNameLabel.snp.bottom).offset(10)
+      $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
+    }
+    
+    workoutTimeLabel.snp.makeConstraints {
+      $0.top.equalTo(profileImageView.snp.bottom).offset(20)
+      $0.leading.equalTo(profileImageView)
+    }
+    
+    workoutInfoLabel.snp.makeConstraints {
+      $0.top.equalTo(workoutTimeLabel.snp.bottom).offset(10)
+      $0.leading.equalTo(profileImageView)
     }
     
     genderLabel.snp.makeConstraints {
-      $0.centerY.equalTo(profileImageView)
-      $0.leading.equalTo(genderImageView.snp.trailing).offset(5)
+      $0.top.equalTo(workoutInfoLabel.snp.bottom).offset(10)
+      $0.leading.equalTo(profileImageView)
     }
     
   }
-  
   
   private func bind() {
 
   }
   
 }
-
-

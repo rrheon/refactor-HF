@@ -7,24 +7,13 @@
 
 import Foundation
 
-import FirebaseFirestoreInternal
-import FirebaseAuth
 import FirebaseDatabase
 
-final class CreatePostViewModel {
+final class CreatePostViewModel: CommonViewModel {
   static let shared = CreatePostViewModel()
  
-  let db = Firestore.firestore()
-  let uid = Auth.auth().currentUser?.uid
-  let ref = Database.database().reference()
+//  let db = Firestore.firestore()
   
-  func getCurrentDate() -> String {
-      let currentDate = Date()
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateFormat = "yyyy-MM-dd"
-      return dateFormatter.string(from: currentDate)
-  }
-
   func createPost(_ time: String,
                   _ workoutTyoes: [String],
                   _ gender: String,

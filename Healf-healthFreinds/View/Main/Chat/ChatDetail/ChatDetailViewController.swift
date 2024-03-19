@@ -8,14 +8,12 @@
 import UIKit
 
 import SnapKit
-
 import FirebaseAuth
 
 final class ChatDetailViewController: NaviHelper {
-  let chatDetailViewModel = ChatDetailViewModel()
+  let chatDetailViewModel = ChatDetailViewModel.shared
   
   var destinationUid: String? // 내가 보낼 uid
-  
   var uid: String?
   var chatRoomUid: String?
   var comments: [ChatModel.Comment] = []
@@ -93,7 +91,9 @@ final class ChatDetailViewController: NaviHelper {
   }
   
   func checkChatRoom(){
-    chatDetailViewModel.checkChatRoom(uid!, destinationUid!) { key in
+    guard let uid = uid,
+          let destinationUid = destinationUid else { return }
+    chatDetailViewModel.checkChatRoom(uid, destinationUid) { key in
       self.chatRoomUid = key
       
       self.chatDetailViewModel.getDestinationInfo(self.destinationUid!) { dataSnapshot in

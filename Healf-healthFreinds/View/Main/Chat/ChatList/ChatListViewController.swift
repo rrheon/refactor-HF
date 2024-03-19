@@ -11,7 +11,7 @@ import SnapKit
 
 import FirebaseAuth
 
-final class ChatListViewController: NaviHelper {
+class ChatListViewController: NaviHelper {
   let chatListViewModel = ChatListViewModel()
   
   var usersInChatrooms: [String: String] = [:]
@@ -71,7 +71,7 @@ final class ChatListViewController: NaviHelper {
   
   func getChatList(){
     self.usersInChatrooms.removeAll()
-    chatListViewModel.getChatListData(currentUserUID: currentUserUID ?? "") { userId, nickname  in
+    chatListViewModel.getChatListData(currentUserUID: currentUserUID ?? "") { userId, nickname in
       self.usersInChatrooms[userId] = nickname
       self.chatTableView.reloadData()
     }
@@ -97,11 +97,12 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     navigationController?.pushViewController(chatDetailVC, animated: true)
   }
   
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView,
+                 cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: ChatListCell.cellId,
                                              for: indexPath) as! ChatListCell
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
-
+  
     let nickname = self.usersInChatrooms[userId]
     cell.userNickNameLabel.text = nickname
 //    cell.userNickNameLabel.text = array[indexPath.row].nickname

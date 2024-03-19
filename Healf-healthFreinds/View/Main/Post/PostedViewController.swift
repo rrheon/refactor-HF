@@ -29,6 +29,7 @@ final class PostedViewController: UIViewController {
   private lazy var participateButton = UIHelper.shared.createHealfButton("메시지 보내기 ✉️", .mainBlue, .white)
     
   var destinationUid: String?
+  let chatDetailViewModel = ChatDetailViewModel.shared
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -130,10 +131,8 @@ final class PostedViewController: UIViewController {
   }
   
   func participateButtonTapped(){
-    print("버튼탭탭")
-    // 여기서 상대방 uid를 얻어와야함
-    let test = ChatDetailViewModel()
-    test.createRoom(destinationUid ?? "")
+    chatDetailViewModel.createRoom(destinationUid ?? "") {
+    }
   }
 }
 

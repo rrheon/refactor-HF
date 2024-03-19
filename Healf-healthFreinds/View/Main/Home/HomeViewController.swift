@@ -7,11 +7,13 @@
 
 import UIKit
 
+import SnapKit
+
 final class HomeViewController: NaviHelper {
   
   private lazy var topUnderLineView = UIView()
   
-  private lazy var mainImageView = UIImageView(image: UIImage(named: "SampleMainImg"))
+  private lazy var mainImageView = UIImageView(image: UIImage(named: "HomeMainImg"))
   private lazy var weeklySummaryDataLabel = UIHelper.shared.createSingleLineLabel("주간 요약 📊")
   private lazy var weeklySummaryStackView = UIHelper.shared.createStackView(axis: .horizontal,
                                                                             spacing: 5)
@@ -33,19 +35,20 @@ final class HomeViewController: NaviHelper {
   private lazy var satdayLabel = UIHelper.shared.createWeeklyCompleteLabel("토")
   private lazy var sundayLabel = UIHelper.shared.createWeeklyCompleteLabel("일")
 
-  
   private lazy var newPostContentStackView = UIHelper.shared.createStackView(axis: .vertical,
                                                                              spacing: 10,
                                                                              backgroundColor: .white)
-  private lazy var newPostTitleLabel = UIHelper.shared.createSingleLineLabel("NEW 새로운 매칭글")
+  private lazy var newPostTitleLabel = UIHelper.shared.createSingleLineLabel("New 매칭 🙌🏻")
   
   private lazy var postCollectionView = UIHelper.shared.createCollectionView(scrollDirection: .horizontal,
                                                                              spacing: 50)
 
-  
-  private lazy var startButton = UIHelper.shared.createHealfButton("💪🏻 시작하기", .mainBlue, .white)
+  private lazy var startButton = UIHelper.shared.createHealfButton("💪🏻 운동 기록하기", .mainBlue, .white)
   private lazy var contentView = UIView()
 
+  let homeViewModel = HomeViewModel()
+  var weekLabels: [UILabel] = []
+  
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -58,6 +61,8 @@ final class HomeViewController: NaviHelper {
     
     setupLayout()
     makeUI()
+    
+    settingHomeVCDatas()
     
     changeLabelColor()
   }
@@ -93,6 +98,7 @@ final class HomeViewController: NaviHelper {
       sundayLabel
     ].forEach {
       weeklyCompleteStackView.addArrangedSubview($0)
+      weekLabels.append($0)
     }
    
     [
@@ -209,18 +215,14 @@ final class HomeViewController: NaviHelper {
   // MARK: - changeLabelColor
   func changeLabelColor(){
     UIHelper.shared.changeColor(label: newPostTitleLabel,
-                                wantToChange: "NEW",
+                                wantToChange: "New",
                                 color: .labelBlue)
-    
-    UIHelper.shared.changeColor(label: timeCountLabel, wantToChange: "3회", color: .lightGray)
-    UIHelper.shared.changeColor(label: timeSummaryLabel, wantToChange: "8시간 30분", color: .lightGray)
-    UIHelper.shared.changeColor(label: withFriendsLabel, wantToChange: "3명", color: .lightGray)
   }
   
   // MARK: - startButtonTapped
   @objc func startButtonTapped(){
     let popupVC = PopupViewController(title: "💪🏾",
-                                      desc: "오늘 운동을 시작할까요?")
+                                      desc: "오늘 운동을 기록할까요?")
     popupVC.modalPresentationStyle = .overFullScreen
     popupVC.popupView.rightButtonAction = { [weak self] in
       guard let self = self else { return }
@@ -229,9 +231,29 @@ final class HomeViewController: NaviHelper {
         writeHistoryVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(writeHistoryVC, animated: true)
       }
-      
     }
     self.present(popupVC, animated: false)
+  }
+  
+  func settingHomeVCDatas(){
+    homeViewModel.getHomeVCData { datas in
+      DispatchQueue.main.async {
+        self.timeCountLabel.text = "운동 횟수\n \(datas.0)회"
+        self.timeSummaryLabel.text = "주간 평점\n \(datas.1)점"
+        self.withFriendsLabel.text = "함께한 친구\n \(datas.2)명"
+        
+        UIHelper.shared.changeColor(label: self.timeCountLabel, wantToChange: "\(datas.0)회", color: .lightGray)
+        UIHelper.shared.changeColor(label: self.timeSummaryLabel, wantToChange: "\(datas.1)점", color: .lightGray)
+        UIHelper.shared.changeColor(label: self.withFriendsLabel, wantToChange: "\(datas.2)명", color: .lightGray)
+        print(self.homeViewModel.weeklyCompletion)
+      
+        for (index, isCompleted) in self.homeViewModel.weeklyCompletion.enumerated() {
+          if let label = self.weekLabels[safe: index] {
+            label.backgroundColor = isCompleted ? .mainBlue : .unableLabelGray
+          }
+        }
+      }
+    }
   }
 }
 
@@ -245,9 +267,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
   
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
-    let postedVC = PostedViewController()
-    postedVC.hidesBottomBarWhenPushed = true
-    self.navigationController?.pushViewController(postedVC, animated: true)
+    // 추후에 홈에서 데이터 받아오고 해당 데이터를 뿌려줘야함 지금은 임시데이터임
+      participateButtonTapped(postedData: CreatePostModel(time: "1", workoutTypes: ["1","2"], gender: "3", info: "3", userNickname: "3", postedDate: "3", userUid: "#"))
   }
   
   func collectionView(_ collectionView: UICollectionView,
@@ -264,7 +285,18 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView,
                       layout collectionViewLayout: UICollectionViewLayout,
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: 250, height: collectionView.frame.height)
+    return CGSize(width: 240, height: collectionView.frame.height)
   }
 }
 
+extension HomeViewController: ParticipateButtonDelegate {
+  func participateButtonTapped(postedData: CreatePostModel) {
+    moveToPostedVC(postedData)
+  }
+}
+extension Array {
+    // 배열의 안전한 접근을 위한 subscript 확장
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
