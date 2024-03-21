@@ -17,5 +17,5 @@ pod 'FirebaseStorage'
 pod 'MessageKit'
 pod 'Firebase/Database'
 pod 'ObjectMapper'
-
+pod 'FSCalendar'
 end

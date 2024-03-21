@@ -12,7 +12,7 @@ import FirebaseDatabase
 final class HomeViewModel: CommonViewModel {
   var weeklyCompletion: [Bool] = []
   
-  func fetchThisWeekData(completion: @escaping ([String: Any]) -> Void) {
+  func fetchThisMonthData(completion: @escaping ([String: Any]) -> Void) {
     let startDate = getStartDate()
     // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
     ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
@@ -20,6 +20,7 @@ final class HomeViewModel: CommonViewModel {
         print("Failed to load posts")
         return
       }
+      print(value)
       completion(value)
     }
   }
@@ -41,7 +42,7 @@ final class HomeViewModel: CommonViewModel {
     let startDate = getStartDate()
     var workoutDatas: [HistoryModel] = []
     
-    self.fetchThisWeekData { value in
+    self.fetchThisMonthData { value in
       for dayOffset in 0..<7 {
         let currentDay = (Int(startDate[2]) ?? 0) + dayOffset
         if let workoutData = self.convertToHistoryModel(for: "\(currentDay)", data: value) {
@@ -67,7 +68,9 @@ final class HomeViewModel: CommonViewModel {
       }
     
       weeklyRate = weeklyRate/Double(workoutCount)
-      completion((workoutCount, weeklyRate, together))
+      
+      let digit: Double = pow(10, 2)
+      completion((workoutCount, round(weeklyRate * digit) / digit, together))
     }
   }
 }

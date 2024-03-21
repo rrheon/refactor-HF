@@ -268,7 +268,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
     // 추후에 홈에서 데이터 받아오고 해당 데이터를 뿌려줘야함 지금은 임시데이터임
-      participateButtonTapped(postedData: CreatePostModel(time: "1", workoutTypes: ["1","2"], gender: "3", info: "3", userNickname: "3", postedDate: "3", userUid: "#"))
+      participateButtonTapped(postedData: CreatePostModel(
+        time: "1", workoutTypes: ["1","2"], gender: "3",
+        info: "3", userNickname: "3", postedDate: "3", userUid: "#"))
   }
   
   func collectionView(_ collectionView: UICollectionView,
@@ -293,10 +295,4 @@ extension HomeViewController: ParticipateButtonDelegate {
   func participateButtonTapped(postedData: CreatePostModel) {
     moveToPostedVC(postedData)
   }
-}
-extension Array {
-    // 배열의 안전한 접근을 위한 subscript 확장
-    subscript(safe index: Int) -> Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
 }
