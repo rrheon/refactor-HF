@@ -33,7 +33,8 @@ final class HomeViewModel: CommonViewModel {
     let together = dataForDate["together"] as? String ?? ""
     let workoutTypes = dataForDate["workoutTypes"] as? [String] ?? []
     
-    return HistoryModel(comment: comment, date: date, rate: rate, together: together, workoutTypes: workoutTypes)
+    return HistoryModel(comment: comment, date: date, rate: rate,
+                        together: together, workoutTypes: workoutTypes)
   }
   
   func getWorkoutData(completion: @escaping (([HistoryModel]) -> Void)) {
