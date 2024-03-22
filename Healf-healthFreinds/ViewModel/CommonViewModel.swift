@@ -53,4 +53,46 @@ class CommonViewModel {
     let startDayString = formatter.string(from: startDay).components(separatedBy: "-")
     return startDayString
   }
+  
+  func fetchThisMonthData(completion: @escaping ([String: Any]) -> Void) {
+    let startDate = getStartDate()
+    // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
+    ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
+      guard let value = snapshot.value as? [String: Any] else {
+        print("Failed to load posts")
+        return
+      }
+      print(value)
+      completion(value)
+    }
+  }
+  
+  func convertToHistoryModelWithDate(for date: String, data: [String: Any]) -> HistoryModel? {
+    guard let dataForDate = data[date] as? [String: Any] else { return nil }
+    
+    let comment = dataForDate["comment"] as? String ?? ""
+    let date = dataForDate["date"] as? String ?? ""
+    let rate = dataForDate["rate"] as? Double ?? 0.0
+    let together = dataForDate["together"] as? String ?? ""
+    let workoutTypes = dataForDate["workoutTypes"] as? [String] ?? []
+    
+    return HistoryModel(comment: comment, date: date, rate: rate,
+                        together: together, workoutTypes: workoutTypes)
+  }
+  
+  func convertToHistoryModel(data: [String: Any]) -> HistoryModel? {
+      // 데이터에서 필요한 정보 추출
+      let comment = data["comment"] as? String ?? ""
+      let date = data["date"] as? String ?? ""
+      let rate = data["rate"] as? Double ?? 0.0
+      let together = data["together"] as? String ?? ""
+      
+      // workoutTypes가 NSArray 형식이므로 변환 필요
+      let workoutTypesArray = data["workoutTypes"] as? NSArray ?? []
+      let workoutTypes = workoutTypesArray.compactMap { $0 as? String }
+      
+      // HistoryModel 객체 생성하여 반환
+      return HistoryModel(comment: comment, date: date, rate: rate,
+                          together: together, workoutTypes: workoutTypes)
+  }
 }
