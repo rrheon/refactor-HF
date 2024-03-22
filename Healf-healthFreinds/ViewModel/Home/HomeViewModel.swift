@@ -19,8 +19,8 @@ final class HomeViewModel: CommonViewModel {
     self.fetchThisMonthData { value in
       for dayOffset in 0..<7 {
         let currentDay = (Int(startDate[2]) ?? 0) + dayOffset
-        if let workoutData = self.convertToHistoryModelWithDate(for: "\(currentDay)", data: value) {
-          print("\(currentDay)일 데이터: \(workoutData.comment), \(workoutData.date), \(workoutData.rate), \(workoutData.together), \(workoutData.workoutTypes)")
+        if let workoutData = self.convertToHistoryModelWithDate(for: "\(currentDay)",
+                                                                data: value) {
           self.weeklyCompletion.append(true)
           workoutDatas.append(workoutData)
         } else { self.weeklyCompletion.append(false) }

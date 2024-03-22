@@ -37,6 +37,7 @@ final class CreatePostViewModel: CommonViewModel {
         
         self.ref.child("users").child(self.uid ?? "").child("posts").child(postId).setValue(userInfo)
       }
+      self.updateCount(childType: "postCount")
     }
     
 // 기존 db에 데이터 추가

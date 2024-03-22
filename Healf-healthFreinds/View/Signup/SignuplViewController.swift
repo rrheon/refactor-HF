@@ -99,7 +99,11 @@ final class SignuplViewController: NaviHelper {
 //        
 //      }
 //
-      let values = ["nickname": self.nicknameTextField.text ?? "", "uid": Auth.auth().currentUser?.uid]
+      let values = ["nickname": self.nicknameTextField.text ?? "",
+                    "uid": Auth.auth().currentUser?.uid,
+                    "togetherCount": 0,
+                    "workoutCount": 0,
+                    "profileImage": "없음"]
       Database.database().reference().child("UserData").child(uid ?? "").setValue(values)
  
       if let error = error { print(error) }

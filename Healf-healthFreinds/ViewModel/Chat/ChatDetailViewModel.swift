@@ -16,7 +16,7 @@ final class ChatDetailViewModel: CommonViewModel {
   
   var chatRoomUid: String?
   var comments: [ChatModel.Comment] = []
-  var userModel: UserModel?
+  var userModel: ChatUserModel?
   
   func createRoom(_ destinationUid: String = "", completion: @escaping () -> Void){
     if uid == destinationUid {

@@ -85,10 +85,13 @@ final class MypageViewController: NaviHelper {
     
     mypageViewModel.getMyWorkoutHistory { result in
       self.highlightedDates = result
+      
       self.setupLayout()
       self.makeUI()
       
       self.registerCell()
+      
+      self.settingMyPageValue()
     }
   }
   
@@ -210,6 +213,22 @@ final class MypageViewController: NaviHelper {
     userWorkoutCollectionView.isHidden = calendarButtonSelected
     scrollView.isHidden = calendarButtonSelected
   }
+  
+  func selectedDailyCell(_ selectedDay: String, data: HistoryModel) {
+      self.selectedDayReportLabel.text = "\(selectedDay)의 기록\n같이한 사람: \(data.together)\n평점: \(data.rate)\ncomment: \(data.comment)"
+  }
+
+  func settingMyPageValue(){
+    self.mypageViewModel.getMyInfomation { result in
+      guard let togetherCount = result.togetherCount,
+            let workoutCount = result.workoutCount,
+      let postCount = result.postCount else { return }
+      self.userNickNameLabel.text = result.nickname
+      self.matchingCountLabel.text = "매칭 횟수\n\(togetherCount)번"
+      self.workoutCountLabel.text = "운동 횟수\n\(workoutCount)번"
+      self.postedCountLabel.text = "작성한 글\n\(postCount)개"
+    }
+  }
 }
 
 // MARK: - collectionView
@@ -246,106 +265,4 @@ extension MypageViewController: UICollectionViewDelegateFlowLayout {
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: 350, height: 185)
   }
-}
-
-extension MypageViewController: FSCalendarDataSource, FSCalendarDelegate {
-  // 공식 문서에서 레이아우울을 위해 아래의 코드 요구
-  func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
-    calendar.snp.updateConstraints { (make) in
-      make.height.equalTo(bounds.height)
-      // Do other updates
-    }
-    self.view.layoutIfNeeded()
-  }
-  
-  // 오늘 cell에 subtitle 생성
-  func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier: "ko_KR")
-    dateFormatter.timeZone = TimeZone(abbreviation: "KST")
-    dateFormatter.dateFormat = "yyyy-MM-dd"
-    
-    switch dateFormatter.string(from: date) {
-    case dateFormatter.string(from: Date()):
-      return "오늘"
-      
-    default:
-      return nil
-      
-    }
-  }
-  
-  // 일요일에 해당되는 모든 날짜의 색상 red로 변경
-  func calendar(_ calendar: FSCalendar,
-                appearance: FSCalendarAppearance,
-                titleDefaultColorFor date: Date) -> UIColor? {
-    let day = Calendar.current.component(.weekday, from: date) - 1
-    
-    if Calendar.current.shortWeekdaySymbols[day] == "일" {
-      return .systemRed
-    } else {
-      return .label
-    }
-  }
-  
-  // MARK: - 날짜 표시 매서드
-  func calendar(_ calendar: FSCalendar,
-                willDisplay cell: FSCalendarCell,
-                for date: Date,
-                at monthPosition: FSCalendarMonthPosition) {
-    
-    let calendar = Calendar.current
-    let components = calendar.dateComponents([.year, .month, .day], from: date)
-    
-    // 날짜 배열에 포함되는지 확인
-    if let day = components.day, highlightedDates.contains(day) {
-      cell.titleLabel?.textColor = .white
-      cell.shapeLayer?.path = UIBezierPath(ovalIn: cell.bounds).cgPath
-      cell.shapeLayer?.fillColor = UIColor.mainBlue.cgColor
-    } else {
-      cell.titleLabel?.textColor = .black
-    }
-  }
-  
-  // MARK: - 날짜 선택 시 매서드
-//   이전에 선택되어 있던 날짜가 하이라이트 배열에 포함되어 있으면 색상 설정되도록 수정하기
-  func calendar(_ calendar: FSCalendar,
-                didDeselect date: Date,
-                at monthPosition: FSCalendarMonthPosition) {
-    guard let cell = calendar.cell(for: date, at: monthPosition) else { return }
-    let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
-    
-    // 선택 해제된 날짜가 강조 대상 날짜인 경우, 강조 스타일을 다시 적용
-    if let day = components.day, highlightedDates.contains(day) {
-      cell.titleLabel?.textColor = .white
-      cell.shapeLayer?.path = UIBezierPath(ovalIn: cell.bounds).cgPath
-      cell.shapeLayer?.fillColor = UIColor.mainBlue.cgColor
-    }
-  }
-  
-  func calendar(_ calendar: FSCalendar,
-                didSelect date: Date,
-                at monthPosition: FSCalendarMonthPosition) {
-      guard let cell = calendar.cell(for: date, at: monthPosition) else { return }
-      let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
-      
-      // 선택된 날짜가 강조 대상 날짜인 경우, 강조 스타일을 적용
-      if let day = components.day, highlightedDates.contains(day) {
-          cell.titleLabel?.textColor = .white
-          cell.shapeLayer?.path = UIBezierPath(ovalIn: cell.bounds).cgPath
-          cell.shapeLayer?.fillColor = UIColor.mainBlue.cgColor
-      }
-      
-      guard let selectedDay = calendar.cell(for: date, at: .current)?.titleLabel.text else { return }
-      mypageViewModel.getDailyHistory(selectedDay) { data in
-          DispatchQueue.main.async {
-              self.selectedDailyCell(selectedDay, data: data)
-          }
-      }
-  }
-
-  func selectedDailyCell(_ selectedDay: String, data: HistoryModel) {
-      self.selectedDayReportLabel.text = "\(selectedDay)의 기록\n같이한 사람: \(data.together)\n평점: \(data.rate)\ncomment: \(data.comment)"
-  }
-
 }

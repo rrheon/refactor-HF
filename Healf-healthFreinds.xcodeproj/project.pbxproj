@@ -54,7 +54,7 @@
 		EECC03522B96FABC003ECF95 /* MyChatCelll.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03512B96FABC003ECF95 /* MyChatCelll.swift */; };
 		EECD22532B9AD64400D88DC6 /* CreatePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECD22522B9AD64400D88DC6 /* CreatePostViewController.swift */; };
 		EED75DC72B9AC1EF00594C68 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DC62B9AC1EF00594C68 /* ChatListViewModel.swift */; };
-		EED75DCA2B9AC54600594C68 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DC92B9AC54600594C68 /* UserModel.swift */; };
+		EED75DCA2B9AC54600594C68 /* ChatUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DC92B9AC54600594C68 /* ChatUserModel.swift */; };
 		EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DCB2B9AC54E00594C68 /* ChatModel.swift */; };
 		EED75DCE2B9AC76900594C68 /* ChatDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DCD2B9AC76900594C68 /* ChatDetailViewModel.swift */; };
 		EEDD81022B70CE490022302E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = EEDD81012B70CE490022302E /* Then */; };
@@ -117,7 +117,7 @@
 		EECC03512B96FABC003ECF95 /* MyChatCelll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatCelll.swift; sourceTree = "<group>"; };
 		EECD22522B9AD64400D88DC6 /* CreatePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewController.swift; sourceTree = "<group>"; };
 		EED75DC62B9AC1EF00594C68 /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
-		EED75DC92B9AC54600594C68 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		EED75DC92B9AC54600594C68 /* ChatUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUserModel.swift; sourceTree = "<group>"; };
 		EED75DCB2B9AC54E00594C68 /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
 		EED75DCD2B9AC76900594C68 /* ChatDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailViewModel.swift; sourceTree = "<group>"; };
 		EEDD81062B70D0D40022302E /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
@@ -336,7 +336,7 @@
 		EED75DC82B9AC52300594C68 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EED75DC92B9AC54600594C68 /* UserModel.swift */,
+				EED75DC92B9AC54600594C68 /* ChatUserModel.swift */,
 				EED75DCB2B9AC54E00594C68 /* ChatModel.swift */,
 				EE4E36832BA8330700FB60FC /* HistoryModel.swift */,
 				EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */,
@@ -554,7 +554,7 @@
 				EECC03142B91C908003ECF95 /* MapViewController.swift in Sources */,
 				EECC031A2B92CA84003ECF95 /* WriteHistoryViewController.swift in Sources */,
 				EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */,
-				EED75DCA2B9AC54600594C68 /* UserModel.swift in Sources */,
+				EED75DCA2B9AC54600594C68 /* ChatUserModel.swift in Sources */,
 				EECC03502B96FAA3003ECF95 /* ChatDetailViewController.swift in Sources */,
 				EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */,
 				EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */,

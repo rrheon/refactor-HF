@@ -11,7 +11,14 @@ import FirebaseAuth
 import FirebaseDatabase
 
 final class WriteHistoryViewModel: CommonViewModel {
-  
+  // 기존 db에 데이터 추가
+  //    ref.child("UserData").child(uid ?? "").child("testKey").setValue("testValue") { (error, ref) in
+  //        if let error = error {
+  //            print("Error adding new key: \(error.localizedDescription)")
+  //        } else {
+  //            print("New key added successfully!")
+  //        }
+  //    }
   func createPost(_ together: String,
                   _ rate: Double,
                   _ workoutTyes: [String],
@@ -34,17 +41,11 @@ final class WriteHistoryViewModel: CommonViewModel {
     self.ref.child("History").child(uid)
       .child("\(splitDate.0)").child("\(splitDate.1)").child("\(splitDate.2)").setValue(userHistory)
     
+    if together != "혼자 했어요"{ updateCount(childType: "togetherCount") }
+    
+    updateCount(childType: "workoutCount")
+    
     vc.popupVC()
     
-    
-// 기존 db에 데이터 추가
-//    ref.child("UserData").child(uid ?? "").child("testKey").setValue("testValue") { (error, ref) in
-//        if let error = error {
-//            print("Error adding new key: \(error.localizedDescription)")
-//        } else {
-//            print("New key added successfully!")
-//        }
-//    }
   }
-  
 }

@@ -17,7 +17,7 @@ final class ChatDetailViewController: NaviHelper {
   var uid: String?
   var chatRoomUid: String?
   var comments: [ChatModel.Comment] = []
-  var userModel: UserModel?
+  var userModel: ChatUserModel?
   
   private lazy var messageTextfield = UIHelper.shared.createGeneralTextField("메세지를 입력해주세요.")
   private lazy var sendMessageButton = UIHelper.shared.createHealfButton("전송", .mainBlue, .white)
@@ -97,7 +97,7 @@ final class ChatDetailViewController: NaviHelper {
       self.chatRoomUid = key
       
       self.chatDetailViewModel.getDestinationInfo(self.destinationUid!) { dataSnapshot in
-        self.userModel = UserModel()
+        self.userModel = ChatUserModel()
         self.userModel?.setValuesForKeys(dataSnapshot)
         
         self.chatDetailViewModel.getMessageList(self.chatRoomUid ?? "") { comment in

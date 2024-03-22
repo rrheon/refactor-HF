@@ -67,7 +67,8 @@ class CommonViewModel {
     }
   }
   
-  func convertToHistoryModelWithDate(for date: String, data: [String: Any]) -> HistoryModel? {
+  func convertToHistoryModelWithDate(for date: String,
+                                     data: [String: Any]) -> HistoryModel? {
     guard let dataForDate = data[date] as? [String: Any] else { return nil }
     
     let comment = dataForDate["comment"] as? String ?? ""
@@ -81,18 +82,43 @@ class CommonViewModel {
   }
   
   func convertToHistoryModel(data: [String: Any]) -> HistoryModel? {
-      // 데이터에서 필요한 정보 추출
-      let comment = data["comment"] as? String ?? ""
-      let date = data["date"] as? String ?? ""
-      let rate = data["rate"] as? Double ?? 0.0
-      let together = data["together"] as? String ?? ""
-      
-      // workoutTypes가 NSArray 형식이므로 변환 필요
-      let workoutTypesArray = data["workoutTypes"] as? NSArray ?? []
-      let workoutTypes = workoutTypesArray.compactMap { $0 as? String }
-      
-      // HistoryModel 객체 생성하여 반환
-      return HistoryModel(comment: comment, date: date, rate: rate,
-                          together: together, workoutTypes: workoutTypes)
+    // 데이터에서 필요한 정보 추출
+    let comment = data["comment"] as? String ?? ""
+    let date = data["date"] as? String ?? ""
+    let rate = data["rate"] as? Double ?? 0.0
+    let together = data["together"] as? String ?? ""
+    
+    // workoutTypes가 NSArray 형식이므로 변환 필요
+    let workoutTypesArray = data["workoutTypes"] as? NSArray ?? []
+    let workoutTypes = workoutTypesArray.compactMap { $0 as? String }
+    
+    // HistoryModel 객체 생성하여 반환
+    return HistoryModel(comment: comment, date: date, rate: rate,
+                        together: together, workoutTypes: workoutTypes)
+  }
+  
+  func convertUserModel(data: [String: Any]) -> UserModel? {
+    let nickname = data["nickname"] as? String ?? ""
+    let uid = data["uid"] as? String ?? ""
+    let profileImage = data["profileImage"] as? String ?? ""
+    let togetherCount = data["togetherCount"] as? Int ?? 0
+    let workoutCount = data["workoutCount"] as? Int ?? 0
+    let postCount = data["postCount"] as? Int ?? 0
+    
+    // HistoryModel 객체 생성하여 반환
+    return UserModel(nickname: nickname, uid: uid, profileImage: profileImage,
+                     togetherCount: togetherCount, workoutCount: workoutCount, postCount: postCount)
+    
+  }
+  
+  func updateCount(childType: String){
+    let ref = Database.database().reference().child("UserData").child(uid ?? "").child("\(childType)")
+
+    ref.observeSingleEvent(of: .value) { (snapshot) in
+      if var count = snapshot.value as? Int {
+        count += 1
+        ref.setValue(count)
+      } else { ref.setValue(1)}
+    }
   }
 }
