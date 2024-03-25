@@ -281,11 +281,9 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
       writeHistoryViewModel.createPost(aloneOrTogether, rate, workoutTypes, comment, vc: self)
     }
   }
-  
-  func popupVC(){
-    navigationController?.popViewController(animated: true)
 
-
+  func afterCompleButtonTapped() {
+    showPopupViewWithOnebutton("오늘 운동을 기록했어요!")
   }
 }
 

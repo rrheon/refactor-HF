@@ -12,15 +12,16 @@ import SnapKit
 final class PopupViewController: UIViewController {
   let popupView: PopupView
   
-  
   init(title: String,
        desc: String,
        leftButtonTitle: String = "취소",
-       rightButtonTilte: String = "시작") {
+       rightButtonTilte: String = "시작",
+       checkCompleteButton: Bool = false) {
     self.popupView = PopupView(title: title,
                                desc: desc,
                                leftButtonTitle: leftButtonTitle,
-                               rightButtonTitle: rightButtonTilte)
+                               rightButtonTitle: rightButtonTilte,
+                               checkCompleteButton: checkCompleteButton)
     
     super.init(nibName: nil, bundle: nil)
     
@@ -30,16 +31,11 @@ final class PopupViewController: UIViewController {
     self.setupConstraints()
     
     self.popupView.leftButtonAction = { [weak self] in
-      guard let self = self else { return }
-      
-      self.dismiss(animated: true, completion: nil)
+        self?.dismiss(animated: true, completion: nil)
     }
-    
-    self.popupView.rightButtonAction = { [weak self] in
-      guard let self = self else { return }
-      
-      self.dismiss(animated: true, completion: nil)
-    }
+
+    self.popupView.rightButtonAction = self.popupView.leftButtonAction
+    self.popupView.completButtonAction = self.popupView.leftButtonAction
   }
   
   required init?(coder: NSCoder) {

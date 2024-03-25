@@ -40,9 +40,7 @@ final class HomeViewModel: CommonViewModel {
         if workoutData.together != "혼자 했어요" { together += 1 }
         weeklyRate += workoutData.rate
       }
-    
-      weeklyRate = weeklyRate/Double(workoutCount)
-      
+      if weeklyRate != 0.0 { weeklyRate = weeklyRate/Double(workoutCount)}
       let digit: Double = pow(10, 2)
       completion((workoutCount, round(weeklyRate * digit) / digit, together))
     }

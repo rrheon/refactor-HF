@@ -45,7 +45,6 @@ final class WriteHistoryViewModel: CommonViewModel {
     
     updateCount(childType: "workoutCount")
     
-    vc.popupVC()
-    
+    vc.afterCompleButtonTapped()
   }
 }

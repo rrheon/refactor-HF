@@ -132,6 +132,7 @@ final class PostedViewController: UIViewController {
   
   func participateButtonTapped(){
     chatDetailViewModel.createRoom(destinationUid ?? "") {
+      self.showPopupViewWithOnebutton("채팅방이 생성되었습니다!", checkNavi: false)
     }
   }
 }

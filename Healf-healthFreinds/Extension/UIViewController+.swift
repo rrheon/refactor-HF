@@ -51,4 +51,18 @@ extension UIViewController {
     }
     self.present(postedVC, animated: true, completion: nil)
   }
+  
+  func showPopupViewWithOnebutton(_ desc: String, checkNavi: Bool = true) {
+    let popupVC = PopupViewController(title: "🙌",
+                                      desc: desc,
+                                      checkCompleteButton: true)
+    popupVC.modalPresentationStyle = .overFullScreen
+    popupVC.popupView.completButtonAction = { [weak self] in
+      self?.dismiss(animated: true) {
+        if checkNavi { self?.navigationController?.popViewController(animated: true) }
+        else { self?.dismiss(animated: true)}
+      }
+    }
+    self.present(popupVC, animated: false)
+  }
 }

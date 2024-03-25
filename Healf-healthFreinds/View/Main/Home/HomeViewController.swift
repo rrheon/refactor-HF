@@ -245,7 +245,6 @@ final class HomeViewController: NaviHelper {
         UIHelper.shared.changeColor(label: self.timeCountLabel, wantToChange: "\(datas.0)회", color: .lightGray)
         UIHelper.shared.changeColor(label: self.timeSummaryLabel, wantToChange: "\(datas.1)점", color: .lightGray)
         UIHelper.shared.changeColor(label: self.withFriendsLabel, wantToChange: "\(datas.2)명", color: .lightGray)
-        print(self.homeViewModel.weeklyCompletion)
       
         for (index, isCompleted) in self.homeViewModel.weeklyCompletion.enumerated() {
           if let label = self.weekLabels[safe: index] {
