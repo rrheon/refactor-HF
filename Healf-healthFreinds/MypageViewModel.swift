@@ -7,7 +7,13 @@
 
 import Foundation
 
+protocol myPostedDataConfigurable {
+  func configure(with data: CreatePostModel)
+}
+
 class MypageViewModel: CommonViewModel {
+  let createViewModel = CreatePostViewModel.shared
+  
   // 받아와야할 것 - 1.해당 월 전체(데이터 있으면 표시 없으면 냅두기), 2. 선택한 날짜의 데이터 뿌려주기
   func getMyInfomation(completion: @escaping(UserModel) -> Void){
     ref.child("UserData").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
@@ -50,4 +56,45 @@ class MypageViewModel: CommonViewModel {
       completion(workoutData)
     }
   }
+  
+  func getMyPostData(completion: @escaping ([String: Any]) -> Void){
+    ref.child("users").child(uid ?? "").child("posts").observeSingleEvent(of: .value) { snapshot in
+      guard let value = snapshot.value as? [String: Any] else {
+        return
+      }
+      completion(value)
+    }
+  }
+  
+  func fectchMyPostData(completion: @escaping ([CreatePostModel]) -> Void) {
+      getMyPostData { result in
+          var posts: [CreatePostModel] = []
+          for (_, postDict) in result {
+            if let postDict = postDict as? [String: Any], let post = self.parsePostData(postDict) {
+                  posts.append(post)
+              }
+          }
+          completion(posts)
+      }
+  }
+  func parsePostData(_ data: [String: Any]) -> CreatePostModel? {
+      guard
+          let exerciseType = data["exerciseType"] as? [String],
+          let gender = data["gender"] as? String,
+          let info = data["info"] as? String,
+          let postedDate = data["postedDate"] as? String,
+          let time = data["time"] as? String,
+          let userNickname = data["userNickname"] as? String,
+          let userUid = data["userUid"] as? String
+      else {
+          return nil
+      }
+      
+    return CreatePostModel( time: time, workoutTypes: exerciseType,
+                            gender: gender,
+                            info: info,
+                            userNickname: userNickname, postedDate: postedDate,
+                  userUid: userUid)
+  }
+
 }

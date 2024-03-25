@@ -19,11 +19,10 @@ final class CreatePostViewModel: CommonViewModel {
                   _ gender: String,
                   _ info: String){
     guard let uid = uid else { return }
-    let postId = ref.child("users").child(uid).child("posts").childByAutoId().key ?? ""
   
     let currentDate = getCurrentDate()
     
-    loadUserPostsFromDatabase { re in
+    loadUserNicknameFromDatabase { re in
       if let nickname = re["nickname"] as? String {
         let userInfo = [
           "time": time,
@@ -35,7 +34,7 @@ final class CreatePostViewModel: CommonViewModel {
           "userUid": uid
         ] as [String : Any]
         
-        self.ref.child("users").child(self.uid ?? "").child("posts").child(postId).setValue(userInfo)
+        self.ref.child("users").child(self.uid ?? "").child("posts").child(currentDate).setValue(userInfo)
       }
       self.updateCount(childType: "postCount")
     }
@@ -51,7 +50,7 @@ final class CreatePostViewModel: CommonViewModel {
   }
   
   // 특정 유저의 게시물 불러오기
-  func loadUserPostsFromDatabase(completion: @escaping ([String: Any]) -> Void) {
+  func loadUserNicknameFromDatabase(completion: @escaping ([String: Any]) -> Void) {
 //    ref.child("users").child(uid ?? "").child("posts").observeSingleEvent(of: .value) { snapshot in
 //      guard let value = snapshot.value as? [String: Any] else {
 //        print("Failed to load user posts")

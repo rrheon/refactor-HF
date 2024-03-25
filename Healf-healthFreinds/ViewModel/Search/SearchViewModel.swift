@@ -7,12 +7,16 @@
 
 import Foundation
 
-final class SearchViewModel {
+protocol postedDataConfigurable {
+  func configure(with data: CreatePostModel)
+}
+
+final class SearchViewModel: CommonViewModel {
   let createViewModel = CreatePostViewModel.shared
   
   func loadAllPostsFromDatabase(completion: @escaping (([CreatePostModel]) -> Void)){
     var userPostsArray: [CreatePostModel] = []
-
+    
     createViewModel.loadAllPostsFromDatabase { result in
       for (_, userData) in result {
         guard let userDataDict = userData as? [String: Any],
@@ -41,3 +45,4 @@ final class SearchViewModel {
     }
   }
 }
+

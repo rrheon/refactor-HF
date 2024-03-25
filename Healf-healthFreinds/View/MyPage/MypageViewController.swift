@@ -10,7 +10,11 @@ import UIKit
 import SnapKit
 import FSCalendar
 
-final class MypageViewController: NaviHelper {
+final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
+  func participateButtonTapped(postedData: CreatePostModel) {
+    print("tt")
+  }
+
   let uiHelper = UIHelper.shared
   
   private lazy var userNickNameLabel = uiHelper.createSingleLineLabel("Gildong.Hong")
@@ -39,15 +43,15 @@ final class MypageViewController: NaviHelper {
     calendar.scope = .month
     
     calendar.scrollEnabled = false
-    calendar.locale = Locale(identifier: "ko_KR")
+//    calendar.locale = Locale(identifier: "ko_KR")
     
     // 현재 달의 날짜들만 표기하도록 설정
     calendar.placeholderType = .none
     
     // 헤더뷰 설정
     calendar.headerHeight = 55
-    calendar.appearance.headerDateFormat = "YYYY년-MM월"
-    calendar.appearance.headerTitleColor = .black
+    calendar.appearance.headerDateFormat = "YYYY.MM"
+    calendar.appearance.headerTitleColor = .mainBlue
     
     // 요일 UI 설정
     calendar.appearance.weekdayFont = UIFont.systemFont(ofSize: 16)
@@ -60,14 +64,9 @@ final class MypageViewController: NaviHelper {
     calendar.appearance.subtitleTodayColor = .mainBlue
     calendar.appearance.todayColor = .white
     
-    
-    // 일요일 라벨의 textColor를 red로 설정
-    calendar.calendarWeekdayView.weekdayLabels.last!.textColor = .red
-    
     calendar.layer.borderWidth = 1
     calendar.layer.cornerRadius = 15
     calendar.layer.borderColor = UIColor.unableGray.cgColor
-    
     return calendar
   }()
   
@@ -78,11 +77,13 @@ final class MypageViewController: NaviHelper {
 
   let mypageViewModel = MypageViewModel()
 
+  var myPostDatas: [CreatePostModel] = []
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
     view.backgroundColor = .white
-    
+    mypageViewModel.fectchMyPostData { self.myPostDatas = $0 }
     mypageViewModel.getMyWorkoutHistory { result in
       self.highlightedDates = result
       
@@ -236,7 +237,7 @@ extension MypageViewController: UICollectionViewDelegate, UICollectionViewDataSo
   
   func collectionView(_ collectionView: UICollectionView,
                       numberOfItemsInSection section: Int) -> Int {
-    return 4
+    return myPostDatas.count
   }
   
   func collectionView(_ collectionView: UICollectionView,
@@ -252,8 +253,9 @@ extension MypageViewController: UICollectionViewDelegate, UICollectionViewDataSo
     // 참여하기 버튼 없애기
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCell.id,
                                                   for: indexPath) as! SearchResultCell
-  
-    
+   
+    cell.configure(with: myPostDatas[indexPath.row])
+    cell.delegate = self
     return cell
   }
 }
@@ -266,3 +268,4 @@ extension MypageViewController: UICollectionViewDelegateFlowLayout {
     return CGSize(width: 350, height: 185)
   }
 }
+

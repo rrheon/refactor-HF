@@ -7,10 +7,6 @@
 
 import Foundation
 
-protocol postedDataConfigurable {
-  func configure(with data: CreatePostModel)
-}
-
 struct CreatePostModel {
   let time: String
   let workoutTypes: [String]
