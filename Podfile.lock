@@ -711,6 +711,7 @@ PODS:
     - FirebaseCore (~> 10.0)
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+  - FloatingPanel (2.8.2)
   - FSCalendar (2.8.4)
   - GoogleAppMeasurement (10.22.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.22.0)
@@ -849,6 +850,7 @@ DEPENDENCIES:
   - FirebaseAuth
   - FirebaseFirestore
   - FirebaseStorage
+  - FloatingPanel
   - FSCalendar
   - MessageKit
   - NMapsMap
@@ -875,6 +877,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - FirebaseSharedSwift
     - FirebaseStorage
+    - FloatingPanel
     - FSCalendar
     - GoogleAppMeasurement
     - GoogleUtilities
@@ -911,6 +914,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 763814908793c0da14c18b3dcffdec71e29ed55e
   FirebaseSharedSwift: 48076404e6e52372290d15a07d2ed1d2f1754023
   FirebaseStorage: bc7bddc743548a89cfb896843a77cf4bdde2c231
+  FloatingPanel: 99b72651e5e607a6a4e0c9831e30f02d145beeb6
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
   GoogleAppMeasurement: ccefe3eac9b0aa27f96066809fb1a7fe4b462626
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
@@ -929,6 +933,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 3247e5019273751f23493252b4669792cdf81133
+PODFILE CHECKSUM: a98adb70e85ea46c1cd2fc3670fddbb7aeae4f83
 
 COCOAPODS: 1.15.2

@@ -10,8 +10,11 @@ import CoreLocation
 
 import SnapKit
 import NMapsMap
+import FloatingPanel
 
-final class MapViewController: NaviHelper, NMFMapViewCameraDelegate {
+final class MapViewController: NaviHelper {
+  var fpc: FloatingPanelController!
+  
   private lazy var naverMapView: NMFNaverMapView = {
     let mapView = NMFNaverMapView()
     mapView.showZoomControls = true
@@ -21,15 +24,9 @@ final class MapViewController: NaviHelper, NMFMapViewCameraDelegate {
     return mapView
   }()
   
-  private lazy var locationManager: CLLocationManager = {
-    let manager = CLLocationManager()
-    manager.desiredAccuracy = kCLLocationAccuracyBest
-    manager.delegate = self
-    return manager
-  }()
-  
+  var locationManager = CLLocationManager()
   private let searchBar = UISearchBar.createSearchBar(placeholder: "원하는 지역을 입력해주세요.")
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -39,18 +36,27 @@ final class MapViewController: NaviHelper, NMFMapViewCameraDelegate {
     
     setupLayout()
     makeUI()
-
-    self.locationManager.requestWhenInUseAuthorization()
     
-  
-      locationManager.startUpdatingLocation() //위치 정보 받아오기 시작
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    locationManager.requestWhenInUseAuthorization()
     
+    naverMapView.mapView.addCameraDelegate(delegate: self)
+    
+    fpc = FloatingPanelController()
+    fpc.delegate = self
+    
+    let contentVC = MapPersonListViewController()
+    
+    fpc.set(contentViewController: contentVC)
+    fpc.addPanel(toParent: self, at: Int(view.bounds.height), animated: true)
+    fpc.addPanel(toParent: self)
   }
   
   override func navigationItemSetting() {
     redesignNavigation("SearchTextImg")
   }
-  
+
   // MARK: - setupLayout
   func setupLayout(){
     [
@@ -76,32 +82,49 @@ final class MapViewController: NaviHelper, NMFMapViewCameraDelegate {
     
     view.bringSubviewToFront(searchBar)
   }
-  
-
 }
 
-extension MapViewController: CLLocationManagerDelegate {
-  func getLocationUsagePermission() {
-    self.locationManager.requestWhenInUseAuthorization()
+extension MapViewController: CLLocationManagerDelegate, NMFMapViewCameraDelegate {
+  func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+    print("카메라가 변경됨 : reason : \(reason)")
+    let cameraPosition = mapView.cameraPosition
+    
+    print(cameraPosition.target.lat, cameraPosition.target.lng)
   }
   
-  func locationManager(_ manager: CLLocationManager,
-                       didChangeAuthorization status: CLAuthorizationStatus) {
-    //location5
-    switch status {
-    case .authorizedAlways, .authorizedWhenInUse:
-      print("GPS 권한 설정됨")
-      self.locationManager.startUpdatingLocation() // 중요!
-    case .restricted, .notDetermined:
-      print("GPS 권한 설정되지 않음")
-      getLocationUsagePermission()
-    case .denied:
-      print("GPS 권한 요청 거부됨")
-      getLocationUsagePermission()
-    default:
-      print("GPS: Default")
+  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    switch manager.authorizationStatus {
+    case .authorizedWhenInUse, .authorizedAlways:
+      DispatchQueue.main.async {
+        if CLLocationManager.locationServicesEnabled() {
+          print("위치 서비스 on")
+          self.locationManager.startUpdatingLocation()
+          print(self.locationManager.location?.coordinate)
+          
+          let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
+            lat: self.locationManager.location?.coordinate.latitude ?? 0,
+            lng: self.locationManager.location?.coordinate.longitude ?? 0))
+          cameraUpdate.animation = .easeIn
+          self.naverMapView.mapView.moveCamera(cameraUpdate)
+        } else {
+          print("위치 서비스 off")
+        }
+      }
+    case .denied, .restricted:
+      // 위치 권한이 거부되거나 제한된 경우, 사용자에게 메시지를 표시하거나 적절한 조치를 취합니다.
+      print("위치 권한이 거부되었거나 제한됨")
+    case .notDetermined:
+      // 위치 권한을 요청하지 않은 경우, 요청합니다.
+      locationManager.requestWhenInUseAuthorization()
+    @unknown default:
+      fatalError("Unhandled case")
     }
   }
-  
-  
+}
+
+extension MapViewController: FloatingPanelControllerDelegate {
+  func floatingPanel(_ fpc: FloatingPanelController,
+                     layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
+    return FloatingPanelBottomLayout()
+  }
 }

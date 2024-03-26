@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>사용자의 위치를 받아오려고 합니다.</string>
 	<key>IDEPreferLogStreaming</key>
 	<string>YES</string>
 	<key>CFBundleExecutable</key>
@@ -28,10 +30,6 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>체크인 기능을 사용하기 위해서 위치정보 권한이 필요합니다.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>체크인 기능을 사용하기 위해서 위치정보 권한이 필요합니다.</string>
-	<key>NSLocationUsageDescription</key>
 	<string>체크인 기능을 사용하기 위해서 위치정보 권한이 필요합니다.</string>
 </dict>
 </plist>

@@ -18,4 +18,5 @@ pod 'MessageKit'
 pod 'Firebase/Database'
 pod 'ObjectMapper'
 pod 'FSCalendar'
+pod 'FloatingPanel'
 end

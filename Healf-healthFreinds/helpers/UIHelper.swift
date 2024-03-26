@@ -94,8 +94,7 @@ final class UIHelper {
     button.setImage(UIImage(named: image), for: .normal)
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     button.contentHorizontalAlignment = .leading
-
-button.widthAnchor.constraint(equalToConstant: 100).isActive = true
+    button.widthAnchor.constraint(equalToConstant: 100).isActive = true
     return button
   }
   

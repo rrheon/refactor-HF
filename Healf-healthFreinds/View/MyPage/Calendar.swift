@@ -34,19 +34,6 @@ extension MypageViewController: FSCalendarDataSource, FSCalendarDelegate {
     }
   }
   
-  // 일요일에 해당되는 모든 날짜의 색상 red로 변경
-  func calendar(_ calendar: FSCalendar,
-                appearance: FSCalendarAppearance,
-                titleDefaultColorFor date: Date) -> UIColor? {
-    let day = Calendar.current.component(.weekday, from: date) - 1
-    
-    if Calendar.current.shortWeekdaySymbols[day] == "일" {
-      return .systemRed
-    } else {
-      return .label
-    }
-  }
-  
   // MARK: - 날짜 표시 매서드
   func calendar(_ calendar: FSCalendar,
                 willDisplay cell: FSCalendarCell,
