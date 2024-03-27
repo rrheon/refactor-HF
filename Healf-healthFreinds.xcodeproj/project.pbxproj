@@ -240,8 +240,6 @@
 				EED75DC82B9AC52300594C68 /* Model */,
 				EEFA6DE32B980E3600147708 /* View */,
 				EEFA6DE42B980E9B00147708 /* ViewModel */,
-				EE4E36892BABE73A00FB60FC /* MypageViewModel.swift */,
-				EE4E36942BB3168000FB60FC /* MapViewModel.swift */,
 				EE98B1DA2B4FDFC60025C4F8 /* Assets.xcassets */,
 				EE98B1DC2B4FDFC60025C4F8 /* LaunchScreen.storyboard */,
 				EE98B1DF2B4FDFC60025C4F8 /* Info.plist */,
@@ -390,8 +388,10 @@
 		EEFA6DE42B980E9B00147708 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				EE4E36942BB3168000FB60FC /* MapViewModel.swift */,
 				EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */,
 				EE4E36962BB3B0A200FB60FC /* SignupViewModel.swift */,
+				EE4E36892BABE73A00FB60FC /* MypageViewModel.swift */,
 				EE4E368B2BABE75800FB60FC /* Home */,
 				EE4E368C2BABE76100FB60FC /* Chat */,
 				EE4E368D2BABE76B00FB60FC /* Search */,

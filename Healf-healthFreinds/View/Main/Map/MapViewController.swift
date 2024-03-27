@@ -97,8 +97,10 @@ final class MapViewController: NaviHelper {
   
   func findUserButtonTapped(){
     guard let userPosition = userPosition else { return }
-    mapViewModel.updateMyLocation(userPosition)
-    mapViewModel.getOtherPersonLocation(userPosition)
+    mapViewModel.changeToAddress(latitude: userPosition.0, longitude: userPosition.1) { result in
+      print(result)
+    }
+//    mapViewModel.getOtherPersonLocation(userPosition)
   }
 }
 
