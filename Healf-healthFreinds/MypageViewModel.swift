@@ -16,7 +16,7 @@ class MypageViewModel: CommonViewModel {
   
   // 받아와야할 것 - 1.해당 월 전체(데이터 있으면 표시 없으면 냅두기), 2. 선택한 날짜의 데이터 뿌려주기
   func getMyInfomation(completion: @escaping(UserModel) -> Void){
-    ref.child("UserData").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
+    ref.child("UserDataInfo").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
       guard let value = snapshot.value as? [String: Any] else { return }
       guard let userData = self.convertUserModel(data: value) else { return}
       completion(userData)

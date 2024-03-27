@@ -11,9 +11,9 @@ import Foundation
 class ChatUserModel: NSObject {
   @objc var nickname: String?
   @objc var uid: String?
+  @objc var profileImage: String?
 }
 
- 
 struct UserModel {
   var nickname: String?
   var uid: String?
@@ -21,4 +21,6 @@ struct UserModel {
   var togetherCount: Int?
   var workoutCount: Int?
   var postCount: Int?
+  var location: [Double]?
+  var introduce: String?
 }

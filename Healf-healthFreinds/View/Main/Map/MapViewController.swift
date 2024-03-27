@@ -14,7 +14,9 @@ import FloatingPanel
 
 final class MapViewController: NaviHelper {
   var fpc: FloatingPanelController!
-  
+
+  private lazy var findUserButton = UIHelper.shared.createSelectButton("이 위치에서 찾기")
+
   private lazy var naverMapView: NMFNaverMapView = {
     let mapView = NMFNaverMapView()
     mapView.showZoomControls = true
@@ -25,7 +27,8 @@ final class MapViewController: NaviHelper {
   }()
   
   var locationManager = CLLocationManager()
-  private let searchBar = UISearchBar.createSearchBar(placeholder: "원하는 지역을 입력해주세요.")
+  let mapViewModel = MapViewModel()
+  var userPosition: (Double, Double)?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -37,20 +40,10 @@ final class MapViewController: NaviHelper {
     setupLayout()
     makeUI()
     
-    locationManager.delegate = self
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    locationManager.requestWhenInUseAuthorization()
+    locationManagerSetting()
+    floatingVCSetting()
     
     naverMapView.mapView.addCameraDelegate(delegate: self)
-    
-    fpc = FloatingPanelController()
-    fpc.delegate = self
-    
-    let contentVC = MapPersonListViewController()
-    
-    fpc.set(contentViewController: contentVC)
-    fpc.addPanel(toParent: self, at: Int(view.bounds.height), animated: true)
-    fpc.addPanel(toParent: self)
   }
   
   override func navigationItemSetting() {
@@ -60,7 +53,7 @@ final class MapViewController: NaviHelper {
   // MARK: - setupLayout
   func setupLayout(){
     [
-      searchBar,
+      findUserButton,
       naverMapView
     ].forEach {
       view.addSubview($0)
@@ -69,18 +62,43 @@ final class MapViewController: NaviHelper {
   
   // MARK: - makeUI
   func makeUI(){
-    searchBar.snp.makeConstraints {
-      $0.top.equalTo(view.safeAreaLayoutGuide)
-      $0.leading.equalToSuperview().offset(20)
-      $0.trailing.equalToSuperview().offset(-20)
+    findUserButton.addAction(UIAction { _ in
+      self.findUserButtonTapped()
+    }, for: .touchUpInside)
+    findUserButton.snp.makeConstraints {
+      $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+      $0.width.equalTo(150)
+      $0.centerX.equalToSuperview()
     }
     
     naverMapView.snp.makeConstraints {
-      $0.top.equalTo(searchBar)
+      $0.top.equalTo(view.safeAreaLayoutGuide)
       $0.leading.trailing.bottom.equalToSuperview()
     }
     
-    view.bringSubviewToFront(searchBar)
+    view.bringSubviewToFront(findUserButton)
+  }
+  
+  func locationManagerSetting(){
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    locationManager.requestWhenInUseAuthorization()
+  }
+  
+  func floatingVCSetting(){
+    fpc = FloatingPanelController()
+    fpc.delegate = self
+    
+    let contentVC = MapPersonListViewController()
+    
+    fpc.set(contentViewController: contentVC)
+    fpc.addPanel(toParent: self, at: Int(view.bounds.height) * 1/3 , animated: true)
+  }
+  
+  func findUserButtonTapped(){
+    guard let userPosition = userPosition else { return }
+    mapViewModel.updateMyLocation(userPosition)
+    mapViewModel.getOtherPersonLocation(userPosition)
   }
 }
 
@@ -88,8 +106,9 @@ extension MapViewController: CLLocationManagerDelegate, NMFMapViewCameraDelegate
   func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
     print("카메라가 변경됨 : reason : \(reason)")
     let cameraPosition = mapView.cameraPosition
-    
+
     print(cameraPosition.target.lat, cameraPosition.target.lng)
+    userPosition = (cameraPosition.target.lat, cameraPosition.target.lng)
   }
   
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

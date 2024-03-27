@@ -13,7 +13,9 @@ import FirebaseStorage
 import FirebaseDatabase
 
 final class SignuplViewController: NaviHelper {
-
+  
+  let signupViewModel = SignupViewModel()
+  
   private lazy var titleLabel = UIHelper.shared.createSingleLineLabel("사용하실 아이디를 입력해주세요.")
   private lazy var emailTextField = UIHelper.shared.createLoginTextField("이메일을 입력해주세요.")
   private lazy var passwordTextField = UIHelper.shared.createLoginTextField("비밀번호를 입력해주세요.")
@@ -84,35 +86,14 @@ final class SignuplViewController: NaviHelper {
   
   func completeSignup(){
     guard let email = emailTextField.text,
-          let password = passwordTextField.text else { return }
+          let password = passwordTextField.text,
+    let nickname = nicknameTextField.text  else { return }
     
     print("이메일: \(email)")
     print("비밀번호: \(password)")
-    
-    Auth.auth().createUser(withEmail: email,
-                           password: password) { result, error in
-    
-      let uid = result?.user.uid
-//      let image = UIImageJPEGRepresentation(UIImage(named: "") ?? "", 0.1)
-//      Storage.storage().reference().child("userImage").child(uid ?? "").putData(image,metadata: nil) { data, error in
-//        let imageUrl = data.downloadURL().absoluteString
-//        
-//      }
-//
-      let values = ["nickname": self.nicknameTextField.text ?? "",
-                    "uid": Auth.auth().currentUser?.uid,
-                    "togetherCount": 0,
-                    "workoutCount": 0,
-                    "profileImage": "없음"]
-      Database.database().reference().child("UserData").child(uid ?? "").setValue(values)
- 
-      if let error = error { print(error) }
-      if let result = result {
-        print(result)
-        
-        let completeVC = CompleSignupViewController()
-        self.navigationController?.pushViewController(completeVC, animated: true)
-      }
+    signupViewModel.registerUserData(email: email, password: password, nickname: nickname) {
+      let completeVC = CompleSignupViewController()
+      self.navigationController?.pushViewController(completeVC, animated: true)
     }
   }
 }

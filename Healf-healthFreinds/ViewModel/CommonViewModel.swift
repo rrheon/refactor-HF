@@ -112,7 +112,7 @@ class CommonViewModel {
   }
   
   func updateCount(childType: String){
-    let ref = Database.database().reference().child("UserData").child(uid ?? "").child("\(childType)")
+    let ref = Database.database().reference().child("UserDataInfo").child(uid ?? "").child("\(childType)")
 
     ref.observeSingleEvent(of: .value) { (snapshot) in
       if var count = snapshot.value as? Int {
