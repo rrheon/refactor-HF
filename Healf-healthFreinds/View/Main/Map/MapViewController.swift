@@ -19,9 +19,7 @@ final class MapViewController: NaviHelper {
 
   private lazy var naverMapView: NMFNaverMapView = {
     let mapView = NMFNaverMapView()
-    mapView.showZoomControls = true
     mapView.showCompass = false
-    mapView.showLocationButton = true
     mapView.mapView.positionMode = NMFMyPositionMode.normal
     return mapView
   }()
@@ -29,7 +27,8 @@ final class MapViewController: NaviHelper {
   var locationManager = CLLocationManager()
   let mapViewModel = MapViewModel()
   var userPosition: (Double, Double)?
-  
+  var userLocation: CLLocation?
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -42,7 +41,7 @@ final class MapViewController: NaviHelper {
     
     locationManagerSetting()
     floatingVCSetting()
-    
+
     naverMapView.mapView.addCameraDelegate(delegate: self)
   }
   
@@ -65,6 +64,7 @@ final class MapViewController: NaviHelper {
     findUserButton.addAction(UIAction { _ in
       self.findUserButtonTapped()
     }, for: .touchUpInside)
+    
     findUserButton.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
       $0.width.equalTo(150)
@@ -75,7 +75,7 @@ final class MapViewController: NaviHelper {
       $0.top.equalTo(view.safeAreaLayoutGuide)
       $0.leading.trailing.bottom.equalToSuperview()
     }
-    
+
     view.bringSubviewToFront(findUserButton)
   }
   
@@ -83,6 +83,7 @@ final class MapViewController: NaviHelper {
     locationManager.delegate = self
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
     locationManager.requestWhenInUseAuthorization()
+    locationManager.startUpdatingLocation()
   }
   
   func floatingVCSetting(){
@@ -93,6 +94,28 @@ final class MapViewController: NaviHelper {
     
     fpc.set(contentViewController: contentVC)
     fpc.addPanel(toParent: self, at: Int(view.bounds.height) * 1/3 , animated: true)
+  }
+  
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+      guard let location = locations.first else { return }
+      userLocation = location
+      
+      // 사용자의 위치를 받아온 후 해당 위치로 이동하거나 처리할 수 있습니다.
+      moveToUserLocation()
+  }
+  
+  func moveToUserLocation() {
+    guard let userLocation = userLocation else { return }
+    
+    // 여기에서 사용자의 위치를 이용하여 지도 상에서 해당 위치로 이동하는 작업을 수행합니다.
+    let latitude = userLocation.coordinate.latitude
+    let longitude = userLocation.coordinate.longitude
+    
+    userPosition = (latitude, longitude)
+
+    // 예를 들어, NMFNaverMapView를 사용하여 사용자의 위치로 지도 이동
+    let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude))
+    naverMapView.mapView.moveCamera(cameraUpdate)
   }
   
   func findUserButtonTapped(){

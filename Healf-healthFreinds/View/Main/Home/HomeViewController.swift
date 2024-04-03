@@ -8,47 +8,49 @@
 import UIKit
 
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class HomeViewController: NaviHelper {
   
   private lazy var topUnderLineView = UIView()
   
   private lazy var mainImageView = UIImageView(image: UIImage(named: "HomeMainImg"))
-  private lazy var weeklySummaryDataLabel = UIHelper.shared.createSingleLineLabel("주간 요약 📊")
-  private lazy var weeklySummaryStackView = UIHelper.shared.createStackView(axis: .horizontal,
+  private lazy var weeklySummaryDataLabel = uihelper.createSingleLineLabel("주간 요약 📊")
+  private lazy var weeklySummaryStackView = uihelper.createStackView(axis: .horizontal,
                                                                             spacing: 5)
-  private lazy var timeCountLabel = UIHelper.shared.createMultipleLineLabel("운동 횟수\n3회")
-  private lazy var timeSummaryLabel = UIHelper.shared.createMultipleLineLabel("운동 시간\n8시간 30분")
-  private lazy var withFriendsLabel = UIHelper.shared.createMultipleLineLabel("함께한 친구\n3명")
+  private lazy var timeCountLabel = uihelper.createMultipleLineLabel("운동 횟수\n3회")
+  private lazy var timeSummaryLabel = uihelper.createMultipleLineLabel("운동 시간\n8시간 30분")
+  private lazy var withFriendsLabel = uihelper.createMultipleLineLabel("함께한 친구\n3명")
   private lazy var rightTimeCountView = UIView()
   private lazy var rightTimeSummaryView = UIView()
   
-  private lazy var weeklyCompleteLabel = UIHelper.shared.createSingleLineLabel("주간 달성률 🏆")
-  private lazy var weeklyCompleteStackView = UIHelper.shared.createStackView(axis: .horizontal,
+  private lazy var weeklyCompleteLabel = uihelper.createSingleLineLabel("주간 달성률 🏆")
+  private lazy var weeklyCompleteStackView = uihelper.createStackView(axis: .horizontal,
                                                                              spacing: 1,
                                                                              backgroundColor: .white)
-  private lazy var mondayLabel = UIHelper.shared.createWeeklyCompleteLabel("월")
-  private lazy var tuesdayLabel = UIHelper.shared.createWeeklyCompleteLabel("화")
-  private lazy var wensdayLabel = UIHelper.shared.createWeeklyCompleteLabel("수")
-  private lazy var thursayLabel = UIHelper.shared.createWeeklyCompleteLabel("목")
-  private lazy var fridayLabel = UIHelper.shared.createWeeklyCompleteLabel("금")
-  private lazy var satdayLabel = UIHelper.shared.createWeeklyCompleteLabel("토")
-  private lazy var sundayLabel = UIHelper.shared.createWeeklyCompleteLabel("일")
+  private lazy var mondayLabel = uihelper.createWeeklyCompleteLabel("월")
+  private lazy var tuesdayLabel = uihelper.createWeeklyCompleteLabel("화")
+  private lazy var wensdayLabel = uihelper.createWeeklyCompleteLabel("수")
+  private lazy var thursayLabel = uihelper.createWeeklyCompleteLabel("목")
+  private lazy var fridayLabel = uihelper.createWeeklyCompleteLabel("금")
+  private lazy var satdayLabel = uihelper.createWeeklyCompleteLabel("토")
+  private lazy var sundayLabel = uihelper.createWeeklyCompleteLabel("일")
 
-  private lazy var newPostContentStackView = UIHelper.shared.createStackView(axis: .vertical,
+  private lazy var newPostContentStackView = uihelper.createStackView(axis: .vertical,
                                                                              spacing: 10,
                                                                              backgroundColor: .white)
-  private lazy var newPostTitleLabel = UIHelper.shared.createSingleLineLabel("New 매칭 🙌🏻")
+  private lazy var newPostTitleLabel = uihelper.createSingleLineLabel("New 매칭 🙌🏻")
   
-  private lazy var postCollectionView = UIHelper.shared.createCollectionView(scrollDirection: .horizontal,
+  private lazy var postCollectionView = uihelper.createCollectionView(scrollDirection: .horizontal,
                                                                              spacing: 50)
 
-  private lazy var startButton = UIHelper.shared.createHealfButton("💪🏻 운동 기록하기", .mainBlue, .white)
+  private lazy var startButton = uihelper.createHealfButton("💪🏻 운동 기록하기", .mainBlue, .white)
   private lazy var contentView = UIView()
 
   let homeViewModel = HomeViewModel()
   var weekLabels: [UILabel] = []
-  
+
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -65,6 +67,19 @@ final class HomeViewController: NaviHelper {
     settingHomeVCDatas()
     
     changeLabelColor()
+    
+    startButton.rx
+      .tap
+      .subscribe(onNext: { _ in
+            print("hh")
+        }, onError: { error in
+            print("error: \(error)")
+        }, onCompleted: {
+            print("completed")
+        }, onDisposed: {
+            print("disposed")
+        }).disposed(by: uihelper.disposeBag)
+
   }
   
   override func navigationItemSetting() {
@@ -214,7 +229,7 @@ final class HomeViewController: NaviHelper {
   
   // MARK: - changeLabelColor
   func changeLabelColor(){
-    UIHelper.shared.changeColor(label: newPostTitleLabel,
+    uihelper.changeColor(label: newPostTitleLabel,
                                 wantToChange: "New",
                                 color: .labelBlue)
   }
@@ -242,9 +257,9 @@ final class HomeViewController: NaviHelper {
         self.timeSummaryLabel.text = "주간 평점\n \(datas.1)점"
         self.withFriendsLabel.text = "함께한 친구\n \(datas.2)명"
         
-        UIHelper.shared.changeColor(label: self.timeCountLabel, wantToChange: "\(datas.0)회", color: .lightGray)
-        UIHelper.shared.changeColor(label: self.timeSummaryLabel, wantToChange: "\(datas.1)점", color: .lightGray)
-        UIHelper.shared.changeColor(label: self.withFriendsLabel, wantToChange: "\(datas.2)명", color: .lightGray)
+        self.uihelper.changeColor(label: self.timeCountLabel, wantToChange: "\(datas.0)회", color: .lightGray)
+        self.uihelper.changeColor(label: self.timeSummaryLabel, wantToChange: "\(datas.1)점", color: .lightGray)
+        self.uihelper.changeColor(label: self.withFriendsLabel, wantToChange: "\(datas.2)명", color: .lightGray)
       
         for (index, isCompleted) in self.homeViewModel.weeklyCompletion.enumerated() {
           if let label = self.weekLabels[safe: index] {

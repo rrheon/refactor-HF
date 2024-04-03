@@ -840,6 +840,12 @@ PODS:
   - ObjectMapper (4.2.0)
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (100.0.0)
+  - RxCocoa (6.6.0):
+    - RxRelay (= 6.6.0)
+    - RxSwift (= 6.6.0)
+  - RxRelay (6.6.0):
+    - RxSwift (= 6.6.0)
+  - RxSwift (6.6.0)
   - SnapKit (5.6.0)
   - Then (3.0.0)
 
@@ -855,6 +861,8 @@ DEPENDENCIES:
   - MessageKit
   - NMapsMap
   - ObjectMapper
+  - RxCocoa
+  - RxSwift
   - SnapKit (~> 5.6.0)
   - Then
 
@@ -893,6 +901,9 @@ SPEC REPOS:
     - ObjectMapper
     - PromisesObjC
     - RecaptchaInterop
+    - RxCocoa
+    - RxRelay
+    - RxSwift
     - SnapKit
     - Then
 
@@ -930,9 +941,12 @@ SPEC CHECKSUMS:
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
+  RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
+  RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: a98adb70e85ea46c1cd2fc3670fddbb7aeae4f83
+PODFILE CHECKSUM: a0ac22659b3dcf6f99bad279b9cd178820e37dad
 
 COCOAPODS: 1.15.2

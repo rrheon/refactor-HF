@@ -7,6 +7,7 @@
 import UIKit
 
 class NaviHelper: UIViewController {
+  lazy var uihelper = UIHelper.shared
   
   init() {
     super.init(nibName: nil, bundle: nil)

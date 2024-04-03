@@ -17,9 +17,13 @@ class MapViewModel: CommonViewModel {
   
   func changeToAddress(latitude: Double?, longitude: Double?,
                        completion: @escaping (String) -> Void) {
-    let location = changeToClLocation(latitude: latitude , longitude: longitude)
+    let digit: Double = pow(10, 2)
+    let roundedLatitude =  round((latitude ?? 0) * digit) / digit
+    let roundedlongitude =  round((longitude ?? 0) * digit) / digit
+
+    let location = changeToClLocation(latitude: roundedLatitude , longitude: roundedlongitude)
     var address: String = ""
-    
+    print(location)
     if let location = location {
       CLGeocoder().reverseGeocodeLocation(location, completionHandler: { placemarks, error in
         if error == nil {

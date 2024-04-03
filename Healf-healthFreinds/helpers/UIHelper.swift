@@ -7,9 +7,12 @@
 
 import UIKit
 
+import RxSwift
+
 final class UIHelper {
   static let shared = UIHelper()
-  
+  var disposeBag: DisposeBag = .init()
+
   // MARK: - 라벨 한 줄
   func createSingleLineLabel(_ title: String,
                    _ color: UIColor = .black,

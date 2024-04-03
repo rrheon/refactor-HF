@@ -19,4 +19,6 @@ pod 'Firebase/Database'
 pod 'ObjectMapper'
 pod 'FSCalendar'
 pod 'FloatingPanel'
+pod 'RxSwift'
+pod 'RxCocoa'
 end
