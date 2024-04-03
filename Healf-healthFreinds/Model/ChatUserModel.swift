@@ -21,6 +21,6 @@ struct UserModel: Codable {
   var togetherCount: Int?
   var workoutCount: Int?
   var postCount: Int?
-  var location: [Double]?
+  var location: String?
   var introduce: String?
 }

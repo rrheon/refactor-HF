@@ -104,10 +104,13 @@ class CommonViewModel {
     let togetherCount = data["togetherCount"] as? Int ?? 0
     let workoutCount = data["workoutCount"] as? Int ?? 0
     let postCount = data["postCount"] as? Int ?? 0
+    let introduce = data["introduce"] as? String ?? ""
+    let location = data["location"] as? String ?? ""
     
     // HistoryModel 객체 생성하여 반환
     return UserModel(nickname: nickname, uid: uid, profileImage: profileImage,
-                     togetherCount: togetherCount, workoutCount: workoutCount, postCount: postCount)
+                     togetherCount: togetherCount, workoutCount: workoutCount,
+                     postCount: postCount, location: location, introduce: introduce)
     
   }
   
@@ -118,7 +121,7 @@ class CommonViewModel {
       if var count = snapshot.value as? Int {
         count += 1
         ref.setValue(count)
-      } else { ref.setValue(1)}
+      } else { ref.setValue(1) }
     }
   }
 }

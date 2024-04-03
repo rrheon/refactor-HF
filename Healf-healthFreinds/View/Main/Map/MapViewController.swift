@@ -12,6 +12,9 @@ import SnapKit
 import NMapsMap
 import FloatingPanel
 
+// 화면 눌러서 VC로 들어오면 사용자의 위치 저장 -> 버튼 누르면 해당 위치에 해당하는 유저가 뜸 -> 유저 누르면 채팅하시겠습니까? 알람하고 확인 취소로 채팅방 생성 -> 사용자가 채팅을 거부하면 거부한 사용자다라는 알람
+
+// 화면 들어오자마자 한번 주소 변환 -> 해당 주소를 토대로 유저 찾기
 final class MapViewController: NaviHelper {
   var fpc: FloatingPanelController!
 
@@ -43,6 +46,7 @@ final class MapViewController: NaviHelper {
     floatingVCSetting()
 
     naverMapView.mapView.addCameraDelegate(delegate: self)
+    mapViewModel.getOtherPersonLocation()
   }
   
   override func navigationItemSetting() {
@@ -96,34 +100,31 @@ final class MapViewController: NaviHelper {
     fpc.addPanel(toParent: self, at: Int(view.bounds.height) * 1/3 , animated: true)
   }
   
-  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-      guard let location = locations.first else { return }
-      userLocation = location
-      
-      // 사용자의 위치를 받아온 후 해당 위치로 이동하거나 처리할 수 있습니다.
-      moveToUserLocation()
+  func locationManager(_ manager: CLLocationManager,
+                       didUpdateLocations locations: [CLLocation]) {
+    guard let location = locations.first else { return }
+    userLocation = location
+    
+    // 사용자의 위치를 받아온 후 해당 위치로 이동하거나 처리할 수 있습니다.
+    moveToUserLocation()
   }
   
   func moveToUserLocation() {
     guard let userLocation = userLocation else { return }
     
-    // 여기에서 사용자의 위치를 이용하여 지도 상에서 해당 위치로 이동하는 작업을 수행합니다.
     let latitude = userLocation.coordinate.latitude
     let longitude = userLocation.coordinate.longitude
     
     userPosition = (latitude, longitude)
+    mapViewModel.updateMyLocation(userPosition ?? (0.0 , 0.0))
 
-    // 예를 들어, NMFNaverMapView를 사용하여 사용자의 위치로 지도 이동
     let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude))
     naverMapView.mapView.moveCamera(cameraUpdate)
   }
   
   func findUserButtonTapped(){
     guard let userPosition = userPosition else { return }
-    mapViewModel.changeToAddress(latitude: userPosition.0, longitude: userPosition.1) { result in
-      print(result)
-    }
-//    mapViewModel.getOtherPersonLocation(userPosition)
+    mapViewModel.updateMyLocation(userPosition)
   }
 }
 

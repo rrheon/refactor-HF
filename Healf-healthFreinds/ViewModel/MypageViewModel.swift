@@ -13,6 +13,7 @@ protocol myPostedDataConfigurable {
 
 class MypageViewModel: CommonViewModel {
   let createViewModel = CreatePostViewModel.shared
+  static let shared = MypageViewModel()
   
   // 받아와야할 것 - 1.해당 월 전체(데이터 있으면 표시 없으면 냅두기), 2. 선택한 날짜의 데이터 뿌려주기
   func getMyInfomation(completion: @escaping(UserModel) -> Void){
