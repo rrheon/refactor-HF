@@ -11,6 +11,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+// 데이터가 없을 때의 처리가 필요함
 final class HomeViewController: NaviHelper {
   
   private lazy var topUnderLineView = UIView()
@@ -19,9 +20,9 @@ final class HomeViewController: NaviHelper {
   private lazy var weeklySummaryDataLabel = uihelper.createSingleLineLabel("주간 요약 📊")
   private lazy var weeklySummaryStackView = uihelper.createStackView(axis: .horizontal,
                                                                             spacing: 5)
-  private lazy var timeCountLabel = uihelper.createMultipleLineLabel("운동 횟수\n3회")
-  private lazy var timeSummaryLabel = uihelper.createMultipleLineLabel("운동 시간\n8시간 30분")
-  private lazy var withFriendsLabel = uihelper.createMultipleLineLabel("함께한 친구\n3명")
+  private lazy var timeCountLabel = uihelper.createMultipleLineLabel("운동 횟수\n0회")
+  private lazy var timeSummaryLabel = uihelper.createMultipleLineLabel("주간 평점\n0점")
+  private lazy var withFriendsLabel = uihelper.createMultipleLineLabel("함께한 친구\n0명")
   private lazy var rightTimeCountView = UIView()
   private lazy var rightTimeSummaryView = UIView()
   

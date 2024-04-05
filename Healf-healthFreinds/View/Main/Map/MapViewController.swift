@@ -15,6 +15,7 @@ import FloatingPanel
 // 화면 눌러서 VC로 들어오면 사용자의 위치 저장 -> 버튼 누르면 해당 위치에 해당하는 유저가 뜸 -> 유저 누르면 채팅하시겠습니까? 알람하고 확인 취소로 채팅방 생성 -> 사용자가 채팅을 거부하면 거부한 사용자다라는 알람
 
 // 화면 들어오자마자 한번 주소 변환 -> 해당 주소를 토대로 유저 찾기
+
 final class MapViewController: NaviHelper {
   var fpc: FloatingPanelController!
 
@@ -31,6 +32,7 @@ final class MapViewController: NaviHelper {
   let mapViewModel = MapViewModel()
   var userPosition: (Double, Double)?
   var userLocation: CLLocation?
+  let contentVC = MapPersonListViewController()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -46,7 +48,6 @@ final class MapViewController: NaviHelper {
     floatingVCSetting()
 
     naverMapView.mapView.addCameraDelegate(delegate: self)
-    mapViewModel.getOtherPersonLocation()
   }
   
   override func navigationItemSetting() {
@@ -93,9 +94,7 @@ final class MapViewController: NaviHelper {
   func floatingVCSetting(){
     fpc = FloatingPanelController()
     fpc.delegate = self
-    
-    let contentVC = MapPersonListViewController()
-    
+        
     fpc.set(contentViewController: contentVC)
     fpc.addPanel(toParent: self, at: Int(view.bounds.height) * 1/3 , animated: true)
   }
@@ -122,9 +121,11 @@ final class MapViewController: NaviHelper {
     naverMapView.mapView.moveCamera(cameraUpdate)
   }
   
+  // 이 위치에서 찾기를 누르면 사람이 바뀌어야함, delegate로 전달해야할듯
   func findUserButtonTapped(){
     guard let userPosition = userPosition else { return }
     mapViewModel.updateMyLocation(userPosition)
+    contentVC.printTest()
   }
 }
 

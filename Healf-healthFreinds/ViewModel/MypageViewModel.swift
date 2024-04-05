@@ -23,19 +23,19 @@ class MypageViewModel: CommonViewModel {
       completion(userData)
     }
   }
-
+  
   func fetchDailyData(_ selectedDay: String,
                       completion: @escaping ([String: Any]) -> Void) {
     let startDate = getStartDate()
     // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
     ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).child(selectedDay)
       .observeSingleEvent(of: .value) { snapshot in
-      guard let value = snapshot.value as? [String: Any] else {
-        print("Failed to load posts")
-        return
+        guard let value = snapshot.value as? [String: Any] else {
+          print("Failed to load posts")
+          return
+        }
+        completion(value)
       }
-      completion(value)
-    }
   }
   
   func getMyWorkoutHistory(completion: @escaping (([Int]) -> Void)){
@@ -68,34 +68,35 @@ class MypageViewModel: CommonViewModel {
   }
   
   func fectchMyPostData(completion: @escaping ([CreatePostModel]) -> Void) {
-      getMyPostData { result in
-          var posts: [CreatePostModel] = []
-          for (_, postDict) in result {
-            if let postDict = postDict as? [String: Any], let post = self.parsePostData(postDict) {
-                  posts.append(post)
-              }
-          }
-          completion(posts)
+    getMyPostData { result in
+      var posts: [CreatePostModel] = []
+      for (_, postDict) in result {
+        if let postDict = postDict as? [String: Any], let post = self.parsePostData(postDict) {
+          posts.append(post)
+        }
       }
+      completion(posts)
+    }
   }
+  
   func parsePostData(_ data: [String: Any]) -> CreatePostModel? {
-      guard
-          let exerciseType = data["exerciseType"] as? [String],
-          let gender = data["gender"] as? String,
-          let info = data["info"] as? String,
-          let postedDate = data["postedDate"] as? String,
-          let time = data["time"] as? String,
-          let userNickname = data["userNickname"] as? String,
-          let userUid = data["userUid"] as? String
-      else {
-          return nil
-      }
-      
+    guard
+      let exerciseType = data["exerciseType"] as? [String],
+      let gender = data["gender"] as? String,
+      let info = data["info"] as? String,
+      let postedDate = data["postedDate"] as? String,
+      let time = data["time"] as? String,
+      let userNickname = data["userNickname"] as? String,
+      let userUid = data["userUid"] as? String
+    else {
+      return nil
+    }
+    
     return CreatePostModel( time: time, workoutTypes: exerciseType,
                             gender: gender,
                             info: info,
                             userNickname: userNickname, postedDate: postedDate,
-                  userUid: userUid)
+                            userUid: userUid)
   }
-
+  
 }

@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 import FSCalendar
 
+// 데이터가 없을 때 처리가 필요함
+
 final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
   func participateButtonTapped(postedData: CreatePostModel) {
     print("tt")
@@ -143,6 +145,9 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
       $0.trailing.equalToSuperview().offset(-20)
     }
     
+    userProfileChangeButton.addAction(UIAction { _ in
+      self.moveToEditProfileVC()
+    }, for: .touchUpInside)
     userProfileChangeButton.snp.makeConstraints {
       $0.top.equalTo(userInfoStackView.snp.bottom)
       $0.leading.equalTo(userInfoStackView.snp.leading).offset(10)
@@ -229,6 +234,11 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
       self.workoutCountLabel.text = "운동 횟수\n\(workoutCount)번"
       self.postedCountLabel.text = "작성한 글\n\(postCount)개"
     }
+  }
+  
+  func moveToEditProfileVC(){
+    let editProfileVC = EditMyProfileViewController()
+    navigationController?.pushViewController(editProfileVC, animated: true)
   }
 }
 

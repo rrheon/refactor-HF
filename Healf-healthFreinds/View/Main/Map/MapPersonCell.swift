@@ -63,4 +63,9 @@ final class MapPersonCell: UITableViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  func cellDataSetting(_ userData: UserModel){
+    userNickNameLabel.text = userData.nickname
+    userProducLabel.text = userData.introduce
+  }
 }

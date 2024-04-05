@@ -11,6 +11,7 @@ import FirebaseDatabase
 
 class MapViewModel: CommonViewModel {
   let mypageModelView = MypageViewModel.shared
+  static let shared = MapViewModel()
   
   func changeToClLocation(latitude: Double?, longitude: Double?) -> CLLocation? {
     guard let latitude = latitude, let longitude = longitude else { return nil }
@@ -19,11 +20,11 @@ class MapViewModel: CommonViewModel {
   
   func changeToAddress(latitude: Double?, longitude: Double?,
                        completion: @escaping (String) -> Void) {
-
+    
     let digit: Double = pow(10, 1)
     let roundedLatitude = round((latitude ?? 0.0) * digit) / digit
     let roundedLongtitude = round((longitude ?? 0.0) * digit) / digit
-
+    
     let location = changeToClLocation(latitude: roundedLatitude , longitude: roundedLongtitude)
     var address: String = ""
     if let location = location {
@@ -63,45 +64,49 @@ class MapViewModel: CommonViewModel {
   }
   
   // userdata에서 유저 정보를 다 가져와야함
-  func getOtherPersonLocation() {
-    self.ref.child("UserDataInfo").child(self.uid ?? "").observe( .value) { snapshot  in
-      guard let value = snapshot.value as? [String: Any] else {
+  func getOtherPersonLocation(completion: @escaping (([UserModel]) -> Void)) {
+    var userDatas: [UserModel] = []
+    self.ref.child("UserDataInfo").child(self.uid ?? "").observeSingleEvent(of: .value) { snapshot in
+      guard let value = snapshot.value as? [String: Any],
+            let location = value["location"] as? String else {
         print("Failed to load user info")
         return
       }
       
-      let location = value["location"] as? String
-      print(location)
-      // 이걸로 위치 넣으면 될듯
+      self.ref.child("UserLocation").child(location).observeSingleEvent(of: .value) { snapshot in
+        guard let data = snapshot.value as? [String: Any] else {
+          print("Failed to convert snapshot to dictionary")
+          return
+        }
+        
+        self.mypageModelView.getMyInfomation { result in
+          guard let userNickname = result.nickname else { return }
+          //uid를 다 받고 순서대로 데이터에 접근해서 유저데이터를 구조체로 변환하고 배열에 하나씩 저장 -> 그 후에 뿌려줌
+          for (nickname, uid) in data {
+            print("Nickname:", nickname)
+            print("UID:", uid)
+            if userNickname != nickname {
+              self.getUserInfomation(uid as? String ?? "") { userData in
+                userDatas.append(userData)
+                completion(userDatas)
+                // 여기에서 UI 업데이트를 수행해야 합니다.
+              }
+            }
+          }
+        }
+      }
     }
-    
-
-//
-//    ref.child("UserLocation").child(userAddress).observeSingleEvent(of: .value) { dataSnap in
-//      // 데이터 스냅샷을 순회하여 각 사용자 위치 정보에 접근
-//      for child in dataSnap.children {
-//        // 데이터 스냅샷의 각 자식 항목에 대한 참조 생성
-//        let childSnapshot = child as! DataSnapshot
-//        
-//        // 자식 항목의 값 가져오기
-//        guard let userData = childSnapshot.value as? [String: Any] else {
-//          continue
-//        }
-//        
-//        // 필요한 데이터 추출
-//        if let address = userData["address"] as? String {
-//          // 주소 데이터 사용
-//          print(address)
-//        }
-//        
-//        if let uid = userData["uid"] as? String {
-//          // 사용자 UID 데이터 사용
-//          print(uid)
-//        }
-//        
-//        // 필요한 다른 데이터에 대한 작업 수행
-//      }
-//    }
   }
   
+  
+  
+  
+  func getUserInfomation(_ uid: String,
+                         completion: @escaping(UserModel) -> Void){
+    ref.child("UserDataInfo").child(uid).observeSingleEvent(of: .value) { snapshot in
+      guard let value = snapshot.value as? [String: Any] else { return }
+      guard let userData = self.convertUserModel(data: value) else { return}
+      completion(userData)
+    }
+  }
 }

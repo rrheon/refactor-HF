@@ -26,6 +26,7 @@
 		EE4E36952BB3168000FB60FC /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36942BB3168000FB60FC /* MapViewModel.swift */; };
 		EE4E36972BB3B0A200FB60FC /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36962BB3B0A200FB60FC /* SignupViewModel.swift */; };
 		EE4E36992BBB203A00FB60FC /* Disposable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36982BBB203A00FB60FC /* Disposable+.swift */; };
+		EE4E369B2BBE805200FB60FC /* EditMyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E369A2BBE805200FB60FC /* EditMyProfileViewController.swift */; };
 		EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */; };
 		EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */; };
 		EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */; };
@@ -92,6 +93,7 @@
 		EE4E36942BB3168000FB60FC /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		EE4E36962BB3B0A200FB60FC /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
 		EE4E36982BBB203A00FB60FC /* Disposable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Disposable+.swift"; sourceTree = "<group>"; };
+		EE4E369A2BBE805200FB60FC /* EditMyProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileViewController.swift; sourceTree = "<group>"; };
 		EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Healf-healthFreinds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 			children = (
 				EECC03282B934F38003ECF95 /* MypageViewController.swift */,
 				EE4E36872BA99E4D00FB60FC /* Calendar.swift */,
+				EE4E369A2BBE805200FB60FC /* EditMyProfileViewController.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -391,13 +394,13 @@
 		EEFA6DE42B980E9B00147708 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				EE4E36942BB3168000FB60FC /* MapViewModel.swift */,
 				EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */,
 				EE4E36962BB3B0A200FB60FC /* SignupViewModel.swift */,
-				EE4E36892BABE73A00FB60FC /* MypageViewModel.swift */,
 				EE4E368B2BABE75800FB60FC /* Home */,
 				EE4E368C2BABE76100FB60FC /* Chat */,
 				EE4E368D2BABE76B00FB60FC /* Search */,
+				EE4E36942BB3168000FB60FC /* MapViewModel.swift */,
+				EE4E36892BABE73A00FB60FC /* MypageViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */,
 				EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */,
 				EE4E36932BB2D13700FB60FC /* MapPersonCell.swift in Sources */,
+				EE4E369B2BBE805200FB60FC /* EditMyProfileViewController.swift in Sources */,
 				EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */,
 				EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */,
 				EE4E36802BA6E98C00FB60FC /* UIViewController+.swift in Sources */,
