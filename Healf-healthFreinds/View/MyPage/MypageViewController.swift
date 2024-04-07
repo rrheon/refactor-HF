@@ -21,6 +21,7 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
   
   private lazy var userNickNameLabel = uiHelper.createSingleLineLabel("Gildong.Hong")
   private lazy var userProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
+  private lazy var userIntroduceLabel = uiHelper.createSingleLineLabel("소개")
   
   private lazy var matchingCountLabel = uiHelper.createMultipleLineLabel("매칭 횟수\n6번")
   private lazy var workoutCountLabel = uiHelper.createMultipleLineLabel("운동횟수\n6번")
@@ -111,6 +112,7 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     [
       userNickNameLabel,
       userProfileImageView,
+      userIntroduceLabel,
       userInfoStackView,
       userProfileChangeButton,
       userWorkoutCalenderButton,
@@ -138,6 +140,11 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
       $0.height.width.equalTo(80)
     }
     
+    userIntroduceLabel.snp.makeConstraints {
+      $0.top.equalTo(userProfileImageView.snp.bottom).offset(10)
+      $0.leading.equalTo(userProfileImageView)
+    }
+    
     userInfoStackView.backgroundColor = .clear
     userInfoStackView.snp.makeConstraints {
       $0.top.equalTo(userProfileImageView).offset(-10)
@@ -158,7 +165,7 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
       self.calendarButtonTapped(self.userWorkoutCalenderButton)
     }, for: .touchUpInside)
     userWorkoutCalenderButton.snp.makeConstraints {
-      $0.top.equalTo(userProfileChangeButton.snp.bottom).offset(30)
+      $0.top.equalTo(userIntroduceLabel.snp.bottom).offset(30)
       $0.leading.equalTo(userProfileImageView).offset(70)
     }
     
@@ -228,11 +235,12 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     self.mypageViewModel.getMyInfomation { result in
       guard let togetherCount = result.togetherCount,
             let workoutCount = result.workoutCount,
-      let postCount = result.postCount else { return }
+            let postCount = result.postCount else { return }
       self.userNickNameLabel.text = result.nickname
       self.matchingCountLabel.text = "매칭 횟수\n\(togetherCount)번"
       self.workoutCountLabel.text = "운동 횟수\n\(workoutCount)번"
       self.postedCountLabel.text = "작성한 글\n\(postCount)개"
+      self.userIntroduceLabel.text = result.introduce
     }
   }
   

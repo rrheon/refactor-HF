@@ -4,6 +4,10 @@
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>사용자의 위치를 받아오려고 합니다.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>저희 앱은 사용자의 카메라를 사용합니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>저희 앱은 사용자의 앨범에 접근합니다.</string>
 	<key>IDEPreferLogStreaming</key>
 	<string>YES</string>
 	<key>CFBundleExecutable</key>

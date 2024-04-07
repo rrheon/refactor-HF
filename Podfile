@@ -21,4 +21,6 @@ pod 'FSCalendar'
 pod 'FloatingPanel'
 pod 'RxSwift'
 pod 'RxCocoa'
+pod 'Kingfisher', '~> 7.0'
+
 end

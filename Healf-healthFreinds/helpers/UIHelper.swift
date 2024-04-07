@@ -9,7 +9,7 @@ import UIKit
 
 import RxSwift
 
-final class UIHelper {
+final class UIHelper: UIViewController {
   static let shared = UIHelper()
   var disposeBag: DisposeBag = .init()
 
@@ -101,6 +101,16 @@ final class UIHelper {
     return button
   }
   
+  // MARK: - 일반 버튼
+  func createProfileButton(title: String, color: UIColor, action: Selector) -> UIButton {
+    let button = UIButton()
+    button.setTitle(title, for: .normal)
+    button.setTitleColor(color, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 12)
+    button.addTarget(self, action: action, for: .touchUpInside)
+    return button
+  }
+
   // MARK: - 로그인 textfield
   func createLoginTextField(_ placeHolder: String) -> UITextField {
     let textField = UITextField()
@@ -191,4 +201,64 @@ final class UIHelper {
     label.attributedText = originalText
   }
 
+  // MARK: - bottomSheet
+  func settingBottomeSheet(bottomSheetVC: BottomSheet){
+    if #available(iOS 15.0, *) {
+      if let sheet = bottomSheetVC.sheetPresentationController {
+        if #available(iOS 16.0, *) {
+          sheet.detents = [.custom(resolver: { context in
+            return 150.0
+          })]
+        } else {
+          // Fallback on earlier versions
+        }
+        sheet.largestUndimmedDetentIdentifier = nil
+        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        sheet.prefersEdgeAttachedInCompactHeight = true
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        sheet.preferredCornerRadius = 20
+      }
+    } else {
+      // Fallback on earlier versions
+    }
+  }
+  
+  // MARK: - toast message, 이미지가 뒤에 나오고 있음 앞으로 빼기, 이미지 없을 때도 있음
+  func showToast(message: String) {
+    let toastContainer = UIView()
+    toastContainer.backgroundColor = .gray
+    toastContainer.layer.cornerRadius = 10
+    
+    let toastLabel = UILabel()
+    toastLabel.textColor = .black
+    toastLabel.font = UIFont(name: "Pretendard", size: 14)
+    toastLabel.text = message
+    toastLabel.textAlignment = .center
+    toastLabel.numberOfLines = 0
+    
+    toastContainer.addSubview(toastLabel)
+  
+    guard let keyWindow = UIApplication.shared.keyWindow else { return }
+    
+    keyWindow.addSubview(toastContainer)
+    
+    toastContainer.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.bottom.equalTo(keyWindow.safeAreaLayoutGuide.snp.bottom).offset(-50)
+      make.width.equalTo(335)
+      make.height.equalTo(56)
+    }
+
+    toastLabel.snp.makeConstraints { make in
+      make.centerY.equalTo(toastContainer)
+      make.leading.equalTo(toastContainer).offset(30)
+      make.trailing.equalTo(toastContainer).offset(-16)
+    }
+    
+    UIView.animate(withDuration: 2.0, delay: 0.5, options: .curveEaseOut, animations: {
+      toastContainer.alpha = 0.0
+    }, completion: { _ in
+      toastContainer.removeFromSuperview()
+    })
+  }
 }

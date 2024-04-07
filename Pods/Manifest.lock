@@ -826,6 +826,7 @@ PODS:
   - InputBarAccessoryView (5.5.0):
     - InputBarAccessoryView/Core (= 5.5.0)
   - InputBarAccessoryView/Core (5.5.0)
+  - Kingfisher (7.11.0)
   - leveldb-library (1.22.4)
   - MessageKit (3.8.0):
     - InputBarAccessoryView (~> 5.5.0)
@@ -858,6 +859,7 @@ DEPENDENCIES:
   - FirebaseStorage
   - FloatingPanel
   - FSCalendar
+  - Kingfisher (~> 7.0)
   - MessageKit
   - NMapsMap
   - ObjectMapper
@@ -893,6 +895,7 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - InputBarAccessoryView
+    - Kingfisher
     - leveldb-library
     - MessageKit
     - nanopb
@@ -933,6 +936,7 @@ SPEC CHECKSUMS:
   gRPC-Core: a21a60aefc08c68c247b439a9ef97174b0c54f96
   GTMSessionFetcher: 8a1b34ad97ebe6f909fb8b9b77fba99943007556
   InputBarAccessoryView: 1d7b0a672b36e370f01f264b3907ef39d03328e3
+  Kingfisher: b9c985d864d43515f404f1ef4a8ce7d802ace3ac
   leveldb-library: 06a69cc7582d64b29424a63e085e683cc188230a
   MessageKit: a1ba0c69ebead94029867853eb44dd05b9b3f453
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
@@ -947,6 +951,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: a0ac22659b3dcf6f99bad279b9cd178820e37dad
+PODFILE CHECKSUM: f2a889847fd35a08d5c642f5569af2ef0b54a620
 
 COCOAPODS: 1.15.2
