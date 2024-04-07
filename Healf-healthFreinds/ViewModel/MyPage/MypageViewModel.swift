@@ -6,6 +6,13 @@
 //
 
 import Foundation
+import UIKit
+import Kingfisher
+
+enum MyPageError: Error {
+  case imageURLNotFound
+  // 다른 에러 유형 추가 가능
+}
 
 protocol myPostedDataConfigurable {
   func configure(with data: CreatePostModel)
@@ -41,6 +48,10 @@ class MypageViewModel: CommonViewModel {
   func getMyWorkoutHistory(completion: @escaping (([Int]) -> Void)){
     var monthlyWorkoutCheck: [Int] = []
     fetchThisMonthData { monthlyData in
+      guard let monthlyData = monthlyData else {
+        completion(monthlyWorkoutCheck)
+        return
+      }
       for dayOffset in 1..<31 {
         if let workoutData = self.convertToHistoryModelWithDate(for: "\(dayOffset)",
                                                                 data: monthlyData) {
@@ -80,14 +91,13 @@ class MypageViewModel: CommonViewModel {
   }
   
   func parsePostData(_ data: [String: Any]) -> CreatePostModel? {
-    guard
-      let exerciseType = data["exerciseType"] as? [String],
-      let gender = data["gender"] as? String,
-      let info = data["info"] as? String,
-      let postedDate = data["postedDate"] as? String,
-      let time = data["time"] as? String,
-      let userNickname = data["userNickname"] as? String,
-      let userUid = data["userUid"] as? String
+    guard let exerciseType = data["exerciseType"] as? [String],
+          let gender = data["gender"] as? String,
+          let info = data["info"] as? String,
+          let postedDate = data["postedDate"] as? String,
+          let time = data["time"] as? String,
+          let userNickname = data["userNickname"] as? String,
+          let userUid = data["userUid"] as? String
     else {
       return nil
     }
@@ -97,6 +107,30 @@ class MypageViewModel: CommonViewModel {
                             info: info,
                             userNickname: userNickname, postedDate: postedDate,
                             userUid: userUid)
+  }
+  
+  func getUserProfileImage(completion: @escaping (Result<UIImage, Error>) -> Void) {
+    getMyInfomation { result in
+      guard let imageUrl = result.profileImageURL,
+            let imageURL = URL(string: imageUrl) else {
+        completion(.failure(MyPageError.imageURLNotFound))
+        return
+      }
+      
+      let processor = ResizingImageProcessor(referenceSize: CGSize(width: 56, height: 56))
+      
+      KingfisherManager.shared.cache.removeImage(forKey: imageURL.absoluteString)
+      
+      KingfisherManager.shared.retrieveImage(with: imageURL,
+                                             options: [.processor(processor)]) { result in
+        switch result {
+        case .success(let value):
+          completion(.success(value.image))
+        case .failure(let error):
+          completion(.failure(error))
+        }
+      }
+    }
   }
   
 }

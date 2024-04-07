@@ -9,14 +9,18 @@ import UIKit
 
 import SnapKit
 import FSCalendar
+import Kingfisher
 
 // 데이터가 없을 때 처리가 필요함
+protocol ImageSelectionDelegate: AnyObject {
+  func didSelectImage(image: UIImage, introduce: String )
+}
 
-final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
+final class MypageViewController: NaviHelper, ParticipateButtonDelegate, ImageSelectionDelegate {
   func participateButtonTapped(postedData: CreatePostModel) {
     print("tt")
   }
-
+  
   let uiHelper = UIHelper.shared
   
   private lazy var userNickNameLabel = uiHelper.createSingleLineLabel("Gildong.Hong")
@@ -46,7 +50,7 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     calendar.scope = .month
     
     calendar.scrollEnabled = false
-//    calendar.locale = Locale(identifier: "ko_KR")
+    //    calendar.locale = Locale(identifier: "ko_KR")
     
     // 현재 달의 날짜들만 표기하도록 설정
     calendar.placeholderType = .none
@@ -73,13 +77,12 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     return calendar
   }()
   
-  var selectedDayReportLabelTitle: String = "21일의 기록\n같이한 사람: test\n평점: 4.24\ncomment:good"
   private lazy var selectedDayReportLabel = uiHelper.createMultipleLineLabel(selectedDayReportLabelTitle)
-
-  var highlightedDates: [Int] = []
-
+  
   let mypageViewModel = MypageViewModel()
-
+  
+  var selectedDayReportLabelTitle: String = "21일의 기록\n같이한 사람: test\n평점: 4.24\ncomment:good"
+  var highlightedDates: [Int] = []
   var myPostDatas: [CreatePostModel] = []
   
   override func viewDidLoad() {
@@ -108,7 +111,7 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     ].forEach {
       userInfoStackView.addArrangedSubview($0)
     }
-        
+    
     [
       userNickNameLabel,
       userProfileImageView,
@@ -208,18 +211,19 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     userWorkoutCollectionView.dataSource = self
     
     userWorkoutCollectionView.register(SearchResultCell.self,
-                                  forCellWithReuseIdentifier: SearchResultCell.id)
+                                       forCellWithReuseIdentifier: SearchResultCell.id)
   }
   
+  // MARK: - calendarButtonTapped
   func calendarButtonTapped(_ sender: UIButton){
     let calendarButtonSelected = (sender == userWorkoutCalenderButton)
-
+    
     let workoutImage = calendarButtonSelected ? "SeletedCalenderImg" : "CalenderImg"
     let postImage = calendarButtonSelected ? "MypostImg" : "SelectedPostImg"
-
+    
     userWorkoutCalenderButton.setImage(UIImage(named: workoutImage), for: .normal)
     userPostedButton.setImage(UIImage(named: postImage), for: .normal)
-
+    
     calendarView.isHidden = !calendarButtonSelected
     selectedDayReportLabel.isHidden = !calendarButtonSelected
     
@@ -227,26 +231,56 @@ final class MypageViewController: NaviHelper, ParticipateButtonDelegate {
     scrollView.isHidden = calendarButtonSelected
   }
   
+  // MARK: - seletedDailyCell
   func selectedDailyCell(_ selectedDay: String, data: HistoryModel) {
-      self.selectedDayReportLabel.text = "\(selectedDay)의 기록\n같이한 사람: \(data.together)\n평점: \(data.rate)\ncomment: \(data.comment)"
+    self.selectedDayReportLabel.text = "\(selectedDay)의 기록\n같이한 사람: \(data.together)\n평점: \(data.rate)\ncomment: \(data.comment)"
   }
-
+  
+  // MARK: - settingMyPageValue
   func settingMyPageValue(){
     self.mypageViewModel.getMyInfomation { result in
       guard let togetherCount = result.togetherCount,
             let workoutCount = result.workoutCount,
-            let postCount = result.postCount else { return }
+            let postCount = result.postCount,
+      let imageUrl = result.profileImageURL else { return }
       self.userNickNameLabel.text = result.nickname
       self.matchingCountLabel.text = "매칭 횟수\n\(togetherCount)번"
       self.workoutCountLabel.text = "운동 횟수\n\(workoutCount)번"
       self.postedCountLabel.text = "작성한 글\n\(postCount)개"
       self.userIntroduceLabel.text = result.introduce
+      
+      self.mypageViewModel.getUserProfileImage { result in
+        DispatchQueue.main.async {
+          switch result {
+          case .success(let image):
+            self.userProfileImageView.image = image
+            self.userProfileImageView.layer.cornerRadius = 35
+            self.userProfileImageView.clipsToBounds = true
+          case .failure(let error):
+            print("Failed to load user profile image: \(error)")
+          }
+        }
+      }
     }
   }
   
+  // MARK: - move to editVC
   func moveToEditProfileVC(){
-    let editProfileVC = EditMyProfileViewController()
+    guard let profileImage = userProfileImageView.image,
+          let introduce = userIntroduceLabel.text else { return }
+    let editProfileVC = EditMyProfileViewController(delegate: self,
+                                                    profileImage: profileImage,
+                                                    introduce: introduce)
     navigationController?.pushViewController(editProfileVC, animated: true)
+  }
+  
+  // MARK: - changeProfile
+  func didSelectImage(image: UIImage, introduce: String) {
+    userProfileImageView.image = image
+    userProfileImageView.layer.cornerRadius = 35
+    userProfileImageView.clipsToBounds = true
+    
+    userIntroduceLabel.text = introduce
   }
 }
 
@@ -263,7 +297,6 @@ extension MypageViewController: UICollectionViewDelegate, UICollectionViewDataSo
     let postedVC = PostedViewController()
     postedVC.hidesBottomBarWhenPushed = true
     self.navigationController?.pushViewController(postedVC, animated: true)
-
   }
   
   func collectionView(_ collectionView: UICollectionView,
@@ -271,7 +304,7 @@ extension MypageViewController: UICollectionViewDelegate, UICollectionViewDataSo
     // 참여하기 버튼 없애기
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchResultCell.id,
                                                   for: indexPath) as! SearchResultCell
-   
+    
     cell.configure(with: myPostDatas[indexPath.row])
     cell.delegate = self
     return cell

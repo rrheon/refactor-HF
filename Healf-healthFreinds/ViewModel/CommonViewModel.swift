@@ -54,18 +54,18 @@ class CommonViewModel {
     return startDayString
   }
   
-  func fetchThisMonthData(completion: @escaping ([String: Any]) -> Void) {
+  func fetchThisMonthData(completion: @escaping ([String: Any]?) -> Void) {
     let startDate = getStartDate()
     // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
     ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
-      guard let value = snapshot.value as? [String: Any] else {
-        print("Failed to load posts")
-        return
+      if let value = snapshot.value as? [String: Any] {
+        completion(value)
+      } else {
+        completion(nil)
       }
-      print(value)
-      completion(value)
     }
   }
+  
   
   func convertToHistoryModelWithDate(for date: String,
                                      data: [String: Any]) -> HistoryModel? {
@@ -100,7 +100,7 @@ class CommonViewModel {
   func convertUserModel(data: [String: Any]) -> UserModel? {
     let nickname = data["nickname"] as? String ?? ""
     let uid = data["uid"] as? String ?? ""
-    let profileImage = data["profileImage"] as? String ?? ""
+    let profileImageUrl = data["profileImageURL"] as? String ?? ""
     let togetherCount = data["togetherCount"] as? Int ?? 0
     let workoutCount = data["workoutCount"] as? Int ?? 0
     let postCount = data["postCount"] as? Int ?? 0
@@ -108,7 +108,7 @@ class CommonViewModel {
     let location = data["location"] as? String ?? ""
     
     // HistoryModel 객체 생성하여 반환
-    return UserModel(nickname: nickname, uid: uid, profileImage: profileImage,
+    return UserModel(nickname: nickname, uid: uid, profileImageURL: profileImageUrl,
                      togetherCount: togetherCount, workoutCount: workoutCount,
                      postCount: postCount, location: location, introduce: introduce)
     
@@ -116,7 +116,7 @@ class CommonViewModel {
   
   func updateCount(childType: String){
     let ref = Database.database().reference().child("UserDataInfo").child(uid ?? "").child("\(childType)")
-
+    
     ref.observeSingleEvent(of: .value) { (snapshot) in
       if var count = snapshot.value as? Int {
         count += 1

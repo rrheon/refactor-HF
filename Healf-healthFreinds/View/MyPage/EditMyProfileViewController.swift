@@ -47,6 +47,24 @@ class EditMyProfileViewController: NaviHelper {
   private lazy var introduceTextFiled = uihelper.createLoginTextField("소개")
   
   let editProfileViewModel = EditMyProfileViewModel()
+  weak var delegate: ImageSelectionDelegate?
+
+  init(delegate: ImageSelectionDelegate? = nil,
+       profileImage: UIImage,
+       introduce: String) {
+    super.init()
+
+    self.delegate = delegate
+    self.profileImageView.image = profileImage
+    self.profileImageView.layer.cornerRadius = 35
+    self.profileImageView.clipsToBounds = true
+
+    self.introduceTextFiled.text = introduce
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -59,6 +77,7 @@ class EditMyProfileViewController: NaviHelper {
     makeUI()
   }
   
+  // MARK: - setuplayout
   func setupLayout(){
     [
       profileChangeButton,
@@ -77,6 +96,7 @@ class EditMyProfileViewController: NaviHelper {
     }
   }
   
+  // MARK: - makeUI
   func makeUI(){
     profileImageView.snp.makeConstraints {
       $0.top.equalToSuperview().offset(150)
@@ -118,14 +138,16 @@ class EditMyProfileViewController: NaviHelper {
     self.navigationItem.rightBarButtonItem = completeButton
   }
   
+  // MARK: - completeButtonTapped
   @objc func completeButtonTapped(){
     guard let introduce = introduceTextFiled.text,
           let image = profileImageView.image else { return }
     editProfileViewModel.saveMyProfile(introduce: introduce, profileImage: image)
-    
+    changeMyProfile()
     navigationController?.popViewController(animated: true)
   }
   
+  // MARK: - changeProfileButtonTapped
   func changeProfileImageButtonTapped(){
     let bottomSheetVC = BottomSheet(firstButtonTitle: "앨범에서 선택하기",
                                     secondButtonTitle: "닫기")
@@ -135,11 +157,20 @@ class EditMyProfileViewController: NaviHelper {
     present(bottomSheetVC, animated: true, completion: nil)
   }
   
+  // MARK: - deleteProfile
   func deleteProfileImageButtonTapped(){
     profileImageView.image = UIImage(named: "EmptyProfileImg")
     uihelper.showToast(message: "기존 프로필 이미지를 삭제했어요!")
   }
   
+  // MARK: - changeMyProfile
+  func changeMyProfile() {
+    if let newImage = profileImageView.image,
+       let introduce = introduceTextFiled.text {
+      delegate?.didSelectImage(image: newImage, introduce: introduce)
+      navigationController?.popViewController(animated: true)
+    }
+  }
 }
 // MARK: - bottomSheet Delegate
 extension EditMyProfileViewController: BottomSheetDelegate {

@@ -17,6 +17,10 @@ final class HomeViewModel: CommonViewModel {
     var workoutDatas: [HistoryModel] = []
     
     self.fetchThisMonthData { value in
+      guard let value = value else {
+        completion(workoutDatas)
+        return
+      }
       for dayOffset in 0..<7 {
         let currentDay = (Int(startDate[2]) ?? 0) + dayOffset
         if let workoutData = self.convertToHistoryModelWithDate(for: "\(currentDay)",
