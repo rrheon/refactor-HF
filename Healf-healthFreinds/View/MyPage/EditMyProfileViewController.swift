@@ -153,7 +153,7 @@ class EditMyProfileViewController: NaviHelper {
                                     secondButtonTitle: "닫기")
     bottomSheetVC.delegate = self
     
-    uihelper.settingBottomeSheet(bottomSheetVC: bottomSheetVC)
+    uihelper.settingBottomeSheet(bottomSheetVC: bottomSheetVC, size: 150)
     present(bottomSheetVC, animated: true, completion: nil)
   }
   

@@ -65,26 +65,4 @@ class NaviHelper: UIViewController {
     
     navigationItem.leftBarButtonItem = logo
   }
-  
-  func showBottomSheet(bottomSheetVC: BottomSheet){
-    if #available(iOS 15.0, *) {
-      if let sheet = bottomSheetVC.sheetPresentationController {
-        if #available(iOS 16.0, *) {
-          sheet.detents = [.custom(resolver: { context in
-            return 228.0
-          })]
-        } else {
-          // Fallback on earlier versions
-        }
-        sheet.largestUndimmedDetentIdentifier = nil
-        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        sheet.prefersEdgeAttachedInCompactHeight = true
-        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-        sheet.preferredCornerRadius = 20
-      }
-    } else {
-      // Fallback on earlier versions
-    }
-    present(bottomSheetVC, animated: true, completion: nil)
-  }
 }

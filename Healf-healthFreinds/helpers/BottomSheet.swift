@@ -11,13 +11,19 @@ final class BottomSheet: UIViewController {
   weak var delegate: BottomSheetDelegate?
 
   private let firstButtonTitle: String
+  private let secondButtonTitle: String
+  private var checkPost: Bool = false
   
   var deletePostButtonAction: (() -> Void)?
   var modifyPostButtonAction: (() -> Void)?
 
   init(firstButtonTitle: String = "삭제하기",
-       secondButtonTitle: String = "수정하기") {
+       secondButtonTitle: String = "수정하기",
+       checkPost: Bool = false) {
     self.firstButtonTitle = firstButtonTitle
+    self.secondButtonTitle = secondButtonTitle
+    self.checkPost = checkPost
+    
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -37,7 +43,11 @@ final class BottomSheet: UIViewController {
   
   private lazy var modifyButton: UIButton = {
     let button = UIButton()
-
+    button.setTitle(secondButtonTitle, for: .normal)
+    button.setTitleColor(.black, for: .normal)
+    button.addAction(UIAction { _ in
+      self.delegate?.secondButtonTapped()
+    }, for: .touchUpInside)
     return button
   }()
   
@@ -59,9 +69,9 @@ final class BottomSheet: UIViewController {
   }
   
   func setUpLayout(){
+    if checkPost { view.addSubview(modifyButton) }
     [
       firstButton,
-//      modifyButton,
       dismissButton
     ].forEach {
       view.addSubview($0)
@@ -75,18 +85,27 @@ final class BottomSheet: UIViewController {
       make.leading.equalToSuperview()
       make.height.equalTo(50)
     }
-//    
-//    modifyButton.snp.makeConstraints { make in
-//      make.top.equalTo(deleteButton.snp.bottom).offset(10)
-//      make.centerX.equalToSuperview()
-//      make.height.equalTo(50)
-//    }
-//    
-    dismissButton.snp.makeConstraints { make in
-      make.top.equalTo(firstButton.snp.bottom).offset(10)
-      make.centerX.equalToSuperview()
-      make.height.equalTo(50)
-      make.width.equalTo(335)
+    
+    if checkPost {
+      modifyButton.snp.makeConstraints { make in
+        make.top.equalTo(firstButton.snp.bottom).offset(10)
+        make.centerX.equalToSuperview()
+        make.height.equalTo(50)
+      }
+      
+      dismissButton.snp.makeConstraints { make in
+        make.top.equalTo(modifyButton.snp.bottom).offset(10)
+        make.centerX.equalToSuperview()
+        make.height.equalTo(50)
+        make.width.equalTo(335)
+      }
+    } else {
+      dismissButton.snp.makeConstraints { make in
+        make.top.equalTo(firstButton.snp.bottom).offset(10)
+        make.centerX.equalToSuperview()
+        make.height.equalTo(50)
+        make.width.equalTo(335)
+      }
     }
   }
   

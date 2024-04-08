@@ -17,22 +17,30 @@ final class SearchResultCell: UICollectionViewCell {
   
   static var id: String { NSStringFromClass(Self.self).components(separatedBy: ".").last ?? "" }
   var delegate: ParticipateButtonDelegate?
+  var checkMyPost: Bool = false
   
   private lazy var profileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
   private lazy var nickNameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
   private lazy var postedDate = UIHelper.shared.createSingleLineLabel("2024.03.02")
   
-  private lazy var titleLabel = UIHelper.shared.createBasePaddingLabel("운동해요~~",
-                                                                       backgroundColor: .init(hexCode: "#F8F8F8"), textColor: .black)
+  private lazy var titleLabel = UIHelper.shared.createBasePaddingLabel(
+    "운동해요~~",
+    backgroundColor: .init(hexCode: "#F8F8F8"),
+    textColor: .black)
   private lazy var locationLabel = UIHelper.shared.createSingleLineLabel("📍 송도 1동",
                                                                          .mainBlue,
                                                                          .boldSystemFont(ofSize: 15))
   private lazy var participateButton = UIHelper.shared.createHealfButton("참여하기", .mainBlue, .white)
+  private lazy var menuButton = UIHelper.shared.createButtonWithImage("",
+                                                                      "MyPostMenuImg",
+                                                                      checkButton: false)
   
   override init(frame: CGRect) {
     super.init(frame: frame)
+    
     self.backgroundColor = .white
     setViewShadow(backView: self)
+    
     
     addSubviews()
     configure()
@@ -44,17 +52,19 @@ final class SearchResultCell: UICollectionViewCell {
   }
   
   private func addSubviews() {
+    
     [
       locationLabel,
       titleLabel,
       profileImageView,
       nickNameLabel,
       postedDate,
-      participateButton
+      participateButton,
+      menuButton
     ].forEach {
       addSubview($0)
     }
-
+    
   }
   
   private func configure() {
@@ -89,11 +99,18 @@ final class SearchResultCell: UICollectionViewCell {
       $0.height.equalTo(35)
       $0.width.equalTo(110)
     }
+    
+    menuButton.snp.makeConstraints {
+      $0.centerY.equalTo(locationLabel)
+      $0.trailing.equalTo(postedDate.snp.trailing)
+    }
   }
 }
 
 extension SearchResultCell: postedDataConfigurable {
-  func configure(with data: CreatePostModel) {
+  func configure(with data: CreatePostModel, checkMyPost: Bool = false) {
+    participateButton.isHidden = checkMyPost
+    menuButton.isHidden = !checkMyPost
     
     nickNameLabel.text = data.userNickname
     titleLabel.text = data.info
@@ -102,5 +119,10 @@ extension SearchResultCell: postedDataConfigurable {
     participateButton.addAction(UIAction { _ in
       self.delegate?.participateButtonTapped(postedData: data)
     }, for: .touchUpInside)
+    
+    menuButton.addAction(UIAction { _ in
+      self.delegate?.participateButtonTapped(postedData: data)
+    }, for: .touchUpInside)
+    
   }
 }

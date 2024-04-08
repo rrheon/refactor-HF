@@ -32,16 +32,16 @@ class MypageViewModel: CommonViewModel {
   }
   
   func fetchDailyData(_ selectedDay: String,
-                      completion: @escaping ([String: Any]) -> Void) {
+                      completion: @escaping ([String: Any]?) -> Void) {
     let startDate = getStartDate()
     // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
     ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).child(selectedDay)
       .observeSingleEvent(of: .value) { snapshot in
-        guard let value = snapshot.value as? [String: Any] else {
-          print("Failed to load posts")
-          return
+        if let value = snapshot.value as? [String: Any] {
+          completion(value)
+        } else {
+          completion(nil)
         }
-        completion(value)
       }
   }
   
@@ -62,9 +62,16 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
-  func getDailyHistory(_ selectedDay: String, completion: @escaping (HistoryModel) -> Void) {
+  func getDailyHistory(_ selectedDay: String,
+                       completion: @escaping (HistoryModel) -> Void) {
     fetchDailyData(selectedDay) { result in
-      guard let workoutData = self.convertToHistoryModel(data: result) else {return }
+      guard let result = result else {
+        let emptyValue = HistoryModel(comment: "기록없음", date: "기록없음", rate: 0.0,
+                                      together: "기록없음", workoutTypes: ["기록없음"])
+        completion(emptyValue)
+        return
+      }
+      guard let workoutData = self.convertToHistoryModel(data: result) else { return }
       completion(workoutData)
     }
   }
@@ -102,11 +109,11 @@ class MypageViewModel: CommonViewModel {
       return nil
     }
     
-    return CreatePostModel( time: time, workoutTypes: exerciseType,
-                            gender: gender,
-                            info: info,
-                            userNickname: userNickname, postedDate: postedDate,
-                            userUid: userUid)
+    return CreatePostModel(time: time, workoutTypes: exerciseType,
+                           gender: gender,
+                           info: info,
+                           userNickname: userNickname, postedDate: postedDate,
+                           userUid: userUid)
   }
   
   func getUserProfileImage(completion: @escaping (Result<UIImage, Error>) -> Void) {

@@ -138,7 +138,7 @@ final class PostedViewController: UIViewController {
 }
 
 extension PostedViewController: postedDataConfigurable {
-  func configure(with data: CreatePostModel) {
+  func configure(with data: CreatePostModel, checkMyPost: Bool = false) {
     postedTimeLabel.text = data.time
     workoutInfoLabel.text = data.workoutTypes.joined(separator: ", ")
     fixedGenderLabel.text = data.gender

@@ -89,7 +89,9 @@ final class UIHelper: UIViewController {
   }
   
   // MARK: - 체크버튼 만들기
-  func createButtonWithImage(_ title: String = "", _ image: String) -> UIButton {
+  func createButtonWithImage(_ title: String = "",
+                             _ image: String,
+                             checkButton: Bool = true) -> UIButton {
     let button = UIButton()
     button.setTitle(title, for: .normal)
     button.setTitleColor(.black, for: .normal)
@@ -97,7 +99,7 @@ final class UIHelper: UIViewController {
     button.setImage(UIImage(named: image), for: .normal)
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     button.contentHorizontalAlignment = .leading
-    button.widthAnchor.constraint(equalToConstant: 100).isActive = true
+    button.widthAnchor.constraint(equalToConstant: 100).isActive = checkButton
     return button
   }
   
@@ -202,12 +204,12 @@ final class UIHelper: UIViewController {
   }
 
   // MARK: - bottomSheet
-  func settingBottomeSheet(bottomSheetVC: BottomSheet){
+  func settingBottomeSheet(bottomSheetVC: BottomSheet, size: Double){
     if #available(iOS 15.0, *) {
       if let sheet = bottomSheetVC.sheetPresentationController {
         if #available(iOS 16.0, *) {
           sheet.detents = [.custom(resolver: { context in
-            return 150.0
+            return size
           })]
         } else {
           // Fallback on earlier versions

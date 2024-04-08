@@ -8,7 +8,7 @@
 import Foundation
 
 protocol postedDataConfigurable {
-  func configure(with data: CreatePostModel)
+  func configure(with data: CreatePostModel, checkMyPost: Bool)
 }
 
 final class SearchViewModel: CommonViewModel {
