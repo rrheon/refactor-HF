@@ -31,6 +31,8 @@ final class SearchViewController: NaviHelper, UISearchBarDelegate {
   }
   
   override func navigationItemSetting() {
+    super.navigationItemSetting()
+    
     redesignNavigation("SearchTextImg")
   }
   

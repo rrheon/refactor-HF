@@ -31,7 +31,7 @@ final class SearchResultCell: UICollectionViewCell {
                                                                          .mainBlue,
                                                                          .boldSystemFont(ofSize: 15))
   private lazy var participateButton = UIHelper.shared.createHealfButton("참여하기", .mainBlue, .white)
-  private lazy var menuButton = UIHelper.shared.createButtonWithImage("",
+  private lazy var menuButton = UIHelper.shared.createButtonWithImage("     ",
                                                                       "MyPostMenuImg",
                                                                       checkButton: false)
   

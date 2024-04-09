@@ -3,8 +3,8 @@ import UIKit
 import SnapKit
 
 protocol BottomSheetDelegate: AnyObject {
-  func firstButtonTapped()
-  func secondButtonTapped()
+  func firstButtonTapped(_ postedData: CreatePostModel?)
+  func secondButtonTapped(_ postedData: CreatePostModel?)
 }
 
 final class BottomSheet: UIViewController {
@@ -13,16 +13,20 @@ final class BottomSheet: UIViewController {
   private let firstButtonTitle: String
   private let secondButtonTitle: String
   private var checkPost: Bool = false
+  private var postedData: CreatePostModel?
   
   var deletePostButtonAction: (() -> Void)?
   var modifyPostButtonAction: (() -> Void)?
 
   init(firstButtonTitle: String = "삭제하기",
        secondButtonTitle: String = "수정하기",
-       checkPost: Bool = false) {
+       checkPost: Bool = false,
+       postedData: CreatePostModel? = nil) {
+    
     self.firstButtonTitle = firstButtonTitle
     self.secondButtonTitle = secondButtonTitle
     self.checkPost = checkPost
+    self.postedData = postedData
     
     super.init(nibName: nil, bundle: nil)
   }
@@ -36,7 +40,7 @@ final class BottomSheet: UIViewController {
     button.setTitle(firstButtonTitle, for: .normal)
     button.setTitleColor(.mainBlue, for: .normal)
     button.addAction(UIAction { _ in
-      self.delegate?.firstButtonTapped()
+      self.delegate?.firstButtonTapped(self.postedData)
     }, for: .touchUpInside)
     return button
   }()
@@ -46,7 +50,7 @@ final class BottomSheet: UIViewController {
     button.setTitle(secondButtonTitle, for: .normal)
     button.setTitleColor(.black, for: .normal)
     button.addAction(UIAction { _ in
-      self.delegate?.secondButtonTapped()
+      self.delegate?.secondButtonTapped(self.postedData)
     }, for: .touchUpInside)
     return button
   }()

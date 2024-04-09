@@ -33,7 +33,7 @@ final class MypageViewController: NaviHelper {
   private lazy var userWorkoutCalenderButton = uiHelper.createButtonWithImage("","SeletedCalenderImg")
   private lazy var userPostedButton = uiHelper.createButtonWithImage("","MypostImg")
   
-  private lazy var userWorkoutCollectionView = uiHelper.createCollectionView(scrollDirection: .vertical,
+  private lazy var myPostColletionView = uiHelper.createCollectionView(scrollDirection: .vertical,
                                                                              spacing: 20)
   private let scrollView = UIScrollView()
   
@@ -123,7 +123,7 @@ final class MypageViewController: NaviHelper {
       view.addSubview($0)
     }
     
-    scrollView.addSubview(userWorkoutCollectionView)
+    scrollView.addSubview(myPostColletionView)
   }
   
   // MARK: - makeUI
@@ -189,8 +189,8 @@ final class MypageViewController: NaviHelper {
       $0.leading.equalTo(calendarView)
     }
     
-    userWorkoutCollectionView.isHidden = true
-    userWorkoutCollectionView.snp.makeConstraints {
+    myPostColletionView.isHidden = true
+    myPostColletionView.snp.makeConstraints {
       $0.width.equalToSuperview()
       $0.height.equalTo(scrollView.snp.height)
     }
@@ -203,10 +203,10 @@ final class MypageViewController: NaviHelper {
   }
   
   func registerCell(){
-    userWorkoutCollectionView.delegate = self
-    userWorkoutCollectionView.dataSource = self
+    myPostColletionView.delegate = self
+    myPostColletionView.dataSource = self
     
-    userWorkoutCollectionView.register(SearchResultCell.self,
+    myPostColletionView.register(SearchResultCell.self,
                                        forCellWithReuseIdentifier: SearchResultCell.id)
   }
   
@@ -223,7 +223,7 @@ final class MypageViewController: NaviHelper {
     calendarView.isHidden = !calendarButtonSelected
     selectedDayReportLabel.isHidden = !calendarButtonSelected
     
-    userWorkoutCollectionView.isHidden = calendarButtonSelected
+    myPostColletionView.isHidden = calendarButtonSelected
     scrollView.isHidden = calendarButtonSelected
   }
   
@@ -321,7 +321,8 @@ extension MypageViewController: ParticipateButtonDelegate {
   func participateButtonTapped(postedData: CreatePostModel) {
     let bottomSheetVC = BottomSheet(firstButtonTitle: "게시글 삭제하기",
                                     secondButtonTitle: "게시글 수정하기",
-                                    checkPost: true)
+                                    checkPost: true,
+                                    postedData: postedData)
     bottomSheetVC.delegate = self
     
     uihelper.settingBottomeSheet(bottomSheetVC: bottomSheetVC, size: 220)
@@ -330,11 +331,16 @@ extension MypageViewController: ParticipateButtonDelegate {
 }
 
 extension MypageViewController: BottomSheetDelegate {
-  func firstButtonTapped() {
-    print("1")
+  func firstButtonTapped(_ postedData: CreatePostModel?) {
+    guard let postedDate = postedData?.postedDate,
+          let postedInfo = postedData?.info else { return }
+    mypageViewModel.deleteMyPost(postedDate: postedDate, info: postedInfo) {
+      self.uiHelper.showToast(message: "✅ 게시글이 삭제되었습니다.")
+      self.myPostColletionView.reloadData()
+    }
   }
   
-  func secondButtonTapped() {
+  func secondButtonTapped(_ postedData: CreatePostModel?) {
     print("2")
   }
 }

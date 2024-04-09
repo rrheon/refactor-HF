@@ -11,7 +11,6 @@ import Kingfisher
 
 enum MyPageError: Error {
   case imageURLNotFound
-  // 다른 에러 유형 추가 가능
 }
 
 protocol myPostedDataConfigurable {
@@ -140,4 +139,28 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
+  // 삭제 기준을 뭘로 잡을지 지금 날짜로 잡았는데 동일한 날짜면 모두 삭제될듯, 컴플리션 걸어서 컬렉션뷰 리로드 필요
+  // 수정은 데이터를 가져오고 덮어쓰는 형식으로 가야할듯
+  func deleteMyPost(postedDate: String,
+                    info: String,
+                    completion: @escaping () -> Void){
+    var ref = ref.child("users").child(uid ?? "").child("posts").child(postedDate)
+    ref.observeSingleEvent(of: .value) { snapshot in
+      guard let value = snapshot.value as? [String: Any] else {
+        return
+      }
+      
+      let postedInfo = value["info"] as? String ?? ""
+      if postedInfo == info {
+        ref.removeValue { error, _ in
+          if let error = error {
+            print("Error removing data: \(error.localizedDescription)")
+          } else {
+            print("Data removed successfully.")
+            completion()
+          }
+        }
+      }
+    }
+  }
 }

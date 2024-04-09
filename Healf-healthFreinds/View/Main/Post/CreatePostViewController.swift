@@ -102,7 +102,7 @@ final class CreatePostViewController: NaviHelper {
   // MARK: - makeUI
   func makeUI(){
     setTimeLabel.snp.makeConstraints {
-      $0.top.equalToSuperview().offset(40)
+      $0.top.equalTo(view.safeAreaLayoutGuide).offset(30)
       $0.leading.equalToSuperview().offset(20)
     }
     

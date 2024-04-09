@@ -174,10 +174,14 @@ class EditMyProfileViewController: NaviHelper {
 }
 // MARK: - bottomSheet Delegate
 extension EditMyProfileViewController: BottomSheetDelegate {
-  func secondButtonTapped() {
-    print("222")
+  // 앨범에서 선택하기
+  func firstButtonTapped(_ postedData: CreatePostModel?) {
+    requestPhotoLibraryAccess()
   }
   
+  func secondButtonTapped(_ postedData: CreatePostModel?) {
+    print("222")
+  }
   // 프로필 이미지 변경
   func changeProfileImage(type: UIImagePickerController.SourceType){
     self.dismiss(animated: true)
@@ -188,12 +192,7 @@ extension EditMyProfileViewController: BottomSheetDelegate {
     picker.allowsEditing = true
     self.present(picker, animated: true)
   }
-  
-  // 앨범에서 선택하기
-  func firstButtonTapped() {
-    requestPhotoLibraryAccess()
-  }
-  
+ 
   func requestPhotoLibraryAccess() {
     PHPhotoLibrary.requestAuthorization { [weak self] status in
       switch status {
