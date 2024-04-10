@@ -10,36 +10,49 @@ import UIKit
 import SnapKit
 
 final class CreatePostViewController: NaviHelper {
-  private lazy var setTimeLabel = UIHelper.shared.createSingleLineLabel("시간대 ⏰")
-  private lazy var setTimeTextfield = UIHelper.shared.createGeneralTextField("메세지를 입력해주세요.")
+  private lazy var setTimeLabel = uihelper.createSingleLineLabel("시간대 ⏰")
+  private lazy var setTimeTextfield = uihelper.createGeneralTextField("메세지를 입력해주세요.")
   
-  private lazy var selectWorkoutTitle = UIHelper.shared.createSingleLineLabel("운동 종류 🏋🏻")
-  private lazy var cardioButton = UIHelper.shared.createButtonWithImage("유산소","EmptyCheckboxImg")
-  private lazy var chestButton = UIHelper.shared.createButtonWithImage("가슴","EmptyCheckboxImg")
-  private lazy var backButton = UIHelper.shared.createButtonWithImage("등","EmptyCheckboxImg")
-  private lazy var lowerBodyButton = UIHelper.shared.createButtonWithImage("하체","EmptyCheckboxImg")
-  private lazy var shoulderButton = UIHelper.shared.createButtonWithImage("어깨","EmptyCheckboxImg")
-  private lazy var choiceWorkoutStackView = UIHelper.shared.createStackView(axis: .vertical,
+  private lazy var selectWorkoutTitle = uihelper.createSingleLineLabel("운동 종류 🏋🏻")
+  private lazy var cardioButton = uihelper.createButtonWithImage("유산소","EmptyCheckboxImg")
+  private lazy var chestButton = uihelper.createButtonWithImage("가슴","EmptyCheckboxImg")
+  private lazy var backButton = uihelper.createButtonWithImage("등","EmptyCheckboxImg")
+  private lazy var lowerBodyButton = uihelper.createButtonWithImage("하체","EmptyCheckboxImg")
+  private lazy var shoulderButton = uihelper.createButtonWithImage("어깨","EmptyCheckboxImg")
+  private lazy var choiceWorkoutStackView = uihelper.createStackView(axis: .vertical,
                                                                             spacing: 10)
   
-  private lazy var selectGenderTitle = UIHelper.shared.createSingleLineLabel("성별 🚻")
-  private lazy var selectMaleButton = UIHelper.shared.createSelectButton("남자만")
-  private lazy var selectFemaleButton = UIHelper.shared.createSelectButton("여자만")
-  private lazy var selectAllButton = UIHelper.shared.createSelectButton("무관")
-  private lazy var selectGenderButtonStackView = UIHelper.shared.createStackView(axis: .horizontal,
+  private lazy var selectGenderTitle = uihelper.createSingleLineLabel("성별 🚻")
+  private lazy var selectMaleButton = uihelper.createSelectButton("남자만")
+  private lazy var selectFemaleButton = uihelper.createSelectButton("여자만")
+  private lazy var selectAllButton = uihelper.createSelectButton("무관")
+  private lazy var selectGenderButtonStackView = uihelper.createStackView(axis: .horizontal,
                                                                                  spacing: 10)
   
-  private lazy var writeDetailInfoLabel = UIHelper.shared.createSingleLineLabel("내용")
-  private lazy var writeDetailInfoTextView = UIHelper.shared.createGeneralTextView("내용을 입력하세요.")
+  private lazy var writeDetailInfoLabel = uihelper.createSingleLineLabel("내용")
+  private lazy var writeDetailInfoTextView = uihelper.createGeneralTextView("내용을 입력하세요.")
   
   private lazy var writerProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
-  private lazy var wirterNicknameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
-  private lazy var enterPostButton = UIHelper.shared.createHealfButton("매칭 등록하기 📬",
-                                                                       .mainBlue, .white)
+  private lazy var wirterNicknameLabel = uihelper.createSingleLineLabel("닉네임")
+  private lazy var enterPostButton = uihelper.createHealfButton("매칭 등록하기 📬", .mainBlue, .white)
   
   let createPostViewModel = CreatePostViewModel()
   var workoutTypes: [String] = []
   var selectedGender: String = ""
+  
+  var checkModify: Bool = false
+  var postedData: CreatePostModel?
+  
+  init(checkModify: Bool = false, postedData: CreatePostModel? = nil) {
+    self.checkModify = checkModify
+    self.postedData = postedData
+    
+    super.init()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -170,6 +183,7 @@ final class CreatePostViewController: NaviHelper {
     }
   }
   
+  // MARK: - button Func register
   func registerButtonFunc(){
     enterPostButton.addAction(UIAction { _ in
       self.registerPost()
@@ -193,6 +207,7 @@ final class CreatePostViewController: NaviHelper {
     }
   }
   
+  // MARK: - genderButtonTapped
   func genderButtonTapped(_ sender: UIButton) {
     [
       selectAllButton,
@@ -210,6 +225,7 @@ final class CreatePostViewController: NaviHelper {
     selectedGender = gender
   }
   
+  // MARK: - registerPost
   func registerPost(){
     guard let time = setTimeTextfield.text,
           let info = writeDetailInfoTextView.text else { return }

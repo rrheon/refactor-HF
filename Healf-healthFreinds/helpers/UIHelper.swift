@@ -204,7 +204,7 @@ final class UIHelper: UIViewController {
   }
 
   // MARK: - bottomSheet
-  func settingBottomeSheet(bottomSheetVC: BottomSheet, size: Double){
+  func settingBottomeSheet(bottomSheetVC: UIViewController, size: Double){
     if #available(iOS 15.0, *) {
       if let sheet = bottomSheetVC.sheetPresentationController {
         if #available(iOS 16.0, *) {

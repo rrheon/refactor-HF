@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+
 import Kingfisher
 
 enum MyPageError: Error {
@@ -44,6 +45,7 @@ class MypageViewModel: CommonViewModel {
       }
   }
   
+  // MARK: - 달력 데이터 가져오기
   func getMyWorkoutHistory(completion: @escaping (([Int]) -> Void)){
     var monthlyWorkoutCheck: [Int] = []
     fetchThisMonthData { monthlyData in
@@ -61,6 +63,7 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
+  // MARK: - 달력에서 데일리 데이터 가져오기
   func getDailyHistory(_ selectedDay: String,
                        completion: @escaping (HistoryModel) -> Void) {
     fetchDailyData(selectedDay) { result in
@@ -96,6 +99,7 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
+  // MARK: - postData to 구조체
   func parsePostData(_ data: [String: Any]) -> CreatePostModel? {
     guard let exerciseType = data["exerciseType"] as? [String],
           let gender = data["gender"] as? String,
@@ -115,6 +119,7 @@ class MypageViewModel: CommonViewModel {
                            userUid: userUid)
   }
   
+// MARK: - 유저 프로필 받아오기
   func getUserProfileImage(completion: @escaping (Result<UIImage, Error>) -> Void) {
     getMyInfomation { result in
       guard let imageUrl = result.profileImageURL,
@@ -139,12 +144,11 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
-  // 삭제 기준을 뭘로 잡을지 지금 날짜로 잡았는데 동일한 날짜면 모두 삭제될듯, 컴플리션 걸어서 컬렉션뷰 리로드 필요
-  // 수정은 데이터를 가져오고 덮어쓰는 형식으로 가야할듯
+// MARK: - 게시글 삭제
   func deleteMyPost(postedDate: String,
                     info: String,
                     completion: @escaping () -> Void){
-    var ref = ref.child("users").child(uid ?? "").child("posts").child(postedDate)
+    let ref = ref.child("users").child(uid ?? "").child("posts").child(postedDate)
     ref.observeSingleEvent(of: .value) { snapshot in
       guard let value = snapshot.value as? [String: Any] else {
         return
@@ -157,10 +161,16 @@ class MypageViewModel: CommonViewModel {
             print("Error removing data: \(error.localizedDescription)")
           } else {
             print("Data removed successfully.")
+            self.updateCount(childType: "postCount", checkCraete: false)
             completion()
           }
         }
       }
     }
+  }
+  
+// MARK: - 게시글 수정
+  func modifyMyPost(){
+    
   }
 }

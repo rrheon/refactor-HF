@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+
 import FirebaseDatabase
 
 class MapViewModel: CommonViewModel {
@@ -97,9 +98,6 @@ class MapViewModel: CommonViewModel {
       }
     }
   }
-  
-  
-  
   
   func getUserInfomation(_ uid: String,
                          completion: @escaping(UserModel) -> Void){

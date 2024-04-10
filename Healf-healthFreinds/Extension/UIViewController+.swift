@@ -32,23 +32,8 @@ extension UIViewController {
     let postedVC = PostedViewController()
     postedVC.configure(with: userData)
 
-    if #available(iOS 15.0, *) {
-      if let sheet = postedVC.sheetPresentationController {
-        if #available(iOS 16.0, *) {
-          sheet.detents = [.custom(resolver: { context in
-            return 400.0
-          })]
-        } else {
-          // Fallback on earlier versions
-        }
-        sheet.largestUndimmedDetentIdentifier = nil
-        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        sheet.prefersEdgeAttachedInCompactHeight = true
-        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-        sheet.preferredCornerRadius = 20
-      }
-    } else {
-    }
+    UIHelper.shared.settingBottomeSheet(bottomSheetVC: postedVC, size: 440.0)
+
     self.present(postedVC, animated: true, completion: nil)
   }
   
@@ -60,7 +45,7 @@ extension UIViewController {
     popupVC.popupView.completButtonAction = { [weak self] in
       self?.dismiss(animated: true) {
         if checkNavi { self?.navigationController?.popViewController(animated: true) }
-        else { self?.dismiss(animated: true)}
+        else { self?.dismiss(animated: true) }
       }
     }
     self.present(popupVC, animated: false)

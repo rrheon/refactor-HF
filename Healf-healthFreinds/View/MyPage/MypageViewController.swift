@@ -35,7 +35,12 @@ final class MypageViewController: NaviHelper {
   
   private lazy var myPostColletionView = uiHelper.createCollectionView(scrollDirection: .vertical,
                                                                              spacing: 20)
-  private let scrollView = UIScrollView()
+  private lazy var scrollView = UIScrollView()
+  
+  private lazy var myPostNotExitLabel = uiHelper.createMultipleLineLabel(
+    "작성한 게시글이 없습니다.\n게시글을 작성하여 새로운 운동을 시작해 보세요!")
+  
+  private lazy var myPostNotExitButton = uiHelper.createHealfButton("게시글 작성하기", .mainBlue, .white)
   
   private lazy var calendarView: FSCalendar = {
     let calendar = FSCalendar()
@@ -210,21 +215,34 @@ final class MypageViewController: NaviHelper {
                                        forCellWithReuseIdentifier: SearchResultCell.id)
   }
   
+  
   // MARK: - calendarButtonTapped
   func calendarButtonTapped(_ sender: UIButton){
     let calendarButtonSelected = (sender == userWorkoutCalenderButton)
+    
+    if !calendarButtonSelected { checkMypostCount() }
     
     let workoutImage = calendarButtonSelected ? "SeletedCalenderImg" : "CalenderImg"
     let postImage = calendarButtonSelected ? "MypostImg" : "SelectedPostImg"
     
     userWorkoutCalenderButton.setImage(UIImage(named: workoutImage), for: .normal)
     userPostedButton.setImage(UIImage(named: postImage), for: .normal)
+  
+    [
+      calendarView,
+      selectedDayReportLabel,
+    ].forEach {
+      $0.isHidden = !calendarButtonSelected
+    }
     
-    calendarView.isHidden = !calendarButtonSelected
-    selectedDayReportLabel.isHidden = !calendarButtonSelected
-    
-    myPostColletionView.isHidden = calendarButtonSelected
-    scrollView.isHidden = calendarButtonSelected
+    [
+      myPostColletionView,
+      scrollView,
+      myPostNotExitLabel,
+      myPostNotExitButton
+    ].forEach {
+      $0.isHidden = calendarButtonSelected
+    }
   }
   
   // MARK: - seletedDailyCell
@@ -270,6 +288,28 @@ final class MypageViewController: NaviHelper {
                                                     introduce: introduce)
     navigationController?.pushViewController(editProfileVC, animated: true)
   }
+  
+  func checkMypostCount(){
+    if myPostDatas.count == 0 {
+      [
+        myPostNotExitLabel,
+        myPostNotExitButton
+      ].forEach {
+        view.addSubview($0)
+      }
+      
+      myPostNotExitLabel.snp.makeConstraints {
+        $0.centerX.equalToSuperview()
+        $0.top.equalTo(userPostedButton.snp.bottom).offset(100)
+      }
+      
+      myPostNotExitButton.snp.makeConstraints {
+        $0.centerX.equalToSuperview()
+        $0.top.equalTo(myPostNotExitLabel.snp.bottom).offset(50)
+        $0.width.equalTo(55)
+      }
+    }
+  }
 }
 
 // MARK: - collectionView
@@ -303,6 +343,10 @@ extension MypageViewController: UICollectionViewDelegate,
                       sizeForItemAt indexPath: IndexPath) -> CGSize {
     return CGSize(width: 350, height: 185)
   }
+  
+  func reloadMyPostCollectionView(completion: @escaping () -> Void){
+    myPostColletionView.reloadData()
+  }
 }
 
 // MARK: - ImageSelectionDelegate
@@ -335,12 +379,23 @@ extension MypageViewController: BottomSheetDelegate {
     guard let postedDate = postedData?.postedDate,
           let postedInfo = postedData?.info else { return }
     mypageViewModel.deleteMyPost(postedDate: postedDate, info: postedInfo) {
+      
+      self.myPostDatas = self.myPostDatas.filter { data in
+        return !(postedDate == data.postedDate && postedInfo == data.info)
+      }
+
+      self.checkMypostCount()
+      
       self.uiHelper.showToast(message: "✅ 게시글이 삭제되었습니다.")
-      self.myPostColletionView.reloadData()
+      self.reloadMyPostCollectionView {
+        self.dismiss(animated: true)
+      }
     }
   }
   
   func secondButtonTapped(_ postedData: CreatePostModel?) {
-    print("2")
+    let createPostVC = CreatePostViewController(checkModify: true, postedData: postedData)
+    createPostVC.hidesBottomBarWhenPushed = true
+    self.navigationController?.pushViewController(createPostVC, animated: true)
   }
 }

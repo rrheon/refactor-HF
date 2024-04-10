@@ -13,7 +13,7 @@ import FirebaseDatabase
 class CommonViewModel {
   let uid = Auth.auth().currentUser?.uid
   let ref = Database.database().reference()
-  
+    
   func getCurrentDate() -> String {
     let currentDate = Date()
     let dateFormatter = DateFormatter()
@@ -114,14 +114,17 @@ class CommonViewModel {
     
   }
   
-  func updateCount(childType: String){
+  func updateCount(childType: String, checkCraete: Bool = true){
     let ref = Database.database().reference().child("UserDataInfo").child(uid ?? "").child("\(childType)")
     
-    ref.observeSingleEvent(of: .value) { (snapshot) in
+    ref.observeSingleEvent(of: .value) { snapshot in
       if var count = snapshot.value as? Int {
-        count += 1
+        count = checkCraete ? count + 1 : count - 1
         ref.setValue(count)
-      } else { ref.setValue(1) }
+      } else {
+        ref.setValue(1)
+      }
     }
+    
   }
 }
