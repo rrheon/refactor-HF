@@ -289,6 +289,7 @@ final class MypageViewController: NaviHelper {
     navigationController?.pushViewController(editProfileVC, animated: true)
   }
   
+  // MARK: - checkMyPostCount
   func checkMypostCount(){
     if myPostDatas.count == 0 {
       [
@@ -306,7 +307,8 @@ final class MypageViewController: NaviHelper {
       myPostNotExitButton.snp.makeConstraints {
         $0.centerX.equalToSuperview()
         $0.top.equalTo(myPostNotExitLabel.snp.bottom).offset(50)
-        $0.width.equalTo(55)
+        $0.leading.equalTo(myPostNotExitLabel.snp.leading).offset(30)
+        $0.trailing.equalTo(myPostNotExitLabel.snp.trailing).offset(-30)
       }
     }
   }
@@ -394,7 +396,9 @@ extension MypageViewController: BottomSheetDelegate {
   }
   
   func secondButtonTapped(_ postedData: CreatePostModel?) {
-    let createPostVC = CreatePostViewController(checkModify: true, postedData: postedData)
+    dismiss(animated: false)
+
+    let createPostVC = CreatePostViewController(postedData: postedData)
     createPostVC.hidesBottomBarWhenPushed = true
     self.navigationController?.pushViewController(createPostVC, animated: true)
   }

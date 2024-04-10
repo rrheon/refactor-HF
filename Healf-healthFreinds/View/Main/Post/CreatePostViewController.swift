@@ -40,14 +40,12 @@ final class CreatePostViewController: NaviHelper {
   var workoutTypes: [String] = []
   var selectedGender: String = ""
   
-  var checkModify: Bool = false
-  var postedData: CreatePostModel?
+  var modifyPostedData: CreatePostModel?
   
-  init(checkModify: Bool = false, postedData: CreatePostModel? = nil) {
-    self.checkModify = checkModify
-    self.postedData = postedData
-    
+  init(postedData: CreatePostModel? = nil) {
     super.init()
+
+    self.modifyPostedData = postedData
   }
   
   required init?(coder: NSCoder) {
@@ -64,8 +62,9 @@ final class CreatePostViewController: NaviHelper {
     
     setupLayout()
     makeUI()
-    
+        
     registerButtonFunc()
+    settingModifyValue()
   }
   
   override func navigationItemSetting() {
@@ -186,7 +185,10 @@ final class CreatePostViewController: NaviHelper {
   // MARK: - button Func register
   func registerButtonFunc(){
     enterPostButton.addAction(UIAction { _ in
-      self.registerPost()
+      self.processPost(isModify: false) {
+        self.navigationController?.popViewController(animated: true)
+        self.uihelper.showToast(message: "✅ 게시글이 등록되었어요!")
+      }
     }, for: .touchUpInside)
     
     let genderButtons = [selectAllButton, selectMaleButton, selectFemaleButton]
@@ -226,11 +228,59 @@ final class CreatePostViewController: NaviHelper {
   }
   
   // MARK: - registerPost
-  func registerPost(){
+  func processPost(isModify: Bool, completion: @escaping () -> Void) {
     guard let time = setTimeTextfield.text,
           let info = writeDetailInfoTextView.text else { return }
     
-    self.createPostViewModel.createPost(time, self.workoutTypes, self.selectedGender, info)
+    if isModify {
+      self.createPostViewModel.createPost(time, self.workoutTypes,
+                                          self.selectedGender, info, modifyPostedData?.postedDate)
+    } else {
+      self.createPostViewModel.createPost(time, self.workoutTypes, self.selectedGender, info)
+    }
+    completion()
+  }
+
+  
+  // MARK: - settingModifyValue
+  func settingModifyValue(){
+    guard let modifyPostedData = modifyPostedData else { return }
+    
+    settingNavigationTitle(title: "게시글 수정하기 📬")
+    
+    setTimeTextfield.text = modifyPostedData.time
+    writeDetailInfoTextView.text = modifyPostedData.info
+    wirterNicknameLabel.text = modifyPostedData.userNickname
+    
+    [
+      selectMaleButton,
+      selectFemaleButton,
+      selectAllButton
+    ].forEach {
+      if $0.currentTitle == modifyPostedData.gender {
+        $0.isSelected = true
+        genderButtonTapped($0)
+      }
+    }
+    
+    for button in [cardioButton, chestButton, backButton, lowerBodyButton, shoulderButton] {
+      if let buttonTitle = button.titleLabel?.text,
+         modifyPostedData.workoutTypes.contains(buttonTitle) {
+        button.isSelected = true
+        workoutTypeButtonTapped(button) { workouts in
+          self.workoutTypes.append(contentsOf: workouts)
+        }
+      }
+    }
+
+    enterPostButton.removeTarget(nil, action: nil, for: .allEvents)
+
+    enterPostButton.addAction(UIAction { _ in
+      self.processPost(isModify: true) {
+        self.navigationController?.popViewController(animated: true)
+        self.uihelper.showToast(message: "✅ 게시글이 등록되었어요!")
+      }
+    }, for: .touchUpInside)
   }
 }
 

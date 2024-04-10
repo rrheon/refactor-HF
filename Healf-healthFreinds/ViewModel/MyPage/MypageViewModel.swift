@@ -168,9 +168,4 @@ class MypageViewModel: CommonViewModel {
       }
     }
   }
-  
-// MARK: - 게시글 수정
-  func modifyMyPost(){
-    
-  }
 }

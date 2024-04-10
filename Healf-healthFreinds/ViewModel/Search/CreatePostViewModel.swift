@@ -17,10 +17,11 @@ final class CreatePostViewModel: CommonViewModel {
   func createPost(_ time: String,
                   _ workoutTyoes: [String],
                   _ gender: String,
-                  _ info: String){
+                  _ info: String,
+                  _ postedDate: String? = nil){
     guard let uid = uid else { return }
   
-    let currentDate = getCurrentDate()
+    let currentDate = postedDate == nil ? getCurrentDate() : postedDate
     
     loadUserNicknameFromDatabase { re in
       if let nickname = re["nickname"] as? String {
@@ -34,7 +35,7 @@ final class CreatePostViewModel: CommonViewModel {
           "userUid": uid
         ] as [String : Any]
         
-        self.ref.child("users").child(self.uid ?? "").child("posts").child(currentDate).setValue(userInfo)
+        self.ref.child("users").child(self.uid ?? "").child("posts").child(currentDate ?? "").setValue(userInfo)
       }
       self.updateCount(childType: "postCount")
     }
@@ -89,4 +90,30 @@ final class CreatePostViewModel: CommonViewModel {
       completion(value)
     }
   }
+  
+  // MARK: - 게시글 수정
+  func modifyMyPost(postedDate: String,
+                    info: String,
+                    completion: @escaping () -> Void){
+    let ref = ref.child("users").child(uid ?? "").child("posts").child(postedDate)
+    
+    ref.observeSingleEvent(of: .value) { snapshot in
+      guard var data = snapshot.value as? [String: Any] else { return }
+      let postedInfo = data["info"] as? String ?? ""
+      
+      if postedInfo == info {
+        var updatedData: [String: Any] = [:]
+        
+        updatedData["exerciseType"] as? [String]
+        updatedData["gender"] as? String
+        updatedData["info"] as? String
+        updatedData["postedDate"] as? String
+        updatedData["time"] as? String
+        updatedData["userNickname"] as? String
+        
+       
+      }
+    }
+  }
 }
+
