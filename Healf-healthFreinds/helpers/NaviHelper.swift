@@ -32,8 +32,7 @@ class NaviHelper: UIViewController {
                                      action: #selector(rightButtonTapped))
     plusButton.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
 
-
-    
+    self.navigationController?.navigationBar.tintColor = .white
     self.navigationItem.leftBarButtonItem = leftButton
     self.navigationItem.rightBarButtonItem = plusButton
   }

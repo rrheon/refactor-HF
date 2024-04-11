@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 import Kingfisher
+import FirebaseDatabase
 
 enum MyPageError: Error {
   case imageURLNotFound
@@ -31,11 +32,21 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
-  func fetchDailyData(_ selectedDay: String,
+  func fetchDailyData(checkOtherMonth: Bool = false,
+                      year: String = "",
+                      month: String = "",_ selectedDay: String,
                       completion: @escaping ([String: Any]?) -> Void) {
     let startDate = getStartDate()
+    var changedRef: DatabaseReference
+    
+    if checkOtherMonth {
+      changedRef = ref.child("History").child(uid!).child(year).child(month)
+    } else {
+      changedRef = ref.child("History").child(uid!).child(startDate[0]).child(startDate[1])
+    }
+    
     // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
-    ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).child(selectedDay)
+    changedRef.child(selectedDay)
       .observeSingleEvent(of: .value) { snapshot in
         if let value = snapshot.value as? [String: Any] {
           completion(value)
@@ -46,9 +57,14 @@ class MypageViewModel: CommonViewModel {
   }
   
   // MARK: - 달력 데이터 가져오기
-  func getMyWorkoutHistory(completion: @escaping (([Int]) -> Void)){
+  func getMyWorkoutHistory(checkMoveMonth: Bool = false,
+                           year: String = "",
+                           month: String = "" ,
+                           completion: @escaping (([Int]) -> Void)){
     var monthlyWorkoutCheck: [Int] = []
-    fetchThisMonthData { monthlyData in
+    fetchThisMonthData(checkMoveMonth: checkMoveMonth,
+                       year: year,
+                       month: month) { monthlyData in
       guard let monthlyData = monthlyData else {
         completion(monthlyWorkoutCheck)
         return
@@ -64,9 +80,15 @@ class MypageViewModel: CommonViewModel {
   }
   
   // MARK: - 달력에서 데일리 데이터 가져오기
-  func getDailyHistory(_ selectedDay: String,
+  func getDailyHistory(checkOtherMonth: Bool = false,
+                       year: String = "",
+                       month: String = "",
+                       _ selectedDay: String,
                        completion: @escaping (HistoryModel) -> Void) {
-    fetchDailyData(selectedDay) { result in
+    fetchDailyData(checkOtherMonth: checkOtherMonth,
+                   year: year,
+                   month: month,
+                   selectedDay) { result in
       guard let result = result else {
         let emptyValue = HistoryModel(comment: "기록없음", date: "기록없음", rate: 0.0,
                                       together: "기록없음", workoutTypes: ["기록없음"])

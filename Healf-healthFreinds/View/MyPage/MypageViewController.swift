@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 import FSCalendar
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 // 값이 들어올 때 setuplayout, makeui 가 되도록 rx적용하기
 protocol ImageSelectionDelegate: AnyObject {
@@ -18,6 +20,7 @@ protocol ImageSelectionDelegate: AnyObject {
 
 final class MypageViewController: NaviHelper {
   let uiHelper = UIHelper.shared
+  let commonViewModel = CommonViewModel.sharedCommonViewModel
   
   private lazy var userNickNameLabel = uiHelper.createSingleLineLabel("Gildong.Hong")
   private lazy var userProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
@@ -42,41 +45,9 @@ final class MypageViewController: NaviHelper {
   
   private lazy var myPostNotExitButton = uiHelper.createHealfButton("게시글 작성하기", .mainBlue, .white)
   
-  private lazy var calendarView: FSCalendar = {
-    let calendar = FSCalendar()
-    calendar.dataSource = self
-    calendar.delegate = self
-    calendar.firstWeekday = 2
-    // week 또는 month 가능
-    calendar.scope = .month
-    
-    calendar.scrollEnabled = false
-    //    calendar.locale = Locale(identifier: "ko_KR")
-    
-    // 현재 달의 날짜들만 표기하도록 설정
-    calendar.placeholderType = .none
-    
-    // 헤더뷰 설정
-    calendar.headerHeight = 55
-    calendar.appearance.headerDateFormat = "YYYY.MM"
-    calendar.appearance.headerTitleColor = .mainBlue
-    
-    // 요일 UI 설정
-    calendar.appearance.weekdayFont = UIFont.systemFont(ofSize: 16)
-    calendar.appearance.weekdayTextColor = .black
-    
-    // 날짜 UI 설정
-    calendar.appearance.titleTodayColor = .black
-    calendar.appearance.titleFont = UIFont.systemFont(ofSize: 16)
-    calendar.appearance.subtitleFont = UIFont.systemFont(ofSize: 10)
-    calendar.appearance.subtitleTodayColor = .mainBlue
-    calendar.appearance.todayColor = .white
-    
-    calendar.layer.borderWidth = 1
-    calendar.layer.cornerRadius = 15
-    calendar.layer.borderColor = UIColor.unableGray.cgColor
-    return calendar
-  }()
+  private lazy var calendarView = FSCalendarCustom.shared
+  private lazy var calendarPrevButton = FSCalendarCustom.shared.createButton(image: "LeftArrowImg")
+  private lazy var calendarNextButton = FSCalendarCustom.shared.createButton(image: "RightArrowImg")
   
   private lazy var selectedDayReportLabel = uiHelper.createMultipleLineLabel(selectedDayReportLabelTitle)
   
@@ -100,6 +71,7 @@ final class MypageViewController: NaviHelper {
       self.makeUI()
       
       self.registerCell()
+      self.setupButtonActions()
     }
   }
   
@@ -122,6 +94,8 @@ final class MypageViewController: NaviHelper {
       userWorkoutCalenderButton,
       userPostedButton,
       calendarView,
+      calendarPrevButton,
+      calendarNextButton,
       selectedDayReportLabel,
       scrollView
     ].forEach {
@@ -181,11 +155,23 @@ final class MypageViewController: NaviHelper {
       $0.leading.equalTo(userWorkoutCalenderButton.snp.trailing).offset(80)
     }
     
+    calendarView.dataSource = self
+    calendarView.delegate = self
     calendarView.snp.makeConstraints {
       $0.top.equalTo(userWorkoutCalenderButton.snp.bottom).offset(20)
       $0.leading.equalToSuperview().offset(10)
       $0.trailing.equalToSuperview().offset(-10)
       $0.height.equalTo(296)
+    }
+    
+    calendarPrevButton.snp.makeConstraints {
+      $0.centerY.equalTo(calendarView.calendarHeaderView).offset(5)
+      $0.leading.equalTo(calendarView.calendarHeaderView.snp.leading).inset(110)
+    }
+    
+    calendarNextButton.snp.makeConstraints {
+      $0.centerY.equalTo(calendarView.calendarHeaderView).offset(5)
+      $0.trailing.equalTo(calendarView.calendarHeaderView.snp.trailing).inset(110)
     }
     
     selectedDayReportLabel.textAlignment = .left
@@ -311,6 +297,28 @@ final class MypageViewController: NaviHelper {
         $0.trailing.equalTo(myPostNotExitLabel.snp.trailing).offset(-30)
       }
     }
+  }
+  
+  func setupButtonActions() {
+    calendarPrevButton.rx.tap
+      .subscribe(onNext: { [weak self] in
+        print("이전 달력 버튼이 클릭되었습니다.")
+        self?.calendarView.moveMonth(next: false, completion: { result in
+          self?.highlightedDates = result
+          self?.calendarView.reloadData()
+        })
+      })
+      .disposed(by: uiHelper.disposeBag)
+    
+    calendarNextButton.rx.tap
+      .subscribe(onNext: { [weak self] in
+        print("다음 달력 버튼이 클릭되었습니다.")
+        self?.calendarView.moveMonth(next: true, completion: { result in
+          self?.highlightedDates = result
+          self?.calendarView.reloadData()
+        })
+      })
+      .disposed(by: uiHelper.disposeBag)
   }
 }
 

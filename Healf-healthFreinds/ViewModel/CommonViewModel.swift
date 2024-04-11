@@ -13,7 +13,9 @@ import FirebaseDatabase
 class CommonViewModel {
   let uid = Auth.auth().currentUser?.uid
   let ref = Database.database().reference()
-    
+  
+  static let sharedCommonViewModel = CommonViewModel()
+  
   func getCurrentDate() -> String {
     let currentDate = Date()
     let dateFormatter = DateFormatter()
@@ -54,16 +56,26 @@ class CommonViewModel {
     return startDayString
   }
   
-  func fetchThisMonthData(completion: @escaping ([String: Any]?) -> Void) {
-    let startDate = getStartDate()
-    // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
-    ref.child("History").child(uid!).child(startDate[0]).child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
-      if let value = snapshot.value as? [String: Any] {
-        completion(value)
-      } else {
-        completion(nil)
-      }
+  func fetchThisMonthData(checkMoveMonth: Bool = false,
+                          year: String = "",
+                          month: String = "",
+                          completion: @escaping ([String: Any]?) -> Void) {
+    var startDate = getStartDate()
+    if checkMoveMonth {
+      startDate[0] = year
+      startDate[1] = month
     }
+    // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
+    ref.child("History")
+      .child(uid!)
+      .child(startDate[0])
+      .child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
+        if let value = snapshot.value as? [String: Any] {
+          completion(value)
+        } else {
+          completion(nil)
+        }
+      }
   }
   
   
@@ -125,6 +137,22 @@ class CommonViewModel {
         ref.setValue(1)
       }
     }
-    
+  }
+  
+  func getKoreanYearAndMonth(from date: Date) -> (year: String, month: String) {
+      let koreaTimeZone = TimeZone(identifier: "Asia/Seoul")!
+      var koreaCalendar = Calendar.current
+      koreaCalendar.timeZone = koreaTimeZone
+      
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateFormat = "yyyy-M"
+      dateFormatter.timeZone = koreaTimeZone
+      let dateString = dateFormatter.string(from: date)
+      
+      let dateComponents = dateString.split(separator: "-")
+      let year = String(dateComponents[0])
+      let month = String(dateComponents[1])
+      
+      return (year, month)
   }
 }
