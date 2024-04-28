@@ -5,7 +5,6 @@
 //  Created by 최용헌 on 3/21/24.
 //
 
-import Foundation
 import UIKit
 
 import Kingfisher
@@ -34,28 +33,17 @@ class MypageViewModel: CommonViewModel {
   
   func fetchDailyData(checkOtherMonth: Bool = false,
                       year: String = "",
-                      month: String = "",_ selectedDay: String,
+                      month: String = "",
+                      _ selectedDay: String,
                       completion: @escaping ([String: Any]?) -> Void) {
-    let startDate = getStartDate()
-    var changedRef: DatabaseReference
+    let startDate = checkOtherMonth ? [year, month] : getStartDate()
+    let changedRef = ref.child("History").child(uid!).child(startDate[0]).child(startDate[1])
     
-    if checkOtherMonth {
-      changedRef = ref.child("History").child(uid!).child(year).child(month)
-    } else {
-      changedRef = ref.child("History").child(uid!).child(startDate[0]).child(startDate[1])
+    changedRef.child(selectedDay).observeSingleEvent(of: .value) { snapshot in
+      completion(snapshot.value as? [String: Any])
     }
-    
-    // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
-    changedRef.child(selectedDay)
-      .observeSingleEvent(of: .value) { snapshot in
-        if let value = snapshot.value as? [String: Any] {
-          completion(value)
-        } else {
-          completion(nil)
-        }
-      }
   }
-  
+
   // MARK: - 달력 데이터 가져오기
   func getMyWorkoutHistory(checkMoveMonth: Bool = false,
                            year: String = "",

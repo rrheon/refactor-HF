@@ -16,6 +16,8 @@ final class ChatDetailViewController: NaviHelper {
   var destinationUid: String? // 내가 보낼 uid
   var uid: String?
   var chatRoomUid: String?
+  var userNickname: String?
+  
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
   
@@ -29,10 +31,22 @@ final class ChatDetailViewController: NaviHelper {
     tableView.register(ChatDetailCell.self, forCellReuseIdentifier: ChatDetailCell.cellId)
     //    tableView.register(UINib(nibName: ChatDetailCell.cellId, bundle: nil), forCellReuseIdentifier: "ReusableCell")
     tableView.rowHeight = UITableView.automaticDimension
+    tableView.allowsSelection = false
     
     return tableView
   }()
+
+  init(destinationUid: String? = nil,
+       userNickname: String? = nil) {
+    super.init()
+    
+    self.destinationUid = destinationUid
+    self.userNickname = userNickname
+  }
   
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -41,13 +55,19 @@ final class ChatDetailViewController: NaviHelper {
     view.backgroundColor = .white
     
     uid = Auth.auth().currentUser?.uid
-    navigationItemSetting()
-    settingNavigationTitle(title: "작성자 이름")
     
     setupLayout()
     makeUI()
-  
+    
     checkChatRoom()
+    navigationItemSetting()
+  }
+  
+  override func navigationItemSetting() {
+    super.navigationItemSetting()
+    
+    navigationItem.rightBarButtonItem = .none
+    settingNavigationTitle(title: userNickname ?? "")
   }
   
   func setupLayout(){
@@ -117,16 +137,20 @@ extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
     return comments.count
   }
   
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 110
-  }
-  
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let messageCell = tableView.dequeueReusableCell(withIdentifier: "ChatDetailCell",
                                                     for: indexPath) as! ChatDetailCell
-    messageCell.chatInfoLabel.text = self.comments[indexPath.row].message
-    messageCell.chatUserProfileImageView.isHidden = self.comments[indexPath.row].uid == uid ? true : false
-  
+    let comment = self.comments[indexPath.row]
+    let checkSendOrReceive = comments[indexPath.row].uid == uid ? ChatType.send : ChatType.receive
+    // 리시브 샌드 구분만 잘 하면 될듯
+    messageCell.model = .init(message: comment.message ?? "", chatType: checkSendOrReceive)
+    
     return messageCell
+  }
+  
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+      let comment = comments[indexPath.row]
+      let estimatedFrame = comment.message?.getEstimatedFrame(with: .systemFont(ofSize: 18))
+      return (estimatedFrame?.height ?? 0) + 20
   }
 }

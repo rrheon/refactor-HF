@@ -4,60 +4,82 @@ import UIKit
 import SnapKit
 
 final class ChatDetailCell: UITableViewCell {
-
+  var model: Model? {
+    didSet { bind() }
+  }
+  
   static let cellId = "ChatDetailCell"
   
   // MARK: - cell 구성
-  lazy var myProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
-  lazy var chatUserProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
-
-  lazy var userNickNameLabel = UIHelper.shared.createSingleLineLabel("이름이름")
-  lazy var chatInfoLabel = UIHelper.shared.createSingleLineLabel("내용내용")
+  
+  let messageTextView: UITextView = {
+    let view = UITextView()
+    view.font = .systemFont(ofSize: 18.0)
+    view.text = "Sample message"
+    view.textColor = .black
+    view.backgroundColor = .white
+    view.layer.cornerRadius = 15.0
+    view.layer.masksToBounds = false
+    view.isEditable = false
+    return view
+  }()
+  
+  let profileImageView: UIImageView = {
+    let view = UIImageView(image: UIImage(named: "EmptyProfileImg"))
+    view.layer.cornerRadius = view.bounds.width / 2
+    view.layer.borderWidth = 1
+    view.layer.borderColor = UIColor.clear.cgColor
+    return view
+  }()
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     
-    setupLayout()
-    makeUI()
+    //    setupLayout()
+    //    makeUI()
+    setupViews()
   }
+//  
+//  // 초기화 어떻게 할지 -> 지금 셀이 계속 늘어나고 줄어들고 난리
+//  override func prepareForReuse() {
+//    super.prepareForReuse()
+//    messageTextView.snp.removeConstraints()
+//    setupViews()
+//    bind()
+//  }
   
-  // MARK: - view 계층
-  func setupLayout(){
-    [
-      chatUserProfileImageView,
-      userNickNameLabel,
-      chatInfoLabel,
-      myProfileImageView
-    ].forEach {
-      self.addSubview($0)
-    }
-  }
-  
-  // MARK: - layout 설정
-  func makeUI(){
-    chatUserProfileImageView.snp.makeConstraints {
-      $0.top.equalToSuperview().offset(10)
-      $0.leading.equalToSuperview().offset(10)
+  func setupViews() {
+    contentView.addSubview(messageTextView)
+    messageTextView.snp.makeConstraints {
+      $0.top.equalTo(contentView.snp.top)
+      $0.bottom.equalTo(contentView.snp.bottom)
     }
     
-    userNickNameLabel.snp.makeConstraints {
-      $0.top.equalTo(chatUserProfileImageView.snp.bottom)
-      $0.leading.equalTo(chatUserProfileImageView.snp.leading)
+    contentView.addSubview(profileImageView)
+    profileImageView.snp.makeConstraints {
+      $0.leading.equalTo(contentView.snp.leading).offset(8)
     }
-    
-    chatInfoLabel.backgroundColor = .black
-    chatInfoLabel.textColor = .white
-    chatInfoLabel.numberOfLines = 0
-    chatInfoLabel.snp.makeConstraints {
-      $0.top.equalTo(chatUserProfileImageView)
-      $0.leading.equalTo(chatUserProfileImageView.snp.trailing).offset(10)
-    }
-      
-    myProfileImageView.snp.makeConstraints {
-      $0.top.equalTo(chatUserProfileImageView)
-      $0.trailing.equalToSuperview().offset(-10)
-    }
+  }
   
+  private func bind() {
+    guard let model = model, let font = messageTextView.font else { return }
+    messageTextView.text = model.message
+    let estimatedFrame = model.message.getEstimatedFrame(with: font)
+    
+    messageTextView.widthAnchor.constraint(equalToConstant: estimatedFrame.width + 16).isActive = true
+    
+    if case .send = model.chatType {
+      messageTextView.backgroundColor = .mainBlue
+      profileImageView.isHidden = true
+      messageTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+      messageTextView.addTipViewToRightBottom(with: messageTextView.backgroundColor)
+    } else {
+      messageTextView.backgroundColor = .lightGray
+      profileImageView.isHidden = false
+      messageTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 16 + profileImageView.bounds.width).isActive = true
+      messageTextView.addTipViewToLeftTop(with: messageTextView.backgroundColor)
+    }
   }
   
   required init?(coder: NSCoder) {

@@ -7,6 +7,16 @@
 
 import ObjectMapper
 
+enum ChatType: CaseIterable {
+  case receive
+  case send
+}
+
+struct Model {
+  let message: String
+  let chatType: ChatType
+}
+
 //. ObjectMapper 라이브러리를 사용하면 복잡한 JSON 데이터를 다룰 때 코드의 가독성과 유지보수성을 높일 수 있다~
 class ChatModel: Mappable {
   public var users: Dictionary<String, Bool> = [:] // 채팅방에 참여한 사람들

@@ -56,7 +56,7 @@ final class ChatDetailViewModel: CommonViewModel {
   func getDestinationInfo(_ destinationUid: String,
                           completion: @escaping ([String: Any]) -> Void){
     ref.child("UserData").child(destinationUid)
-      .observeSingleEvent(of: DataEventType.value, with: {(dataSnapshot) in
+      .observeSingleEvent(of: DataEventType.value, with: { (dataSnapshot) in
         completion(dataSnapshot.value as! [String: Any])
 //      self.userModel = UserModel()
 //      self.userModel?.setValuesForKeys(dataSnapshot.value as! [String: Any])

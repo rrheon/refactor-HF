@@ -8,7 +8,6 @@
 import UIKit
 
 import SnapKit
-
 import FirebaseAuth
 
 class ChatListViewController: NaviHelper {
@@ -90,8 +89,10 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let chatDetailVC = ChatDetailViewController()
-    chatDetailVC.destinationUid = Array(self.usersInChatrooms.keys)[indexPath.row]
+    let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
+    let nickname = self.usersInChatrooms[userId]
+
+    let chatDetailVC = ChatDetailViewController(destinationUid: userId, userNickname: nickname)
 //    chatDetailVC.destinationUid = array[indexPath.row].uid
     chatDetailVC.hidesBottomBarWhenPushed = true
     navigationController?.pushViewController(chatDetailVC, animated: true)

@@ -11,7 +11,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-// 데이터가 없을 때의 처리가 필요함
+// init할 때 데이터 로드해오기
 final class HomeViewController: NaviHelper {
   
   private lazy var topUnderLineView = UIView()
