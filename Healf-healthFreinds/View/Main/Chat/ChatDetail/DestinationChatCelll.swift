@@ -3,7 +3,8 @@ import UIKit
 
 import SnapKit
 
-final class ChatDetailCell: UITableViewCell {
+final class ChatCell: UITableViewCell {
+  var count: Int = 0
   var model: Model? {
     didSet { bind() }
   }
@@ -11,7 +12,6 @@ final class ChatDetailCell: UITableViewCell {
   static let cellId = "ChatDetailCell"
   
   // MARK: - cell 구성
-  
   let messageTextView: UITextView = {
     let view = UITextView()
     view.font = .systemFont(ofSize: 18.0)
@@ -35,19 +35,15 @@ final class ChatDetailCell: UITableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     
-    //    setupLayout()
-    //    makeUI()
     setupViews()
   }
 //  
-//  // 초기화 어떻게 할지 -> 지금 셀이 계속 늘어나고 줄어들고 난리
-//  override func prepareForReuse() {
-//    super.prepareForReuse()
-//    messageTextView.snp.removeConstraints()
-//    setupViews()
-//    bind()
-//  }
-  
+  // 초기화 어떻게 할지 -> 지금 셀이 계속 늘어나고 줄어들고 난리
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    messageTextView.backgroundColor = nil
+  }
+
   func setupViews() {
     contentView.addSubview(messageTextView)
     messageTextView.snp.makeConstraints {
@@ -64,14 +60,23 @@ final class ChatDetailCell: UITableViewCell {
   private func bind() {
     guard let model = model, let font = messageTextView.font else { return }
     messageTextView.text = model.message
+    
+    // 여기 값 변화확인
     let estimatedFrame = model.message.getEstimatedFrame(with: font)
-    
-    messageTextView.widthAnchor.constraint(equalToConstant: estimatedFrame.width + 16).isActive = true
-    
+    print(estimatedFrame)
+    messageTextView.translatesAutoresizingMaskIntoConstraints = false
+    messageTextView.sizeToFit()
+    messageTextView.isScrollEnabled = false
+
+//        messageTextView.widthAnchor.constraint(equal: estimatedFrame.width + 16).isActive = true
+    messageTextView.widthAnchor.constraint(greaterThanOrEqualToConstant: estimatedFrame.width + 16).isActive = true
+
     if case .send = model.chatType {
+      // 여기 값 변화확인
       messageTextView.backgroundColor = .mainBlue
       profileImageView.isHidden = true
-      messageTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+      messageTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -16).isActive = true
       messageTextView.addTipViewToRightBottom(with: messageTextView.backgroundColor)
     } else {
       messageTextView.backgroundColor = .lightGray
