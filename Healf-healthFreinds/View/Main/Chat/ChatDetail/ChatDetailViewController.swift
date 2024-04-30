@@ -17,7 +17,6 @@ final class ChatDetailViewController: NaviHelper {
   var uid: String?
   var chatRoomUid: String?
   var userNickname: String?
-  var checkUpdateChatList: Bool = false
   
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
@@ -116,7 +115,6 @@ final class ChatDetailViewController: NaviHelper {
   }
   
   func checkChatRoom(){
-    
     guard let uid = uid,
           let destinationUid = destinationUid else { return }
     chatDetailViewModel.checkChatRoom(uid, destinationUid) { key in
@@ -131,10 +129,7 @@ final class ChatDetailViewController: NaviHelper {
           
           self.comments.append(contentsOf: comment)
           
-         self.chatTableView.reloadData()
-//          self.chatTableView.reloadData()
-          
-          self.checkUpdateChatList = true
+          self.chatTableView.reloadData()
           
           self.arrangeChatCellRecently()
         }
@@ -194,7 +189,6 @@ extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
   }
 
-  
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     let comment = comments[indexPath.row]
       let estimatedFrame = comment.message?.getEstimatedFrame(with: .systemFont(ofSize: 18))

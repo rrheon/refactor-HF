@@ -14,6 +14,7 @@ class ChatListViewController: NaviHelper {
   let chatListViewModel = ChatListViewModel()
   
   var usersInChatrooms: [String: String] = [:]
+  var usersLastMessage: [String: ChatModel.Comment] = [:]
   let currentUserUID = Auth.auth().currentUser?.uid
   
   private let searchBar = UISearchBar.createSearchBar(placeholder: "원하는 내용을 검색하세요.")
@@ -35,10 +36,12 @@ class ChatListViewController: NaviHelper {
     
     navigationItemSetting()
     
-    setupLayout()
-    makeUI()
-    
-    getChatList()
+ 
+    getChatList {
+      self.setupLayout()
+      self.makeUI()
+      
+    }
   }
   
   override func navigationItemSetting() {
@@ -68,11 +71,23 @@ class ChatListViewController: NaviHelper {
     }
   }
   
-  func getChatList(){
+  func getChatList(completion: @escaping () -> Void){
     self.usersInChatrooms.removeAll()
-    chatListViewModel.getChatListData(currentUserUID: currentUserUID ?? "") { userId, nickname in
-      self.usersInChatrooms[userId] = nickname
-      self.chatTableView.reloadData()
+    chatListViewModel.getAllChatroomData(currentUserUID: currentUserUID ?? "") { result in
+      var numberOfMessagesReceived = 0 // 받은 메시지 수를 추적
+      
+      for data in result {
+        self.usersInChatrooms[data.1] = data.2
+        self.chatListViewModel.getLastMessage(data.0) { lastMessage in
+          self.usersLastMessage[data.1] = lastMessage
+          
+          numberOfMessagesReceived += 1
+          if numberOfMessagesReceived == result.count { // 모든 메시지를 받았을 때만 테이블 뷰를 다시 로드
+            self.chatTableView.reloadData()
+            completion()
+          }
+        }
+      }
     }
   }
 }
@@ -103,10 +118,13 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(withIdentifier: ChatListCell.cellId,
                                              for: indexPath) as! ChatListCell
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
-  
-    let nickname = self.usersInChatrooms[userId]
-    cell.userNickNameLabel.text = nickname
-//    cell.userNickNameLabel.text = array[indexPath.row].nickname
+    if let nickname = self.usersInChatrooms[userId],
+       let lastMessage = self.usersLastMessage[userId] {
+        cell.model = .init(profile: "",
+                         nickname: nickname,
+                         lastMessage: lastMessage.message ?? "",
+                         timeStamp: lastMessage.timeStamp?.todayTime ?? "")
+    }
     return cell
   }
   

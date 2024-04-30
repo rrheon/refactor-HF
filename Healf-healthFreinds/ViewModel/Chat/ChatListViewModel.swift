@@ -10,19 +10,32 @@ import Foundation
 import FirebaseDatabase
 
 final class ChatListViewModel: CommonViewModel {
+  func getLastMessage(_ chatRoomUid: String,
+                      completion: @escaping (ChatModel.Comment?) -> Void) {
+    ref.child("chatrooms").child(chatRoomUid).child("comments")
+      .queryOrderedByKey()
+      .queryLimited(toLast: 1)
+      .observeSingleEvent(of: .value, with: { (snapshot) in
+        guard let lastSnapshot = snapshot.children.allObjects.last as? DataSnapshot else {
+          completion(nil)
+          return
+        }
+        let lastComment = ChatModel.Comment(JSON: lastSnapshot.value as! [String: AnyObject])
+        completion(lastComment)
+      })
+  }
   
   // MARK: - 채팅방 리스트 가져오기
-  func getChatListData(currentUserUID: String, completion: @escaping (String, String) -> Void){
-    // 자기자신 빼기, 비어있을 경우 모두 출력되는 오류
+  func getAllChatroomData(currentUserUID: String,
+                          completion: @escaping ([(String, String, String)]) -> Void) {
+    var chatroomData: [(String, String, String)] = []
+    
     ref.child("chatrooms").observe(DataEventType.value, with: { (snapshot) in
-      var currentUserParticipated = false // 현재 사용자가 참여한 채팅방인지 여부를 나타내는 변수
-      
       for child in snapshot.children {
         let roomSnapshot = child as! DataSnapshot
+        var currentUserParticipated = false
         
-        // 각 채팅방의 UserData 노드에 접근하여 사용자 UID 가져오기
         if let userDataSnapshot = roomSnapshot.childSnapshot(forPath: "UserData").children.allObjects as? [DataSnapshot] {
-          // 현재 사용자의 UID와 관련된 채팅방인지 확인
           for userSnapshot in userDataSnapshot {
             let userId = userSnapshot.key
             let userParticipated = userSnapshot.value as! Bool
@@ -33,20 +46,19 @@ final class ChatListViewModel: CommonViewModel {
             }
           }
           
-          // 채팅방이 하나라도 있을 경우에만 사용자 정보를 가져옴
           if currentUserParticipated {
             for userSnapshot in userDataSnapshot {
               let userId = userSnapshot.key
               let userParticipated = userSnapshot.value as! Bool
+              
               if userParticipated && userId != currentUserUID {
-                // 사용자의 UID를 키로 사용하여 닉네임 가져오기
-                self.ref.child("UserData").child(userId)
-                  .observeSingleEvent(of: .value, with: { (userSnapshot) in
-                    if let userData = userSnapshot.value as? [String: Any] {
-                      let nickname = userData["nickname"] as? String ?? "Unknown"
-                      completion(userId, nickname)
-                    }
-                  })
+                self.ref.child("UserData").child(userId).observeSingleEvent(of: .value, with: { (userSnapshot) in
+                  if let userData = userSnapshot.value as? [String: Any] {
+                    let nickname = userData["nickname"] as? String ?? "Unknown"
+                    chatroomData.append((roomSnapshot.key, userId, nickname))
+                    completion(chatroomData)
+                  }
+                })
               }
             }
           }
@@ -54,4 +66,5 @@ final class ChatListViewModel: CommonViewModel {
       }
     })
   }
+  
 }

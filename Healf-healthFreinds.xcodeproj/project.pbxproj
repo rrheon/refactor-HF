@@ -32,6 +32,7 @@
 		EE4E36A22BD2003300FB60FC /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A12BD2003300FB60FC /* String+.swift */; };
 		EE4E36A62BDFA68500FB60FC /* MyChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */; };
 		EE4E36A82BE0757C00FB60FC /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A72BE0757C00FB60FC /* Int+.swift */; };
+		EE4E36AA2BE0F8A600FB60FC /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A92BE0F8A600FB60FC /* ChatCell.swift */; };
 		EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */; };
 		EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */; };
 		EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */; };
@@ -104,6 +105,7 @@
 		EE4E36A12BD2003300FB60FC /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatCell.swift; sourceTree = "<group>"; };
 		EE4E36A72BE0757C00FB60FC /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
+		EE4E36A92BE0F8A600FB60FC /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Healf-healthFreinds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */,
+				EE4E36A92BE0F8A600FB60FC /* ChatCell.swift */,
 				EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */,
 				EECC03512B96FABC003ECF95 /* DestinationChatCelll.swift */,
 			);
@@ -607,6 +610,7 @@
 				EECC03502B96FAA3003ECF95 /* ChatDetailViewController.swift in Sources */,
 				EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */,
 				EE4E36972BB3B0A200FB60FC /* SignupViewModel.swift in Sources */,
+				EE4E36AA2BE0F8A600FB60FC /* ChatCell.swift in Sources */,
 				EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */,
 				EE4E36952BB3168000FB60FC /* MapViewModel.swift in Sources */,
 				EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */,

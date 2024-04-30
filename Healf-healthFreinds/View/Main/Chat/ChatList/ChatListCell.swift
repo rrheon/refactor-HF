@@ -3,15 +3,28 @@ import UIKit
 
 import SnapKit
 
+struct ChatListCellModel {
+  let profile: String
+  let nickname: String
+  let lastMessage: String
+  let timeStamp: String
+}
+
 final class ChatListCell: UITableViewCell {
 
   static let cellId = "ChatCell"
   
+  var model: ChatListCellModel?{
+    didSet{
+      bind()
+    }
+  }
+  
   // MARK: - cell 구성
   private lazy var writerProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
   lazy var userNickNameLabel = UIHelper.shared.createSingleLineLabel("이름이름")
-  private lazy var lastChatInfoLabel = UIHelper.shared.createSingleLineLabel("내용내용")
-  private lazy var lastChatTimeLabel = UIHelper.shared.createSingleLineLabel("09:41")
+  lazy var lastChatInfoLabel = UIHelper.shared.createSingleLineLabel("내용내용")
+  lazy var lastChatTimeLabel = UIHelper.shared.createSingleLineLabel("09:41")
   
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,18 +57,27 @@ final class ChatListCell: UITableViewCell {
       $0.leading.equalTo(writerProfileImageView.snp.trailing).offset(10)
     }
     
+    lastChatInfoLabel.textColor = .lightGray
     lastChatInfoLabel.snp.makeConstraints {
-      $0.top.equalTo(userNickNameLabel.snp.bottom).offset(5)
+      $0.top.equalTo(userNickNameLabel.snp.bottom).offset(10)
       $0.leading.equalTo(writerProfileImageView.snp.trailing).offset(10)
     }
     
+    lastChatTimeLabel.textColor = .lightGray
     lastChatTimeLabel.snp.makeConstraints {
-      $0.centerY.equalTo(writerProfileImageView)
+      $0.bottom.equalToSuperview()
       $0.trailing.equalToSuperview().offset(-20)
     }
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func bind(){
+//    writerProfileImageView.image = model?.profile
+    userNickNameLabel.text = model?.nickname
+    lastChatInfoLabel.text = model?.lastMessage
+    lastChatTimeLabel.text = model?.timeStamp
   }
 }
