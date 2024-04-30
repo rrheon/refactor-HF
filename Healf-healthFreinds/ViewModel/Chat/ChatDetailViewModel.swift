@@ -73,20 +73,24 @@ final class ChatDetailViewModel: CommonViewModel {
       
       self.comments.removeAll()
       
-      for item in datasnapshot.children.allObjects as! [DataSnapshot] {
+    for item in datasnapshot.children.allObjects as! [DataSnapshot] {
         let comment = ChatModel.Comment(JSON: item.value as! [String: AnyObject])
         self.comments.append(comment!)
       }
-//      self.chatTableView.reloadData()
         completion(self.comments)
     })
   }
 
-  func sendMessage(_ uid: String, _ message: String, _ chatRoomUid: String){
+  func sendMessage(_ uid: String,
+                   _ message: String,
+                   _ chatRoomUid: String,
+                   completion: @escaping () -> Void){
     let value: Dictionary<String,Any> = [
         "uid": uid,
-        "message": message
+        "message": message,
+        "timeStamp": ServerValue.timestamp()
       ]
     ref.child("chatrooms").child(chatRoomUid).child("comments").childByAutoId().setValue(value)
+    completion()
   }
 }

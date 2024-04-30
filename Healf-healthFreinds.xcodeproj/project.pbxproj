@@ -30,6 +30,8 @@
 		EE4E369E2BC0229100FB60FC /* EditMyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E369D2BC0229100FB60FC /* EditMyProfileViewModel.swift */; };
 		EE4E36A02BC0410C00FB60FC /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E369F2BC0410C00FB60FC /* BottomSheet.swift */; };
 		EE4E36A22BD2003300FB60FC /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A12BD2003300FB60FC /* String+.swift */; };
+		EE4E36A62BDFA68500FB60FC /* MyChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */; };
+		EE4E36A82BE0757C00FB60FC /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A72BE0757C00FB60FC /* Int+.swift */; };
 		EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */; };
 		EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */; };
 		EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */; };
@@ -60,7 +62,7 @@
 		EECC032B2B95EA9D003ECF95 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */; };
 		EECC032D2B95F286003ECF95 /* CompleteSignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */; };
 		EECC03502B96FAA3003ECF95 /* ChatDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */; };
-		EECC03522B96FABC003ECF95 /* MyChatCelll.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03512B96FABC003ECF95 /* MyChatCelll.swift */; };
+		EECC03522B96FABC003ECF95 /* DestinationChatCelll.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03512B96FABC003ECF95 /* DestinationChatCelll.swift */; };
 		EECD22532B9AD64400D88DC6 /* CreatePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECD22522B9AD64400D88DC6 /* CreatePostViewController.swift */; };
 		EED75DC72B9AC1EF00594C68 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DC62B9AC1EF00594C68 /* ChatListViewModel.swift */; };
 		EED75DCA2B9AC54600594C68 /* ChatUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DC92B9AC54600594C68 /* ChatUserModel.swift */; };
@@ -100,6 +102,8 @@
 		EE4E369D2BC0229100FB60FC /* EditMyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyProfileViewModel.swift; sourceTree = "<group>"; };
 		EE4E369F2BC0410C00FB60FC /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		EE4E36A12BD2003300FB60FC /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatCell.swift; sourceTree = "<group>"; };
+		EE4E36A72BE0757C00FB60FC /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Healf-healthFreinds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -132,7 +136,7 @@
 		EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteSignupViewController.swift; sourceTree = "<group>"; };
 		EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailViewController.swift; sourceTree = "<group>"; };
-		EECC03512B96FABC003ECF95 /* MyChatCelll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatCelll.swift; sourceTree = "<group>"; };
+		EECC03512B96FABC003ECF95 /* DestinationChatCelll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationChatCelll.swift; sourceTree = "<group>"; };
 		EECD22522B9AD64400D88DC6 /* CreatePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewController.swift; sourceTree = "<group>"; };
 		EED75DC62B9AC1EF00594C68 /* ChatListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewModel.swift; sourceTree = "<group>"; };
 		EED75DC92B9AC54600594C68 /* ChatUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUserModel.swift; sourceTree = "<group>"; };
@@ -276,6 +280,7 @@
 				EE4E368E2BABE93800FB60FC /* Double+.swift */,
 				EE4E36852BA9181800FB60FC /* Array+.swift */,
 				EE4E36A12BD2003300FB60FC /* String+.swift */,
+				EE4E36A72BE0757C00FB60FC /* Int+.swift */,
 				EECC03102B91B725003ECF95 /* UISearchBar+.swift */,
 				EE4E367F2BA6E98C00FB60FC /* UIViewController+.swift */,
 				EECC03092B90CED5003ECF95 /* UIView+.swift */,
@@ -359,7 +364,8 @@
 			isa = PBXGroup;
 			children = (
 				EECC034F2B96FAA3003ECF95 /* ChatDetailViewController.swift */,
-				EECC03512B96FABC003ECF95 /* MyChatCelll.swift */,
+				EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */,
+				EECC03512B96FABC003ECF95 /* DestinationChatCelll.swift */,
 			);
 			path = ChatDetail;
 			sourceTree = "<group>";
@@ -549,6 +555,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEDD810C2B70E6B80022302E /* SignuplViewController.swift in Sources */,
+				EE4E36A62BDFA68500FB60FC /* MyChatCell.swift in Sources */,
 				EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */,
 				EE4E36A02BC0410C00FB60FC /* BottomSheet.swift in Sources */,
 				EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */,
@@ -556,7 +563,7 @@
 				EE4E36822BA6F4E100FB60FC /* HomeViewModel.swift in Sources */,
 				EE4E36882BA99E4D00FB60FC /* Calendar.swift in Sources */,
 				EE4E36862BA9181800FB60FC /* Array+.swift in Sources */,
-				EECC03522B96FABC003ECF95 /* MyChatCelll.swift in Sources */,
+				EECC03522B96FABC003ECF95 /* DestinationChatCelll.swift in Sources */,
 				EEC9DE712BA05A5900437A6A /* SearchViewModel.swift in Sources */,
 				EECD22532B9AD64400D88DC6 /* CreatePostViewController.swift in Sources */,
 				EE98B1D92B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld in Sources */,
@@ -605,6 +612,7 @@
 				EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */,
 				EE4E368F2BABE93800FB60FC /* Double+.swift in Sources */,
 				EECC03112B91B725003ECF95 /* UISearchBar+.swift in Sources */,
+				EE4E36A82BE0757C00FB60FC /* Int+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

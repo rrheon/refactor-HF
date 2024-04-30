@@ -65,6 +65,7 @@ final class CreatePostViewController: NaviHelper {
         
     registerButtonFunc()
     settingModifyValue()
+    
   }
   
   override func navigationItemSetting() {

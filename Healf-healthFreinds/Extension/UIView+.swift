@@ -29,7 +29,7 @@ extension UIView {
     let path = CGMutablePath()
     path.move(to: CGPoint(x: -8, y: 16))
     path.addLine(to: CGPoint(x: 12, y: 16))
-    path.addLine(to: CGPoint(x: 12, y: 2))
+//    path.addLine(to: CGPoint(x: 12, y: 2))
     
     let shape = CAShapeLayer()
     shape.path = path
@@ -38,7 +38,6 @@ extension UIView {
   }
   
   func addTipViewToRightBottom(with color: UIColor?) {
-    
     // frame 값을 얻기 위해서 layoutIfNeeded() 호출 (호출 안하면 width, height값 모두 0인 상태)
     layoutIfNeeded()
     
@@ -50,7 +49,7 @@ extension UIView {
     let path = CGMutablePath()
     path.move(to: CGPoint(x: width + 12, y: height - 18))
     path.addLine(to: CGPoint(x: width - 8, y: height - 18))
-    path.addLine(to: CGPoint(x: width - 8, y: height - 4))
+//    path.addLine(to: CGPoint(x: width - 8, y: height - 4))
     
     let shape = CAShapeLayer()
     shape.path = path

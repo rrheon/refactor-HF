@@ -14,7 +14,7 @@ enum ChatType: CaseIterable {
 
 struct Model {
   let message: String
-  let chatType: ChatType
+  let timeStamp: String
 }
 
 //. ObjectMapper 라이브러리를 사용하면 복잡한 JSON 데이터를 다룰 때 코드의 가독성과 유지보수성을 높일 수 있다~
@@ -34,11 +34,13 @@ class ChatModel: Mappable {
   public class Comment: Mappable {
     public var uid: String?
     public var message: String?
+    public var timeStamp: Int?
 // ObjectMapper가 객체를 생성하고 매핑하는 데 필요한 메서드를 제공하므로 명시적으로 초기화 메서드를 구현할 필요가 없다.
     public required init(map: Map){}
     public func mapping(map: Map){
       uid <- map["uid"]
       message <- map["message"]
+      timeStamp <- map["timeStamp"]
     }
   }
 }

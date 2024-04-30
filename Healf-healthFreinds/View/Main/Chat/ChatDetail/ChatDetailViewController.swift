@@ -17,6 +17,7 @@ final class ChatDetailViewController: NaviHelper {
   var uid: String?
   var chatRoomUid: String?
   var userNickname: String?
+  var checkUpdateChatList: Bool = false
   
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
@@ -28,11 +29,12 @@ final class ChatDetailViewController: NaviHelper {
     let tableView = UITableView()
     tableView.delegate = self
     tableView.dataSource = self
-    tableView.register(ChatDetailCell.self, forCellReuseIdentifier: ChatDetailCell.cellId)
+    tableView.register(DestinationChatCelll.self, forCellReuseIdentifier: DestinationChatCelll.cellId)
+    tableView.register(MyChatCell.self, forCellReuseIdentifier: MyChatCell.cellId)
     //    tableView.register(UINib(nibName: ChatDetailCell.cellId, bundle: nil), forCellReuseIdentifier: "ReusableCell")
     tableView.rowHeight = UITableView.automaticDimension
     tableView.allowsSelection = false
-    
+    tableView.separatorStyle = .none
     return tableView
   }()
 
@@ -90,7 +92,7 @@ final class ChatDetailViewController: NaviHelper {
     messageTextfield.snp.makeConstraints {
       $0.leading.equalToSuperview().offset(20)
       $0.trailing.equalTo(sendMessageButton.snp.leading).offset(-20)
-      $0.bottom.equalTo(sendMessageButton.snp.top).offset(-20)
+      $0.top.equalTo(sendMessageButton.snp.top).offset(5)
     }
     
     sendMessageButton.addAction(UIAction { _ in
@@ -105,12 +107,16 @@ final class ChatDetailViewController: NaviHelper {
   
   func sendMessage(){
     guard let uid = uid,
-          let message = messageTextfield.text,
+          let message = messageTextfield.text, message != "",
           let chatRoomUid = chatRoomUid else { return }
-    chatDetailViewModel.sendMessage(uid, message, chatRoomUid)
+    chatDetailViewModel.sendMessage(uid, message, chatRoomUid) {
+      self.messageTextfield.text = ""
+      self.arrangeChatCellRecently()
+    }
   }
   
   func checkChatRoom(){
+    
     guard let uid = uid,
           let destinationUid = destinationUid else { return }
     chatDetailViewModel.checkChatRoom(uid, destinationUid) { key in
@@ -124,10 +130,39 @@ final class ChatDetailViewController: NaviHelper {
           self.comments.removeAll()
           
           self.comments.append(contentsOf: comment)
-          self.chatTableView.reloadData()
+          
+         self.chatTableView.reloadData()
+//          self.chatTableView.reloadData()
+          
+          self.checkUpdateChatList = true
+          
+          self.arrangeChatCellRecently()
         }
       }
     }
+  }
+  
+  func arrangeChatCellRecently(){
+    if self.comments.count > 0 {
+      self.chatTableView.scrollToRow(at: IndexPath(item: self.comments.count - 1,
+                                                   section: 0),
+                                     at: UITableView.ScrollPosition.bottom, animated: true)
+    }
+  }
+  
+  func updateLastCell() {
+      chatTableView.beginUpdates()
+      let newIndexPath = IndexPath(row: self.comments.count - 1, section: 0)
+      chatTableView.insertRows(at: [newIndexPath], with: .bottom)
+      chatTableView.endUpdates()
+
+      // Adjust content offset to prevent constraint issues
+      let contentHeight = chatTableView.contentSize.height
+      let tableViewHeight = chatTableView.bounds.size.height
+      if contentHeight > tableViewHeight {
+          let offset = CGPoint(x: 0, y: contentHeight - tableViewHeight)
+          chatTableView.setContentOffset(offset, animated: true)
+      }
   }
 }
 
@@ -138,19 +173,31 @@ extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let messageCell = tableView.dequeueReusableCell(withIdentifier: "ChatDetailCell",
-                                                    for: indexPath) as! ChatDetailCell
     let comment = self.comments[indexPath.row]
-    let checkSendOrReceive = comments[indexPath.row].uid == uid ? ChatType.send : ChatType.receive
-    // 리시브 샌드 구분만 잘 하면 될듯
-    messageCell.model = .init(message: comment.message ?? "", chatType: checkSendOrReceive)
+    let checkSendOrReceive = comment.uid == uid ? ChatType.send : ChatType.receive
+    var commentTime: String = ""
     
-    return messageCell
+    if let time = comment.timeStamp { 
+      commentTime = time.todayTime
+   }
+    
+    if checkSendOrReceive == .send {
+      let cell = tableView.dequeueReusableCell(withIdentifier: "MyChatCell",
+                                               for: indexPath) as! MyChatCell
+      cell.model = .init(message: comment.message ?? "", timeStamp: commentTime)
+      return cell
+    } else {
+      let cell = tableView.dequeueReusableCell(withIdentifier: "DestinationChatCell",
+                                               for: indexPath) as! DestinationChatCelll
+      cell.model = .init(message: comment.message ?? "", timeStamp: commentTime)
+      return cell
+    }
   }
+
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-      let comment = comments[indexPath.row]
+    let comment = comments[indexPath.row]
       let estimatedFrame = comment.message?.getEstimatedFrame(with: .systemFont(ofSize: 18))
-      return (estimatedFrame?.height ?? 0) + 20
+      return (estimatedFrame?.height ?? 0) + 30
   }
 }
