@@ -17,6 +17,7 @@ class ChatUserModel: NSObject {
 struct UserModel: Codable {
   var nickname: String?
   var uid: String?
+  var pushToken: String?
   var profileImageURL: String?
   var togetherCount: Int?
   var workoutCount: Int?

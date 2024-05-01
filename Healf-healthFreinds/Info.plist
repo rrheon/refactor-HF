@@ -2,20 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>사용자의 위치를 받아오려고 합니다.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>저희 앱은 사용자의 카메라를 사용합니다.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>저희 앱은 사용자의 앨범에 접근합니다.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakaoaa5658e72cc7f6d1e860972f93c4a9f6</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+		</dict>
+	</array>
 	<key>IDEPreferLogStreaming</key>
 	<string>YES</string>
-	<key>CFBundleExecutable</key>
-	<string></string>
-	<key>CFBundleIdentifier</key>
-	<string></string>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -33,7 +36,10 @@
 			</array>
 		</dict>
 	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>체크인 기능을 사용하기 위해서 위치정보 권한이 필요합니다.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakaokompassauth</string>
+		<string>kakaolink</string>
+	</array>
 </dict>
 </plist>

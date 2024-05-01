@@ -69,12 +69,9 @@
 		EED75DCA2B9AC54600594C68 /* ChatUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DC92B9AC54600594C68 /* ChatUserModel.swift */; };
 		EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DCB2B9AC54E00594C68 /* ChatModel.swift */; };
 		EED75DCE2B9AC76900594C68 /* ChatDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED75DCD2B9AC76900594C68 /* ChatDetailViewModel.swift */; };
-		EEDD81022B70CE490022302E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = EEDD81012B70CE490022302E /* Then */; };
-		EEDD81052B70CE860022302E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EEDD81042B70CE860022302E /* SnapKit */; };
 		EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD81062B70D0D40022302E /* UITextField+.swift */; };
 		EEDD81092B70E55B0022302E /* NaviHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD81082B70E55B0022302E /* NaviHelper.swift */; };
 		EEDD810C2B70E6B80022302E /* SignuplViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDD810B2B70E6B80022302E /* SignuplViewController.swift */; };
-		EEFA6DF52B98103B00147708 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = EEFA6DF42B98103B00147708 /* MessageKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -154,10 +151,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEDD81022B70CE490022302E /* Then in Frameworks */,
-				EEDD81052B70CE860022302E /* SnapKit in Frameworks */,
 				886D5BAFE19D85D85BA5AF19 /* Pods_Healf_healthFreinds.framework in Frameworks */,
-				EEFA6DF52B98103B00147708 /* MessageKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,9 +444,6 @@
 			);
 			name = "Healf-healthFreinds";
 			packageProductDependencies = (
-				EEDD81012B70CE490022302E /* Then */,
-				EEDD81042B70CE860022302E /* SnapKit */,
-				EEFA6DF42B98103B00147708 /* MessageKit */,
 			);
 			productName = "Healf-healthFreinds";
 			productReference = EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */;
@@ -759,10 +750,15 @@
 				DEVELOPMENT_TEAM = YQC68LN7U3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Healf-healthFreinds/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "저희 앱은 사용자의 카메라를 사용합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "체크인 기능을 사용하기 위해서 위치정보 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자의 위치를 받아오려고 합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "저희 앱은 사용자의 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -792,10 +788,15 @@
 				DEVELOPMENT_TEAM = YQC68LN7U3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Healf-healthFreinds/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "저희 앱은 사용자의 카메라를 사용합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "체크인 기능을 사용하기 위해서 위치정보 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자의 위치를 받아오려고 합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "저희 앱은 사용자의 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -863,24 +864,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		EEDD81012B70CE490022302E /* Then */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EEDD81002B70CE490022302E /* XCRemoteSwiftPackageReference "Then" */;
-			productName = Then;
-		};
-		EEDD81042B70CE860022302E /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EEDD81032B70CE860022302E /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		EEFA6DF42B98103B00147708 /* MessageKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EEFA6DF32B98103B00147708 /* XCRemoteSwiftPackageReference "MessageKit" */;
-			productName = MessageKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		EE98B1D72B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld */ = {

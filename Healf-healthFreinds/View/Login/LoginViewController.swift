@@ -12,8 +12,10 @@ import Then
 
 import FirebaseAuth
 import FirebaseFirestoreInternal
+import KakaoSDKUser
 
-final class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController, LoginViewModelDelegate {
+  let signupViewModel = SignupViewModel()
   
   private lazy var titleLabel = UIHelper.shared.createMultipleLineLabel(
     "나만을 위한 헬스 친구 찾기,\nHeal F 🏋🏻",
@@ -25,7 +27,14 @@ final class LoginViewController: UIViewController {
   private lazy var passwordTextField = UIHelper.shared.createLoginTextField("비밀번호")
   
   private lazy var loginButton = UIHelper.shared.createHealfButton("로그인", .mainBlue, .white)
-  private lazy var kakaoLoginButton = UIHelper.shared.createHealfButton("카카오 로그인", .kakaoYellow, .black)
+  
+  private lazy var kakaoLoginButton = UIButton().then {
+    $0.setImage(UIImage(named: "KakaoLoginImg"), for: .normal)
+    $0.addAction(UIAction { _ in
+      self.kakaoLoginButtonTapped()
+    }, for: .touchUpInside)
+  }
+  
   private lazy var naverLoginButton = UIHelper.shared.createHealfButton("네이버 로그인", .naverGreen, .white)
   
   private lazy var signupButton = UIButton().then {
@@ -42,6 +51,8 @@ final class LoginViewController: UIViewController {
     super.viewDidLoad()
     
     view.backgroundColor = .white
+    
+    signupViewModel.delegate = self
     
     setupLayout()
     makeUI()
@@ -80,16 +91,18 @@ final class LoginViewController: UIViewController {
       $0.leading.trailing.equalTo(emailTextField)
     }
     
-    loginButton.addAction(UIAction { _ in self.loginButtonTapped() }, for: .touchUpInside)
+    loginButton.addAction(UIAction { _ in
+      self.loginToHealf()
+    }, for: .touchUpInside)
     loginButton.snp.makeConstraints {
       $0.top.equalTo(passwordTextField.snp.bottom).offset(40)
       $0.leading.trailing.equalTo(emailTextField)
       $0.height.equalTo(48)
     }
-    
+
     kakaoLoginButton.snp.makeConstraints {
       $0.top.equalTo(loginButton.snp.bottom).offset(60)
-      $0.leading.trailing.equalTo(emailTextField)
+      $0.leading.trailing.equalTo(loginButton)
       $0.height.equalTo(48)
     }
     
@@ -105,6 +118,22 @@ final class LoginViewController: UIViewController {
     }
   }
   
+  func loginToHealf() {
+    guard let email = emailTextField.text?.description,
+          let password = passwordTextField.text?.description else { return }
+    signupViewModel.loginToHealf(email: email, password: password)
+  }
+
+  // MARK: - LoginViewModelDelegate
+  func loginDidSucceed() {
+    let tapbarcontroller = TabBarController()
+    tapbarcontroller.modalPresentationStyle = .fullScreen
+    self.present(tapbarcontroller, animated: true, completion: nil)
+  }
+  
+  func loginDidFail(with error: Error) {
+    // 로그인 실패 시 처리할 작업
+  }
   
   func loginButtonTapped(){
     guard let email = emailTextField.text?.description,
@@ -121,6 +150,23 @@ final class LoginViewController: UIViewController {
       } else {
         print("로그인 실패")
         print(error.debugDescription)
+      }
+    }
+  }
+  
+  func kakaoLoginButtonTapped(){
+    if (UserApi.isKakaoTalkLoginAvailable()) {
+      UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+        if let error = error {
+          print(error)
+        }
+        else {
+          print("loginWithKakaoTalk() success.")
+          
+          //do something
+          self.signupViewModel.kakaoAuthSignIn()
+          _ = oauthToken
+        }
       }
     }
   }
