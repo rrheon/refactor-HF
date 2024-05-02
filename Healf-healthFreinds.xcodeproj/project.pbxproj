@@ -43,6 +43,7 @@
 		EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */; };
 		EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */; };
 		EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */; };
+		EEC414E72BE379B9003FB246 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC414E62BE379B9003FB246 /* UIImage+.swift */; };
 		EEC434E42B9FE53C00FED4EB /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */; };
 		EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */; };
 		EEC9DE712BA05A5900437A6A /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC9DE702BA05A5900437A6A /* SearchViewModel.swift */; };
@@ -115,6 +116,8 @@
 		EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		EEC414E62BE379B9003FB246 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
+		EEC414E82BE37AA5003FB246 /* Healf-healthFreinds.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Healf-healthFreinds.entitlements"; sourceTree = "<group>"; };
 		EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
 		EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostModel.swift; sourceTree = "<group>"; };
 		EEC9DE702BA05A5900437A6A /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -252,6 +255,7 @@
 		EE98B1CD2B4FDFC30025C4F8 /* Healf-healthFreinds */ = {
 			isa = PBXGroup;
 			children = (
+				EEC414E82BE37AA5003FB246 /* Healf-healthFreinds.entitlements */,
 				EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */,
 				EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */,
 				EEDD810A2B70E5780022302E /* helpers */,
@@ -277,6 +281,7 @@
 				EE4E36852BA9181800FB60FC /* Array+.swift */,
 				EE4E36A12BD2003300FB60FC /* String+.swift */,
 				EE4E36A72BE0757C00FB60FC /* Int+.swift */,
+				EEC414E62BE379B9003FB246 /* UIImage+.swift */,
 				EECC03102B91B725003ECF95 /* UISearchBar+.swift */,
 				EE4E367F2BA6E98C00FB60FC /* UIViewController+.swift */,
 				EECC03092B90CED5003ECF95 /* UIView+.swift */,
@@ -603,6 +608,7 @@
 				EE4E36972BB3B0A200FB60FC /* SignupViewModel.swift in Sources */,
 				EE4E36AA2BE0F8A600FB60FC /* ChatCell.swift in Sources */,
 				EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */,
+				EEC414E72BE379B9003FB246 /* UIImage+.swift in Sources */,
 				EE4E36952BB3168000FB60FC /* MapViewModel.swift in Sources */,
 				EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */,
 				EE4E368F2BABE93800FB60FC /* Double+.swift in Sources */,
@@ -745,6 +751,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Healf-healthFreinds/Healf-healthFreinds.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YQC68LN7U3;
@@ -783,6 +790,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Healf-healthFreinds/Healf-healthFreindsRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YQC68LN7U3;

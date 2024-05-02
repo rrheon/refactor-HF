@@ -10,20 +10,25 @@ import Foundation
 import FirebaseAuth
 import KakaoSDKAuth
 import KakaoSDKUser
+import AuthenticationServices
+import FirebaseDatabase
 
 protocol LoginViewModelDelegate: AnyObject {
-  func loginDidSucceed()
+  func loginDidSucceed(completion: @escaping() -> Void)
   func loginDidFail(with error: Error)
 }
 
 class SignupViewModel: CommonViewModel {
   weak var delegate: LoginViewModelDelegate?
-
+  
+  // MARK: - 로그인함수
   func loginToHealf(email: String, password: String) {
     Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
       if error == nil {
         // 로그인 성공
-        self?.delegate?.loginDidSucceed()
+        self?.delegate?.loginDidSucceed {
+          print("로그인 성공")
+        }
       } else {
         // 로그인 실패
         self?.delegate?.loginDidFail(with: error!)
@@ -33,10 +38,13 @@ class SignupViewModel: CommonViewModel {
     }
   }
   
-  func registerUserData(email: String, password: String, nickname: String, completion: @escaping () -> Void){
+  // MARK: - 계정등록 함수
+  func registerUserData(email: String, password: String, nickname: String,
+                        completion: @escaping () -> Void){
     Auth.auth().createUser(withEmail: email,
                            password: password) { result, error in
       if let error = error {
+        self.loginToHealf(email: email, password: String(password))
         print("Error creating user:", error.localizedDescription)
         return
       }
@@ -46,39 +54,63 @@ class SignupViewModel: CommonViewModel {
         return
       }
       
-      let values = ["nickname": nickname,
-                    "uid": uid,
-                    "profileImage": "없음"]
-      
-      let valuesForUserData = ["nickname": nickname,
-                               "uid": uid,
-                               "togetherCount": 0,
-                               "workoutCount": 0,
-                               "postCount": 0,
-                               "profileImage": "없음",
-                               "location": "없음",
-                               "introduce": "없읍"]
-      
-      
-      // Replace "." with "_" in the UID to create a valid database path
-      let sanitizedUID = uid.replacingOccurrences(of: ".", with: "_")
-      
-      self.ref.child("UserDataInfo").child(sanitizedUID).setValue(valuesForUserData) { (error, ref) in
-        if let error = error {
-          print("Error setting user data:", error.localizedDescription)
-          return
-        }
-        
-        print("User data successfully saved to database.")
+      self.registerUserData(uid: uid, nickname: nickname) {
+        completion()
+      }
+    }
+  }
+  
+  func registerUserData(uid: String, nickname: String, completion: @escaping () -> Void) {
+    let values = ["nickname": nickname,
+                  "uid": uid,
+                  "profileImage": "없음"]
+    
+    let valuesForUserData = ["nickname": nickname,
+                             "uid": uid,
+                             "togetherCount": 0,
+                             "workoutCount": 0,
+                             "postCount": 0,
+                             "profileImage": "없음",
+                             "location": "없음",
+                             "introduce": "없읍"] as [String : Any]
+    
+    
+    // Replace "." with "_" in the UID to create a valid database path
+    let sanitizedUID = uid.replacingOccurrences(of: ".", with: "_")
+    
+    self.ref.child("UserDataInfo").child(sanitizedUID).setValue(valuesForUserData) { (error, ref) in
+      if let error = error {
+        print("Error setting user data:", error.localizedDescription)
+        return
       }
       
-      self.ref.child("UserData").child(sanitizedUID).setValue(values) { (error, ref) in
+      print("User data successfully saved to database.")
+    }
+    
+    self.ref.child("UserData").child(sanitizedUID).setValue(values) { (error, ref) in
+      if let error = error {
+        print("Error setting user data:", error.localizedDescription)
+        return
+      }
+      completion()
+      print("User data successfully saved to database.")
+    }
+  }
+  
+  // MARK: - 카카오로그인 함수
+  func kakaoLogin(){
+    if (UserApi.isKakaoTalkLoginAvailable()) {
+      UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
         if let error = error {
-          print("Error setting user data:", error.localizedDescription)
-          return
+          print(error)
         }
-        completion()
-        print("User data successfully saved to database.")
+        else {
+          print("loginWithKakaoTalk() success.")
+          
+          //do something
+          self.kakaoAuthSignIn()
+          _ = oauthToken
+        }
       }
     }
   }
@@ -135,6 +167,34 @@ class SignupViewModel: CommonViewModel {
       email = "kakao_\(email)"
       self.registerUserData(email: email, password: String(password), nickname: userName) {
         self.loginToHealf(email: email, password: String(password))
+      }
+    }
+  }
+  
+  // MARK: - 애플로그인
+  func searchUID(){
+    ref.child("UserDataInfo").observeSingleEvent(of: .value) { snapshot in
+      if snapshot.exists() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+
+        for child in snapshot.children {
+          if let snap = child as? DataSnapshot,
+             let searchUid = snap.key as? String,
+             searchUid == uid {
+            // 원하는 uid를 찾았을 때의 처리
+            print("내 uid를 찾았습니다.")
+            return
+          }
+        }
+        print(uid)
+        self.registerUserData(uid: uid, nickname: "") {
+          print("계정등록완료")
+        }
+        // 원하는 uid를 찾지 못했을 때의 처리
+        print("원하는 uid를 찾을 수 없습니다.")
+      } else {
+        // 데이터가 없을 때의 처리
+        print("데이터가 없습니다.")
       }
     }
   }

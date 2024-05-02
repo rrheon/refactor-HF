@@ -36,11 +36,10 @@ class ChatListViewController: NaviHelper {
     
     navigationItemSetting()
     
- 
+    // 이렇게 설정하면 메세지가 없을 때 아무것도 안뜸
     getChatList {
       self.setupLayout()
       self.makeUI()
-      
     }
   }
   
@@ -67,7 +66,7 @@ class ChatListViewController: NaviHelper {
     chatTableView.snp.makeConstraints {
       $0.top.equalTo(searchBar.snp.bottom).offset(20)
       $0.leading.trailing.bottom.equalToSuperview()
-//      $0.height.equalTo(120)
+      //      $0.height.equalTo(120)
     }
   }
   
@@ -76,15 +75,21 @@ class ChatListViewController: NaviHelper {
     chatListViewModel.getAllChatroomData(currentUserUID: currentUserUID ?? "") { result in
       var numberOfMessagesReceived = 0 // 받은 메시지 수를 추적
       
-      for data in result {
-        self.usersInChatrooms[data.1] = data.2
-        self.chatListViewModel.getLastMessage(data.0) { lastMessage in
-          self.usersLastMessage[data.1] = lastMessage
-          
-          numberOfMessagesReceived += 1
-          if numberOfMessagesReceived == result.count { // 모든 메시지를 받았을 때만 테이블 뷰를 다시 로드
-            self.chatTableView.reloadData()
-            completion()
+      if result.isEmpty {
+        // 데이터가 없는 경우에도 completion을 실행
+        self.chatTableView.reloadData()
+        completion()
+      } else {
+        for data in result {
+          self.usersInChatrooms[data.1] = data.2
+          self.chatListViewModel.getLastMessage(data.0) { lastMessage in
+            self.usersLastMessage[data.1] = lastMessage
+            
+            numberOfMessagesReceived += 1
+            if numberOfMessagesReceived == result.count { 
+              self.chatTableView.reloadData()
+              completion()
+            }
           }
         }
       }
@@ -106,9 +111,9 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
     let nickname = self.usersInChatrooms[userId]
-
+    
     let chatDetailVC = ChatDetailViewController(destinationUid: userId, userNickname: nickname)
-//    chatDetailVC.destinationUid = array[indexPath.row].uid
+    //    chatDetailVC.destinationUid = array[indexPath.row].uid
     chatDetailVC.hidesBottomBarWhenPushed = true
     navigationController?.pushViewController(chatDetailVC, animated: true)
   }
@@ -120,7 +125,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
     if let nickname = self.usersInChatrooms[userId],
        let lastMessage = self.usersLastMessage[userId] {
-        cell.model = .init(profile: "",
+      cell.model = .init(profile: "",
                          nickname: nickname,
                          lastMessage: lastMessage.message ?? "",
                          timeStamp: lastMessage.timeStamp?.todayTime ?? "")

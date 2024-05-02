@@ -39,5 +39,6 @@ extension UIColor {
   static let buttonTitleBlue = UIColor(red: 0.21, green: 0.29, blue: 0.46, alpha: 1.00)
   static let searchStackViewColor = UIColor(red: 0.97, green: 0.98, blue: 0.98, alpha: 1.00)
   static let cellShadow = UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)
+  static let toastPopup = UIColor(red: 0.21, green: 0.21, blue: 0.21, alpha: 1.00)
 
 }

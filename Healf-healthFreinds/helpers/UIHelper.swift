@@ -228,7 +228,7 @@ final class UIHelper: UIViewController {
   // MARK: - toast message, 이미지가 뒤에 나오고 있음 앞으로 빼기, 이미지 없을 때도 있음
   func showToast(message: String) {
     let toastContainer = UIView()
-    toastContainer.backgroundColor = .gray
+    toastContainer.backgroundColor = .lightGray
     toastContainer.layer.cornerRadius = 10
     
     let toastLabel = UILabel()

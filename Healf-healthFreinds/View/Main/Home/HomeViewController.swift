@@ -297,6 +297,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     return cell
   }
 }
+
 // 셀의 각각의 크기
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
   func collectionView(_ collectionView: UICollectionView,

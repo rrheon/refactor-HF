@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
+// 메세지 보낼 때 키보드가 가림
 final class ChatDetailViewController: NaviHelper {
   let chatDetailViewModel = ChatDetailViewModel.shared
   

@@ -29,6 +29,7 @@ class MapPersonListViewController: NaviHelper {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    // 0일 경우 처리 필요
     mapViewModel.getOtherPersonLocation { userDatasFromServer in
       self.userDatas = userDatasFromServer
 

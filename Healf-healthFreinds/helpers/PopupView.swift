@@ -95,7 +95,8 @@ final class PopupView: UIView {
 
     checkComplete = checkCompleteButton
 
-    if checkComplete {      self.buttonStack.addArrangedSubview(self.completeButton)
+    if checkComplete {     
+      self.buttonStack.addArrangedSubview(self.completeButton)
     } else {
       self.buttonStack.addArrangedSubview(self.leftButton)
       self.buttonStack.addArrangedSubview(self.rightButton)

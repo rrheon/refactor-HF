@@ -12,9 +12,7 @@ import SnapKit
 import NMapsMap
 import FloatingPanel
 
-// 화면 눌러서 VC로 들어오면 사용자의 위치 저장 -> 버튼 누르면 해당 위치에 해당하는 유저가 뜸 -> 유저 누르면 채팅하시겠습니까? 알람하고 확인 취소로 채팅방 생성 -> 사용자가 채팅을 거부하면 거부한 사용자다라는 알람
-
-// 화면 들어오자마자 한번 주소 변환 -> 해당 주소를 토대로 유저 찾기
+// 지금 플로팅이 안뜸
 
 final class MapViewController: NaviHelper {
   var fpc: FloatingPanelController!
