@@ -17,7 +17,7 @@ final class CompleSignupViewController: NaviHelper {
     "가입을 완료했어요!\n로그인하여 운동친구를 찾아보세요.",
     .black,
     .boldSystemFont(ofSize: 17))
-  private lazy var startButton = UIHelper.shared.createHealfButton("시작하기", .unableGray, .white)
+  private lazy var startButton = UIHelper.shared.createHealfButton("시작하기", .mainBlue, .white)
 
   // MARK: - viewDidLoad
   override func viewDidLoad() {

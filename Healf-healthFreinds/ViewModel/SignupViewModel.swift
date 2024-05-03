@@ -20,7 +20,7 @@ protocol LoginViewModelDelegate: AnyObject {
 
 class SignupViewModel: CommonViewModel {
   weak var delegate: LoginViewModelDelegate?
-  
+
   // MARK: - 로그인함수
   func loginToHealf(email: String, password: String) {
     Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
@@ -172,6 +172,38 @@ class SignupViewModel: CommonViewModel {
   }
   
   // MARK: - 애플로그인
+  func appleLogin(authorization: ASAuthorization,
+                  currentNonce: String?, completion: @escaping() -> Void){
+    if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+      guard let nonce = currentNonce else {
+        fatalError("Invalid state: A login callback was received, but no login request was sent.")
+      }
+      guard let appleIDToken = appleIDCredential.identityToken else {
+        print("Unable to fetch identity token")
+        return
+      }
+      guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+        print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+        return
+      }
+      
+      // Initialize a Firebase credential, including the user's full name.
+      let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
+                                                     rawNonce: nonce,
+                                                     fullName: appleIDCredential.fullName)
+      
+      // Sign in with Firebase.
+      Auth.auth().signIn(with: credential) { authResult, error in
+        if let error = error {
+          print("Error Apple sign in: \(error.localizedDescription)")
+          return
+        }
+        // 로그인에 성공했을 시 실행할 메서드 추가
+       completion()
+      }
+    }
+  }
+  // MARK: - 애플로그인 시 유저 정보 등록
   func searchUID(){
     ref.child("UserDataInfo").observeSingleEvent(of: .value) { snapshot in
       if snapshot.exists() {

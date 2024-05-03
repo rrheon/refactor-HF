@@ -16,6 +16,7 @@ final class SignuplViewController: NaviHelper {
   
   let signupViewModel = SignupViewModel()
   
+  // 이메일 형식에 맞게, 비밀번호 형식에 맞게, 공백이 있으면 다음버튼 활성화 x
   private lazy var emailTextField = UIHelper.shared.createLoginTextField("이메일을 입력해주세요.")
   private lazy var passwordTextField = UIHelper.shared.createLoginTextField("비밀번호를 입력해주세요.")
   private lazy var nicknameTextField = UIHelper.shared.createLoginTextField("닉네임을 입력해주세요.")

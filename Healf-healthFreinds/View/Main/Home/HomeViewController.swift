@@ -13,6 +13,10 @@ import RxCocoa
 
 // init할 때 데이터 로드해오기
 final class HomeViewController: NaviHelper {
+  let homeViewModel = HomeViewModel()
+  let searchViewModel = SearchViewModel.shared
+  
+  var recentPosts: [CreatePostModel] = []
   
   private lazy var topUnderLineView = UIView()
   
@@ -49,7 +53,6 @@ final class HomeViewController: NaviHelper {
   private lazy var startButton = uihelper.createHealfButton("💪🏻 운동 기록하기", .mainBlue, .white)
   private lazy var contentView = UIView()
 
-  let homeViewModel = HomeViewModel()
   var weekLabels: [UILabel] = []
 
   // MARK: - viewDidLoad
@@ -61,6 +64,8 @@ final class HomeViewController: NaviHelper {
     navigationItemSetting()
     
     registerCell()
+    
+    loadRecentPosts()
     
     setupLayout()
     makeUI()
@@ -258,9 +263,12 @@ final class HomeViewController: NaviHelper {
         self.timeSummaryLabel.text = "주간 평점\n \(datas.1)점"
         self.withFriendsLabel.text = "함께한 친구\n \(datas.2)명"
         
-        self.uihelper.changeColor(label: self.timeCountLabel, wantToChange: "\(datas.0)회", color: .lightGray)
-        self.uihelper.changeColor(label: self.timeSummaryLabel, wantToChange: "\(datas.1)점", color: .lightGray)
-        self.uihelper.changeColor(label: self.withFriendsLabel, wantToChange: "\(datas.2)명", color: .lightGray)
+        self.uihelper.changeColor(label: self.timeCountLabel,
+                                  wantToChange: "\(datas.0)회", color: .lightGray)
+        self.uihelper.changeColor(label: self.timeSummaryLabel,
+                                  wantToChange: "\(datas.1)점", color: .lightGray)
+        self.uihelper.changeColor(label: self.withFriendsLabel,
+                                  wantToChange: "\(datas.2)명", color: .lightGray)
       
         for (index, isCompleted) in self.homeViewModel.weeklyCompletion.enumerated() {
           if let label = self.weekLabels[safe: index] {
@@ -270,6 +278,13 @@ final class HomeViewController: NaviHelper {
       }
     }
   }
+  
+  func loadRecentPosts(){
+    searchViewModel.loadFirstFivePostsFromDatabase { recentFivePosts in
+      self.recentPosts = recentFivePosts
+      self.postCollectionView.reloadData()
+    }
+  }
 }
 
 // MARK: - collectionView
@@ -277,15 +292,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
   
   func collectionView(_ collectionView: UICollectionView,
                       numberOfItemsInSection section: Int) -> Int {
-    return 5
+    return recentPosts.count
   }
   
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
-    // 추후에 홈에서 데이터 받아오고 해당 데이터를 뿌려줘야함 지금은 임시데이터임
-      participateButtonTapped(postedData: CreatePostModel(
-        time: "1", workoutTypes: ["1","2"], gender: "3",
-        info: "3", userNickname: "3", postedDate: "3", userUid: "#"))
+    participateButtonTapped(postedData: recentPosts[indexPath.row])
   }
   
   func collectionView(_ collectionView: UICollectionView,
@@ -293,7 +305,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostedCell.id,
                                                   for: indexPath) as! PostedCell
-
+    cell.model = recentPosts[indexPath.row]
     return cell
   }
 }

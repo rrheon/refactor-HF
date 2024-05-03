@@ -23,8 +23,12 @@ class MypageViewModel: CommonViewModel {
   static let shared = MypageViewModel()
   
   // 받아와야할 것 - 1.해당 월 전체(데이터 있으면 표시 없으면 냅두기), 2. 선택한 날짜의 데이터 뿌려주기
-  func getMyInfomation(completion: @escaping(UserModel) -> Void){
-    ref.child("UserDataInfo").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
+  // uid를 매개변수로 따로 빼서 값이 들어오면 상대방 없으면 내꺼
+  func getMyInfomation(checkMyUid: Bool = true,
+                       otherPersonUid: String = "",
+                       completion: @escaping(UserModel) -> Void){
+    let userUid = checkMyUid == true ? uid : otherPersonUid
+    ref.child("UserDataInfo").child(userUid ?? "").observeSingleEvent(of: .value) { snapshot in
       guard let value = snapshot.value as? [String: Any] else { return }
       guard let userData = self.convertUserModel(data: value) else { return}
       completion(userData)
@@ -130,8 +134,11 @@ class MypageViewModel: CommonViewModel {
   }
   
 // MARK: - 유저 프로필 받아오기
-  func getUserProfileImage(completion: @escaping (Result<UIImage, Error>) -> Void) {
-    getMyInfomation { result in
+  func getUserProfileImage(checkMyUid: Bool = true,
+                           otherPersonUid: String = "",
+                           completion: @escaping (Result<UIImage, Error>) -> Void) {
+    getMyInfomation(checkMyUid: checkMyUid,
+                    otherPersonUid: otherPersonUid) { result in
       guard let imageUrl = result.profileImageURL,
             let imageURL = URL(string: imageUrl) else {
         completion(.failure(MyPageError.imageURLNotFound))
@@ -153,6 +160,21 @@ class MypageViewModel: CommonViewModel {
       }
     }
   }
+  
+  func settingProfileImage(profile: UIImageView,
+                           result:Result<UIImage, any Error>){
+    DispatchQueue.main.async {
+      switch result {
+      case .success(let image):
+        profile.image = image
+        profile.layer.cornerRadius = 20
+        profile.clipsToBounds = true
+      case .failure(let error):
+        print("Failed to load user profile image: \(error)")
+      }
+    }
+  }
+  
   
 // MARK: - 게시글 삭제
   func deleteMyPost(postedDate: String,

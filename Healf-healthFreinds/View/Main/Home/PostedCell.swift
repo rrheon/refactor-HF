@@ -7,7 +7,14 @@ final class PostedCell: UICollectionViewCell {
   
   static var id: String { NSStringFromClass(Self.self).components(separatedBy: ".").last ?? "" }
   var delegate: ParticipateButtonDelegate?
-
+  let myPageViewModel = MypageViewModel.shared
+  
+  var model: CreatePostModel? {
+    didSet {
+      bind()
+    }
+  }
+  
   private lazy var profileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
   private lazy var nickNameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
   
@@ -89,7 +96,19 @@ final class PostedCell: UICollectionViewCell {
   }
   
   private func bind() {
+    guard let data = model else { return }
+    nickNameLabel.text = data.userNickname
 
+    let combinedString = data.workoutTypes.joined(separator: ", ")
+
+    workoutInfoLabel.text = "🏋🏻 운동종류: \(combinedString)"
+    workoutTimeLabel.text = "🕖 선호하는 시간: \(data.time)"
+    genderLabel.text = "🚻 성별: \(data.gender)"
+    
+    myPageViewModel.getUserProfileImage(checkMyUid: false,
+                                        otherPersonUid: data.userUid) { result in
+      self.myPageViewModel.settingProfileImage(profile: self.profileImageView, result: result)
+    }
   }
-  
 }
+

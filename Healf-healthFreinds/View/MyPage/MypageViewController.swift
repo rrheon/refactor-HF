@@ -251,16 +251,7 @@ final class MypageViewController: NaviHelper {
       self.userIntroduceLabel.text = result.introduce
       
       self.mypageViewModel.getUserProfileImage { result in
-        DispatchQueue.main.async {
-          switch result {
-          case .success(let image):
-            self.userProfileImageView.image = image
-            self.userProfileImageView.layer.cornerRadius = 35
-            self.userProfileImageView.clipsToBounds = true
-          case .failure(let error):
-            print("Failed to load user profile image: \(error)")
-          }
-        }
+        self.mypageViewModel.settingProfileImage(profile: self.userProfileImageView, result: result)
       }
     }
   }
