@@ -33,6 +33,7 @@
 		EE4E36A62BDFA68500FB60FC /* MyChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */; };
 		EE4E36A82BE0757C00FB60FC /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A72BE0757C00FB60FC /* Int+.swift */; };
 		EE4E36AA2BE0F8A600FB60FC /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36A92BE0F8A600FB60FC /* ChatCell.swift */; };
+		EE5EA4172BE9157F00226188 /* SingupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5EA4162BE9157F00226188 /* SingupModel.swift */; };
 		EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */; };
 		EE98B1D12B4FDFC30025C4F8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */; };
 		EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1D22B4FDFC30025C4F8 /* LoginViewController.swift */; };
@@ -104,6 +105,7 @@
 		EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatCell.swift; sourceTree = "<group>"; };
 		EE4E36A72BE0757C00FB60FC /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		EE4E36A92BE0F8A600FB60FC /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		EE5EA4162BE9157F00226188 /* SingupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingupModel.swift; sourceTree = "<group>"; };
 		EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Healf-healthFreinds.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE98B1CE2B4FDFC30025C4F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EE98B1D02B4FDFC30025C4F8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 		EED75DC82B9AC52300594C68 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EE5EA4162BE9157F00226188 /* SingupModel.swift */,
 				EED75DC92B9AC54600594C68 /* ChatUserModel.swift */,
 				EED75DCB2B9AC54E00594C68 /* ChatModel.swift */,
 				EE4E36832BA8330700FB60FC /* HistoryModel.swift */,
@@ -558,6 +561,7 @@
 				EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */,
 				EE4E36A02BC0410C00FB60FC /* BottomSheet.swift in Sources */,
 				EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */,
+				EE5EA4172BE9157F00226188 /* SingupModel.swift in Sources */,
 				EE4E368A2BABE73A00FB60FC /* MypageViewModel.swift in Sources */,
 				EE4E36822BA6F4E100FB60FC /* HomeViewModel.swift in Sources */,
 				EE4E36882BA99E4D00FB60FC /* Calendar.swift in Sources */,

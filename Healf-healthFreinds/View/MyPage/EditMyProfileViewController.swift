@@ -160,7 +160,7 @@ class EditMyProfileViewController: NaviHelper {
   // MARK: - deleteProfile
   func deleteProfileImageButtonTapped(){
     profileImageView.image = UIImage(named: "EmptyProfileImg")
-    uihelper.showToast(message: "기존 프로필 이미지를 삭제했어요!")
+    uihelper.showToast(message: "✅ 기존 프로필 이미지를 삭제했어요!")
   }
   
   // MARK: - changeMyProfile

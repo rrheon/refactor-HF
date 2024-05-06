@@ -251,7 +251,9 @@ final class MypageViewController: NaviHelper {
       self.userIntroduceLabel.text = result.introduce
       
       self.mypageViewModel.getUserProfileImage { result in
-        self.mypageViewModel.settingProfileImage(profile: self.userProfileImageView, result: result)
+        self.mypageViewModel.settingProfileImage(profile: self.userProfileImageView,
+                                                 result: result,
+                                                 radious: 35)
       }
     }
   }
@@ -293,23 +295,22 @@ final class MypageViewController: NaviHelper {
   func setupButtonActions() {
     calendarPrevButton.rx.tap
       .subscribe(onNext: { [weak self] in
-        print("이전 달력 버튼이 클릭되었습니다.")
-        self?.calendarView.moveMonth(next: false, completion: { result in
-          self?.highlightedDates = result
-          self?.calendarView.reloadData()
-        })
+        self?.tappedMoveMonth(next: false)
       })
       .disposed(by: uiHelper.disposeBag)
     
     calendarNextButton.rx.tap
       .subscribe(onNext: { [weak self] in
-        print("다음 달력 버튼이 클릭되었습니다.")
-        self?.calendarView.moveMonth(next: true, completion: { result in
-          self?.highlightedDates = result
-          self?.calendarView.reloadData()
-        })
+        self?.tappedMoveMonth(next: true)
       })
       .disposed(by: uiHelper.disposeBag)
+  }
+  
+  func tappedMoveMonth(next: Bool){
+    self.calendarView.moveMonth(next: next, completion: { result in
+      self.highlightedDates = result
+      self.calendarView.reloadData()
+    })
   }
 }
 

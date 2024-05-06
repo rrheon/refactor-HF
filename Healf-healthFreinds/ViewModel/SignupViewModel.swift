@@ -218,8 +218,8 @@ class SignupViewModel: CommonViewModel {
             return
           }
         }
-        print(uid)
-        self.registerUserData(uid: uid, nickname: "") {
+        let userNum = Int.random(in: 1..<10000)
+        self.registerUserData(uid: uid, nickname: "user\(userNum)") {
           print("계정등록완료")
         }
         // 원하는 uid를 찾지 못했을 때의 처리

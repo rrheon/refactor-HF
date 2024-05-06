@@ -24,7 +24,7 @@ final class LoginViewController: UIViewController {
     .boldSystemFont(ofSize: 16),
     .left)
   
-  private lazy var emailTextField = UIHelper.shared.createLoginTextField("아이디 또는 이메일")
+  private lazy var emailTextField = UIHelper.shared.createLoginTextField("이메일")
   private lazy var passwordTextField = UIHelper.shared.createLoginTextField("비밀번호")
   
   private lazy var loginButton = UIHelper.shared.createHealfButton("로그인", .mainBlue, .white)
@@ -107,13 +107,14 @@ final class LoginViewController: UIViewController {
     }, for: .touchUpInside)
     loginButton.snp.makeConstraints {
       $0.top.equalTo(passwordTextField.snp.bottom).offset(40)
-      $0.leading.trailing.equalTo(emailTextField)
+      $0.leading.equalTo(emailTextField).offset(20)
+      $0.trailing.equalTo(emailTextField).offset(-20)
       $0.height.equalTo(48)
     }
     
     kakaoLoginButton.snp.makeConstraints {
       $0.top.equalTo(loginButton.snp.bottom).offset(60)
-      $0.leading.trailing.equalTo(loginButton)
+      $0.leading.trailing.equalTo(emailTextField)
       //      $0.height.equalTo(48)
     }
     
@@ -188,7 +189,15 @@ extension LoginViewController: LoginViewModelDelegate {
   }
   
   func loginDidFail(with error: Error) {
-    UIHelper.shared.showToast(message: "❌ 아이디, 비밀번호를 확인해주세요")
+    [
+      emailTextField,
+      passwordTextField
+    ].forEach { 
+      $0.text = nil
+      $0.resignFirstResponder()
+    }
+    
+    showPopupViewWithOnebutton("아이디,비밀번호를 확인해주세요")
   }
 }
 

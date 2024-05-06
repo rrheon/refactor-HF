@@ -107,7 +107,9 @@ final class PostedCell: UICollectionViewCell {
     
     myPageViewModel.getUserProfileImage(checkMyUid: false,
                                         otherPersonUid: data.userUid) { result in
-      self.myPageViewModel.settingProfileImage(profile: self.profileImageView, result: result)
+      self.myPageViewModel.settingProfileImage(profile: self.profileImageView,
+                                               result: result,
+                                               radious: 20)
     }
   }
 }

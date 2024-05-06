@@ -90,7 +90,6 @@ class MapViewModel: CommonViewModel {
               self.getUserInfomation(uid as? String ?? "") { userData in
                 userDatas.append(userData)
                 completion(userDatas)
-                // 여기에서 UI 업데이트를 수행해야 합니다.
               }
             }
           }

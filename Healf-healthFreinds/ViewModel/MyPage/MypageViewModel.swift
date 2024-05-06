@@ -162,12 +162,13 @@ class MypageViewModel: CommonViewModel {
   }
   
   func settingProfileImage(profile: UIImageView,
-                           result:Result<UIImage, any Error>){
+                           result:Result<UIImage, any Error>,
+                           radious: CGFloat){
     DispatchQueue.main.async {
       switch result {
       case .success(let image):
         profile.image = image
-        profile.layer.cornerRadius = 20
+        profile.layer.cornerRadius = radious
         profile.clipsToBounds = true
       case .failure(let error):
         print("Failed to load user profile image: \(error)")
