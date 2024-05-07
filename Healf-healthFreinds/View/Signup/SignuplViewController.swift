@@ -103,47 +103,119 @@ final class SignuplViewController: NaviHelper {
     nextButton.backgroundColor = .mainBlue
   }
   
-  func afterEnteredEmail(){
-    guard let email = emailTextField.text else { return }
-    userInfo.email = email
-    
-    titleLabel.text = "사용하실 비밀번호를 입력해주세요."
-    
+  func focusoutAndShowPopup(desc: String){
     emailTextField.text = nil
-    emailTextField.placeholder = "비밀번호를 입력해주세요."
-    passwordTextField.isHidden = false
+    emailTextField.resignFirstResponder()
     
-    nextButton.isEnabled = false
-    nextButton.removeTarget(nil, action: nil, for: .allEvents)
-    nextButton.addAction(UIAction { _ in
-      self.afterEnterPassword()
-    }, for: .touchUpInside)
+    if !passwordTextField.isHidden {
+      passwordTextField.text = nil
+      passwordTextField.resignFirstResponder()
+    }
+    showPopupViewWithOnebutton(desc)
   }
   
+  func afterEnteredEmail() {
+    guard let email = emailTextField.text,
+          signupViewModel.isValidEmail(testStr: email) else {
+      focusoutAndShowPopup(desc: "이메일 주소를 정확히 입력해주세요.")
+      return
+    }
+    
+    signupViewModel.checkEmailDuplication(checkType: "email",
+                                          checkValue: email) { isDuplicatedEmail in
+      if !isDuplicatedEmail {
+        self.focusoutAndShowPopup(desc: "이미 사용중인 이메일입니다.")
+      } else {
+        self.userInfo.email = email
+        
+        self.titleLabel.text = "사용하실 비밀번호를 입력해주세요."
+        
+        self.emailTextField.text = nil
+        self.emailTextField.placeholder = "비밀번호를 입력해주세요."
+        
+        self.emailTextField.isSecureTextEntry = true
+        self.passwordTextField.isSecureTextEntry = true
+        
+        self.passwordTextField.isHidden = false
+        
+        self.nextButton.isEnabled = false
+        self.nextButton.removeTarget(nil, action: nil, for: .allEvents)
+        self.nextButton.addAction(UIAction { _ in
+          self.afterEnterPassword()
+        }, for: .touchUpInside)
+      }
+    }
+  }
+  
+  // MARK: - 비밀번호 특수문자 등 유효성 확인
+  func checkValidPassword(firstPassword: String,
+                          secondPassword: String,
+                          completion: @escaping (Bool) -> Void) {
+    let specialCharacterRegEx = ".*[!&^%$#@()/]+.*"
+    let textTest = NSPredicate(format:"SELF MATCHES %@", specialCharacterRegEx)
+    let result = textTest.evaluate(with: emailTextField.text)
+
+    if emailTextField.text?.count ?? 0 < 10 || !result {
+      focusoutAndShowPopup(desc: "사용할 수 없는 비밀번호예요. (10자리 이상, 특수문자 포함)")
+      completion(false)
+      return
+    }
+    
+    // 다시 입력한 비밀번호가 일치한지 유효성 확인
+    if firstPassword != secondPassword {
+      focusoutAndShowPopup(desc: "비밀번호가 일치하지 않아요.")
+      completion(false)
+      return
+    }
+    completion(true)
+  }
+  
+  // 첫번째 두번째 비밀번호가 같지 않을 경우, 비밀번호가 6자 이상
   func afterEnterPassword(){
     guard let password = passwordTextField.text,
           let checkPassword = emailTextField.text, checkPassword != "" else { return }
-    userInfo.password = password
     
-    titleLabel.text = "사용하실 닉네임을 입력해주세요."
-    emailTextField.placeholder = "닉네임을 입력해주세요."
-    emailTextField.text = nil
-    
-    passwordTextField.isHidden = true
-    nextButton.isEnabled = false
-    nextButton.addAction(UIAction { _ in
-      self.completeSignup()
-    }, for: .touchUpInside)
+    checkValidPassword(firstPassword: password,
+                       secondPassword: checkPassword) { checkPassword in
+      if checkPassword {
+        self.userInfo.password = password
+        
+        self.titleLabel.text = "사용하실 닉네임을 입력해주세요."
+        self.emailTextField.isSecureTextEntry = false
+        self.emailTextField.placeholder = "닉네임을 입력해주세요."
+        self.emailTextField.text = nil
+        
+        self.passwordTextField.isHidden = true
+        self.nextButton.isEnabled = false
+        self.nextButton.removeTarget(nil, action: nil, for: .allEvents)
+        self.nextButton.addAction(UIAction { _ in
+          self.completeSignup()
+        }, for: .touchUpInside)
+      }
+    }
   }
   
+  // 닉네임 중복 확인필요
   func completeSignup(){
     guard let nickname = emailTextField.text else { return }
-    userInfo.nickname = nickname
-    signupViewModel.registerUserData(email: userInfo.email,
-                                     password: userInfo.password,
-                                     nickname: userInfo.nickname) {
-      let completeVC = CompleSignupViewController()
-      self.navigationController?.pushViewController(completeVC, animated: true)
+    signupViewModel.checkEmailDuplication(checkType: "nickname",
+                                          checkValue: nickname) { result in
+      if !result {
+        self.focusoutAndShowPopup(desc: "이미 사용중인 닉네임입니다.")
+      } else {
+        self.userInfo.nickname = nickname
+        self.signupViewModel.registerUserData(email: self.userInfo.email,
+                                              password: self.userInfo.password,
+                                              nickname: self.userInfo.nickname) { result in
+          if result {
+            let completeVC = CompleSignupViewController()
+            self.navigationController?.pushViewController(completeVC, animated: true)
+          } else {
+            self.focusoutAndShowPopup(desc: "이메일과 비밀번호르 확인해주세요.")
+            self.navigationController?.popViewController(animated: true)
+          }
+        }
+      }
     }
   }
 }

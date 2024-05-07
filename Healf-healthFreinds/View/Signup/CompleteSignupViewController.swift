@@ -12,11 +12,14 @@ import Then
 
 final class CompleSignupViewController: NaviHelper {
   
+  private lazy var completedSignupImage = UIImageView().then { 
+    $0.image = UIImage(named: "CompleteSignupImg")
+  }
   private lazy var mainImageView = UIImageView().then { $0.image = UIImage(named: "MainTitleImg") }
-  private lazy var mainTitleLabel = UIHelper.shared.createSingleLineLabel(
-    "가입을 완료했어요!\n로그인하여 운동친구를 찾아보세요.",
-    .black,
-    .boldSystemFont(ofSize: 17))
+  private lazy var mainTitleLabel = UIHelper.shared.createMultipleLineLabel(
+    "가입을 완료했어요 🎉\n로그인하여 운동친구를 찾아보세요.",
+    .black, .boldSystemFont(ofSize: 17),
+    .center)
   private lazy var startButton = UIHelper.shared.createHealfButton("시작하기", .mainBlue, .white)
 
   // MARK: - viewDidLoad
@@ -36,6 +39,7 @@ final class CompleSignupViewController: NaviHelper {
   // MARK: - setupLayout
   func setupLayout() {
     [
+      completedSignupImage,
       mainImageView,
       mainTitleLabel,
       startButton
@@ -46,13 +50,18 @@ final class CompleSignupViewController: NaviHelper {
   
   // MARK: - makeUI
   func makeUI(){
-    mainImageView.snp.makeConstraints {
+    completedSignupImage.snp.makeConstraints {
+      $0.top.equalToSuperview().offset(150)
       $0.centerX.equalToSuperview()
-      $0.centerY.equalToSuperview().offset(50)
     }
     
+    mainImageView.snp.makeConstraints {
+      $0.top.equalTo(completedSignupImage.snp.bottom).offset(20)
+      $0.centerX.equalToSuperview()
+    }
+  
     mainTitleLabel.snp.makeConstraints {
-      $0.top.equalTo(mainImageView.snp.bottom).offset(20)
+      $0.top.equalTo(mainImageView.snp.bottom).offset(50)
       $0.centerX.equalToSuperview()
     }
     
@@ -60,8 +69,10 @@ final class CompleSignupViewController: NaviHelper {
       self.startButtonTapped()
     } , for: .touchUpInside)
     startButton.snp.makeConstraints {
-      $0.top.equalTo(mainTitleLabel.snp.bottom).offset(50)
+      $0.bottom.equalToSuperview().offset(-150)
       $0.centerX.equalToSuperview()
+      $0.leading.trailing.equalTo(mainTitleLabel)
+      $0.height.equalTo(50)
     }
   }
   

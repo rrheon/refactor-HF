@@ -7,11 +7,12 @@
 
 import Foundation
 
+import AuthenticationServices
 import FirebaseAuth
+import FirebaseDatabase
 import KakaoSDKAuth
 import KakaoSDKUser
-import AuthenticationServices
-import FirebaseDatabase
+
 
 protocol LoginViewModelDelegate: AnyObject {
   func loginDidSucceed(completion: @escaping() -> Void)
@@ -20,6 +21,30 @@ protocol LoginViewModelDelegate: AnyObject {
 
 class SignupViewModel: CommonViewModel {
   weak var delegate: LoginViewModelDelegate?
+  
+  func isValidEmail(testStr:String) -> Bool {
+    let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+    return emailTest.evaluate(with: testStr)
+  }
+
+  func checkEmailDuplication(checkType: String,
+                             checkValue: String,
+                             completion: @escaping (Bool) -> Void) {
+    ref.child("UserDataInfo").observeSingleEvent(of: .value) { snapshot in
+      guard let value = snapshot.value as? [String: [String: Any]] else {
+        completion(true) 
+        return
+      }
+      
+      let emails = value.compactMap { $0.value[checkType] as? String }
+      if emails.contains(checkValue) {
+        completion(false) // 이메일이 중복됨
+      } else {
+        completion(true) // 이메일이 중복되지 않음
+      }
+    }
+  }
 
   // MARK: - 로그인함수
   func loginToHealf(email: String, password: String) {
@@ -40,12 +65,13 @@ class SignupViewModel: CommonViewModel {
   
   // MARK: - 계정등록 함수
   func registerUserData(email: String, password: String, nickname: String,
-                        completion: @escaping () -> Void){
+                        completion: @escaping (Bool) -> Void){
     Auth.auth().createUser(withEmail: email,
                            password: password) { result, error in
       if let error = error {
         self.loginToHealf(email: email, password: String(password))
         print("Error creating user:", error.localizedDescription)
+        completion(false)
         return
       }
       
@@ -54,13 +80,14 @@ class SignupViewModel: CommonViewModel {
         return
       }
       
-      self.registerUserData(uid: uid, nickname: nickname) {
-        completion()
+      self.registerUserData(uid: uid, nickname: nickname, email: email) {
+        completion(true)
       }
     }
   }
   
-  func registerUserData(uid: String, nickname: String, completion: @escaping () -> Void) {
+  func registerUserData(uid: String, nickname: String, email: String = "" ,
+                        completion: @escaping () -> Void) {
     let values = ["nickname": nickname,
                   "uid": uid,
                   "profileImage": "없음"]
@@ -72,8 +99,8 @@ class SignupViewModel: CommonViewModel {
                              "postCount": 0,
                              "profileImage": "없음",
                              "location": "없음",
-                             "introduce": "없읍"] as [String : Any]
-    
+                             "introduce": "없음",
+                             "email": email] as [String : Any]
     
     // Replace "." with "_" in the UID to create a valid database path
     let sanitizedUID = uid.replacingOccurrences(of: ".", with: "_")
@@ -165,7 +192,7 @@ class SignupViewModel: CommonViewModel {
       guard let userName = kakaoUser?.kakaoAccount?.profile?.nickname else { return }
       
       email = "kakao_\(email)"
-      self.registerUserData(email: email, password: String(password), nickname: userName) {
+      self.registerUserData(email: email, password: String(password), nickname: userName) { _ in 
         self.loginToHealf(email: email, password: String(password))
       }
     }
