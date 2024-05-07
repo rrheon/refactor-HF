@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "MainTitleImg.png",
+      "filename" : "CompleteSignupImg.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "스크린샷_2023-10-05_16.43 2.png",
+      "filename" : "bx_map-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "스크린샷_2023-10-05_16.43 2-2.png",
+      "filename" : "bx_map-3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
