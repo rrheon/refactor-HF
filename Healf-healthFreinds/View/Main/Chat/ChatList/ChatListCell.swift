@@ -4,7 +4,7 @@ import UIKit
 import SnapKit
 
 struct ChatListCellModel {
-  let profile: String
+  let uid: String
   let nickname: String
   let lastMessage: String
   let timeStamp: String
@@ -13,6 +13,7 @@ struct ChatListCellModel {
 final class ChatListCell: UITableViewCell {
 
   static let cellId = "ChatCell"
+  let myPageViewModel = MypageViewModel.shared
   
   var model: ChatListCellModel?{
     didSet{
@@ -76,8 +77,17 @@ final class ChatListCell: UITableViewCell {
   
   func bind(){
 //    writerProfileImageView.image = model?.profile
-    userNickNameLabel.text = model?.nickname
-    lastChatInfoLabel.text = model?.lastMessage
-    lastChatTimeLabel.text = model?.timeStamp
+    guard let model = model else { return }
+    userNickNameLabel.text = model.nickname
+    lastChatInfoLabel.text = model.lastMessage
+    lastChatTimeLabel.text = model.timeStamp
+    
+    myPageViewModel.getUserProfileImage(checkMyUid: false,
+                                        otherPersonUid: model.uid) { result in
+      self.myPageViewModel.settingProfileImage(profile: self.writerProfileImageView,
+                                               result: result,
+                                               radious: 25)
+    }
+
   }
 }

@@ -10,7 +10,7 @@ import UIKit
 import Cosmos
 import SnapKit
 
-final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
+final class WriteHistoryViewController: NaviHelper {
   private lazy var aloneButton = UIHelper.shared.createSelectButton("혼자 했어요")
   private lazy var togetherButton = UIHelper.shared.createSelectButton("같이 했어요")
   private lazy var selectAloneOrTogetherStackView = UIHelper.shared.createStackView(axis: .horizontal,
@@ -39,8 +39,9 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
   private lazy var choiceWorkoutStackView = UIHelper.shared.createStackView(axis: .vertical,
                                                                             spacing: 10)
   
+  let textViewPlaceHolder = "코멘트를 입력하세요."
   private lazy var commentLabel = UIHelper.shared.createSingleLineLabel("오늘의 코멘트 📝")
-  private lazy var commentTextView = UIHelper.shared.createGeneralTextView("코멘트를 입력하세요.")
+  private lazy var commentTextView = UIHelper.shared.createGeneralTextView(textViewPlaceHolder)
   private lazy var completeButton = UIHelper.shared.createHealfButton("🙌 오늘 운동 끝!", .mainBlue, .white)
   
   let writeHistoryViewModel = WriteHistoryViewModel()
@@ -290,5 +291,21 @@ final class WriteHistoryViewController: NaviHelper, UITextViewDelegate {
 extension WriteHistoryViewController: SelectPersonProtocol {
   func selectPersonProtocol(_ nickname: String) {
     friendNameLabel.text = nickname
+  }
+}
+
+extension WriteHistoryViewController: UITextViewDelegate {
+  func textViewDidBeginEditing(_ textView: UITextView) {
+    if textView.text == textViewPlaceHolder {
+      textView.text = nil
+      textView.textColor = .black
+    }
+  }
+  
+  func textViewDidEndEditing(_ textView: UITextView) {
+    if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      textView.text = textViewPlaceHolder
+      textView.textColor = .lightGray
+    }
   }
 }

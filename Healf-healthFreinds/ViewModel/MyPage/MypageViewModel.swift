@@ -162,7 +162,7 @@ class MypageViewModel: CommonViewModel {
   }
   
   func settingProfileImage(profile: UIImageView,
-                           result:Result<UIImage, any Error>,
+                           result: Result<UIImage, any Error>,
                            radious: CGFloat){
     DispatchQueue.main.async {
       switch result {

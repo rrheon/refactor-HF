@@ -18,9 +18,11 @@ final class ChatDetailViewModel: CommonViewModel {
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
   
-  func createRoom(_ destinationUid: String = "", completion: @escaping () -> Void){
+  func createRoom(_ destinationUid: String = "",
+                  completion: @escaping (Bool) -> Void){
     if uid == destinationUid {
       print("나 자신임")
+      completion(false)
       return
     } else {
       let createRoomInfo = [ "UserData": [ "\(uid!)": true,
@@ -28,7 +30,7 @@ final class ChatDetailViewModel: CommonViewModel {
       ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
           if err == nil {
             self.checkChatRoom(self.uid!, destinationUid) { _ in
-              completion()
+              completion(true)
             }
           }
         }

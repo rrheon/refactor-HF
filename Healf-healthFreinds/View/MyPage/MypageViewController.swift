@@ -13,9 +13,9 @@ import Kingfisher
 import RxSwift
 import RxCocoa
 
-// 값이 들어올 때 setuplayout, makeui 가 되도록 rx적용하기
+// 설정 추가하기 - 탈퇴 로그아웃 개인정보처리방침
 protocol ImageSelectionDelegate: AnyObject {
-  func didSelectImage(image: UIImage, introduce: String )
+  func didSelectImage(image: UIImage, nickname: String, introduce: String )
 }
 
 final class MypageViewController: NaviHelper {
@@ -175,6 +175,7 @@ final class MypageViewController: NaviHelper {
     }
     
     selectedDayReportLabel.textAlignment = .left
+    selectedDayReportLabel.isHidden = true
     selectedDayReportLabel.snp.makeConstraints {
       $0.top.equalTo(calendarView.snp.bottom).offset(10)
       $0.leading.equalTo(calendarView)
@@ -233,6 +234,8 @@ final class MypageViewController: NaviHelper {
   
   // MARK: - seletedDailyCell
   func selectedDailyCell(_ selectedDay: String, data: HistoryModel) {
+    selectedDayReportLabel.isHidden = false
+    
     let noData = "❌ 해당 날짜의 기록이 존재하지 않습니다 ❌"
     let existedData = "\(selectedDay)일의 기록\n같이한 사람: \(data.together)\n평점: \(data.rate)\ncomment: \(data.comment)"
     selectedDayReportLabel.text = data.together == "기록없음" ? noData : existedData
@@ -261,10 +264,12 @@ final class MypageViewController: NaviHelper {
   // MARK: - move to editVC
   func moveToEditProfileVC(){
     guard let profileImage = userProfileImageView.image,
-          let introduce = userIntroduceLabel.text else { return }
+          let introduce = userIntroduceLabel.text,
+          let nickname = userNickNameLabel.text else { return }
     let editProfileVC = EditMyProfileViewController(delegate: self,
                                                     profileImage: profileImage,
-                                                    introduce: introduce)
+                                                    introduce: introduce,
+                                                    nickname: nickname)
     navigationController?.pushViewController(editProfileVC, animated: true)
   }
   
@@ -353,12 +358,13 @@ extension MypageViewController: UICollectionViewDelegate,
 
 // MARK: - ImageSelectionDelegate
 extension MypageViewController: ImageSelectionDelegate {
-  func didSelectImage(image: UIImage, introduce: String) {
+  func didSelectImage(image: UIImage, nickname: String, introduce: String) {
     userProfileImageView.image = image
     userProfileImageView.layer.cornerRadius = 35
     userProfileImageView.clipsToBounds = true
     
     userIntroduceLabel.text = introduce
+    userNickNameLabel.text = nickname
   }
 }
 

@@ -24,12 +24,15 @@ final class PostedViewController: UIViewController {
   
   // 작성자 정보
   private lazy var writerProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
+  private lazy var writerNickNameTitleLabel = UIHelper.shared.createSingleLineLabel("닉네임")
   private lazy var writerNickNameLabel = UIHelper.shared.createSingleLineLabel("닉네임")
   
-  private lazy var participateButton = UIHelper.shared.createHealfButton("메시지 보내기 ✉️", .mainBlue, .white)
+  private lazy var participateButton = UIHelper.shared.createHealfButton("메시지 보내기 ✉️",
+                                                                         .mainBlue, .white)
     
   var destinationUid: String?
   let chatDetailViewModel = ChatDetailViewModel.shared
+  let myPageViewModel = MypageViewModel.shared
   
   // MARK: - viewDidLoad
   override func viewDidLoad() {
@@ -77,6 +80,7 @@ final class PostedViewController: UIViewController {
       workoutInfoStackView,
       produceLabel,
       writerProfileImageView,
+      writerNickNameTitleLabel,
       writerNickNameLabel,
       participateButton
     ].forEach {
@@ -114,9 +118,14 @@ final class PostedViewController: UIViewController {
       $0.leading.equalTo(produceLabel)
     }
     
-    writerNickNameLabel.snp.makeConstraints {
-      $0.top.equalTo(writerProfileImageView.snp.top).offset(10)
+    writerNickNameTitleLabel.snp.makeConstraints {
+      $0.top.equalTo(writerProfileImageView.snp.top)
       $0.leading.equalTo(writerProfileImageView.snp.trailing).offset(10)
+    }
+    
+    writerNickNameLabel.snp.makeConstraints {
+      $0.top.equalTo(writerNickNameTitleLabel.snp.bottom).offset(10)
+      $0.leading.equalTo(writerNickNameTitleLabel)
     }
     
     participateButton.addAction(UIAction { _ in
@@ -131,8 +140,13 @@ final class PostedViewController: UIViewController {
   }
   
   func participateButtonTapped(){
-    chatDetailViewModel.createRoom(destinationUid ?? "") {
-      self.showPopupViewWithOnebutton("채팅방이 생성되었습니다!", checkNavi: false)
+    chatDetailViewModel.createRoom(destinationUid ?? "") { result in
+      switch result{
+      case true:
+        self.showPopupViewWithOnebutton("채팅방이 생성되었습니다!", checkNavi: false)
+      case false:
+        self.showPopupViewWithOnebutton("본인과는 채팅이 불가능합니다", checkNavi: false)
+      }
     }
   }
 }
@@ -146,5 +160,12 @@ extension PostedViewController: postedDataConfigurable {
     writerNickNameLabel.text = data.userNickname
     
     destinationUid = data.userUid
+    
+    myPageViewModel.getUserProfileImage(checkMyUid: false,
+                                        otherPersonUid: data.userUid) { result in
+      self.myPageViewModel.settingProfileImage(profile: self.writerProfileImageView,
+                                               result: result,
+                                               radious: 25)
+    }
   }
 }

@@ -104,11 +104,9 @@ final class SignuplViewController: NaviHelper {
   }
   
   func focusoutAndShowPopup(desc: String){
-    emailTextField.text = nil
     emailTextField.resignFirstResponder()
     
     if !passwordTextField.isHidden {
-      passwordTextField.text = nil
       passwordTextField.resignFirstResponder()
     }
     showPopupViewWithOnebutton(desc)
@@ -121,7 +119,7 @@ final class SignuplViewController: NaviHelper {
       return
     }
     
-    signupViewModel.checkEmailDuplication(checkType: "email",
+    signupViewModel.checkDuplication(checkType: "email",
                                           checkValue: email) { isDuplicatedEmail in
       if !isDuplicatedEmail {
         self.focusoutAndShowPopup(desc: "이미 사용중인 이메일입니다.")
@@ -198,7 +196,7 @@ final class SignuplViewController: NaviHelper {
   // 닉네임 중복 확인필요
   func completeSignup(){
     guard let nickname = emailTextField.text else { return }
-    signupViewModel.checkEmailDuplication(checkType: "nickname",
+    signupViewModel.checkDuplication(checkType: "nickname",
                                           checkValue: nickname) { result in
       if !result {
         self.focusoutAndShowPopup(desc: "이미 사용중인 닉네임입니다.")

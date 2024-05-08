@@ -22,23 +22,25 @@ protocol LoginViewModelDelegate: AnyObject {
 class SignupViewModel: CommonViewModel {
   weak var delegate: LoginViewModelDelegate?
   
+  static let shared = SignupViewModel()
+  
   func isValidEmail(testStr:String) -> Bool {
     let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
     let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
     return emailTest.evaluate(with: testStr)
   }
 
-  func checkEmailDuplication(checkType: String,
-                             checkValue: String,
-                             completion: @escaping (Bool) -> Void) {
+  func checkDuplication(checkType: String,
+                        checkValue: String,
+                        completion: @escaping (Bool) -> Void) {
     ref.child("UserDataInfo").observeSingleEvent(of: .value) { snapshot in
       guard let value = snapshot.value as? [String: [String: Any]] else {
-        completion(true) 
+        completion(true)
         return
       }
       
-      let emails = value.compactMap { $0.value[checkType] as? String }
-      if emails.contains(checkValue) {
+      let datas = value.compactMap { $0.value[checkType] as? String }
+      if datas.contains(checkValue) {
         completion(false) // 이메일이 중복됨
       } else {
         completion(true) // 이메일이 중복되지 않음
@@ -53,6 +55,7 @@ class SignupViewModel: CommonViewModel {
         // 로그인 성공
         self?.delegate?.loginDidSucceed {
           print("로그인 성공")
+          UIApplication.shared.windows.first?.isUserInteractionEnabled = true
         }
       } else {
         // 로그인 실패

@@ -20,7 +20,7 @@ final class HomeViewController: NaviHelper {
   
   private lazy var topUnderLineView = UIView()
   
-  private lazy var mainImageView = UIImageView(image: UIImage(named: "HomeMainImg"))
+  private lazy var mainImageView = UIImageView(image: UIImage(named: "Healf_advertiseImg"))
   private lazy var weeklySummaryDataLabel = uihelper.createSingleLineLabel("주간 요약 📊")
   private lazy var weeklySummaryStackView = uihelper.createStackView(axis: .horizontal,
                                                                             spacing: 5)
@@ -73,27 +73,16 @@ final class HomeViewController: NaviHelper {
     settingHomeVCDatas()
     
     changeLabelColor()
-    
-    startButton.rx
-      .tap
-      .subscribe(onNext: { _ in
-            print("hh")
-        }, onError: { error in
-            print("error: \(error)")
-        }, onCompleted: {
-            print("completed")
-        }, onDisposed: {
-            print("disposed")
-        }).disposed(by: uihelper.disposeBag)
-
   }
   
   override func navigationItemSetting() {
+    
     let logoImg = UIImage(named: "MainTitleImg")?.withRenderingMode(.alwaysOriginal)
     let logo = UIBarButtonItem(image: logoImg, style: .done, target: nil, action: nil)
     logo.imageInsets = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
     logo.isEnabled = false
-    
+
+    self.navigationController?.navigationBar.tintColor = .white
     navigationItem.leftBarButtonItem = logo
   }
     

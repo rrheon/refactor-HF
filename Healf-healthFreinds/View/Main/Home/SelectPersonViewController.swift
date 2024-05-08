@@ -27,10 +27,18 @@ final class SelectPersonViewController: ChatListViewController {
                                      target: self,
                                      action: #selector(leftButtonTapped))
     
+    let rightButton = UIBarButtonItem(title: "선택",
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(leftButtonTapped))
+    rightButton.tintColor = .mainBlue
+    settingNavigationTitle(title: "함께한 친구를 선택하세요")
+    
     self.navigationController?.navigationBar.backgroundColor = .white
     self.navigationController?.navigationBar.isTranslucent = false
     
     self.navigationItem.leftBarButtonItem = leftButton
+    self.navigationItem.rightBarButtonItem = rightButton
   }
 }
 
@@ -43,7 +51,8 @@ extension SelectPersonViewController {
     delegate?.selectPersonProtocol(nickname)
   }
   
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  override func tableView(_ tableView: UITableView,
+                          cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     super.tableView(tableView, cellForRowAt: indexPath)
   }
 }

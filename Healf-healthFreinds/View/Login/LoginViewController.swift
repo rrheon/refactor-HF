@@ -130,11 +130,15 @@ final class LoginViewController: UIViewController {
     }
   }
   
+  // 로그인 중에 다른 버튼 터치 못하게
   func loginToHealf() {
     guard let email = emailTextField.text?.description,
           let password = passwordTextField.text?.description else { return }
+    
+    UIApplication.shared.windows.first?.isUserInteractionEnabled = false
     signupViewModel.loginToHealf(email: email, password: password)
     activityIndicator.stopAnimating()
+    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
   }
   
   func kakaoLoginButtonTapped(){
@@ -152,6 +156,8 @@ final class LoginViewController: UIViewController {
   
   // 처음에 계정등록절차를 밟으면 될드
   func appleLogin(){
+    waitingNetworking()
+    
     let nonce = String().randomNonceString()
     currentNonce = nonce
     let appleIDProvider = ASAuthorizationAppleIDProvider()
@@ -168,6 +174,8 @@ final class LoginViewController: UIViewController {
   
   // MARK: - 네트워킹 기다릴 때
   func waitingNetworking(){
+    UIApplication.shared.windows.first?.isUserInteractionEnabled = false
+
     view.addSubview(activityIndicator)
     
     activityIndicator.snp.makeConstraints {
@@ -193,7 +201,6 @@ extension LoginViewController: LoginViewModelDelegate {
       emailTextField,
       passwordTextField
     ].forEach { 
-      $0.text = nil
       $0.resignFirstResponder()
     }
     
@@ -210,6 +217,8 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
                                didCompleteWithAuthorization authorization: ASAuthorization) {
     signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
       self.loginDidSucceed {
+        UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+
         self.signupViewModel.searchUID()
       }
     }

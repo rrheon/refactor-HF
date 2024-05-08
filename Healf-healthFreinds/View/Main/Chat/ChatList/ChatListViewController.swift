@@ -44,6 +44,8 @@ class ChatListViewController: NaviHelper {
   }
   
   override func navigationItemSetting() {
+    self.navigationController?.navigationBar.tintColor = .white
+
     redesignNavigation("ChatTitleImg")
   }
   
@@ -125,7 +127,7 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
     if let nickname = self.usersInChatrooms[userId],
        let lastMessage = self.usersLastMessage[userId] {
-      cell.model = .init(profile: "",
+      cell.model = .init(uid: userId,
                          nickname: nickname,
                          lastMessage: lastMessage.message ?? "",
                          timeStamp: lastMessage.timeStamp?.todayTime ?? "")

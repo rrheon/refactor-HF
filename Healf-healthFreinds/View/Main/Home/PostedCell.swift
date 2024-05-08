@@ -92,7 +92,6 @@ final class PostedCell: UICollectionViewCell {
       $0.top.equalTo(workoutInfoLabel.snp.bottom).offset(10)
       $0.leading.equalTo(profileImageView)
     }
-    
   }
   
   private func bind() {
@@ -109,7 +108,7 @@ final class PostedCell: UICollectionViewCell {
                                         otherPersonUid: data.userUid) { result in
       self.myPageViewModel.settingProfileImage(profile: self.profileImageView,
                                                result: result,
-                                               radious: 20)
+                                               radious: 25)
     }
   }
 }

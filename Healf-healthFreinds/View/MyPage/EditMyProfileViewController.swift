@@ -11,32 +11,29 @@ import UIKit
 
 import SnapKit
 import Kingfisher
+import Then
 
-// 이미지 다운로드 해야함, 이미지 앨범에서 선택, 삭제누르면 기본 이미지로 변경하게끔
+// 닉네임 변경추가하기
 class EditMyProfileViewController: NaviHelper {
   
   private lazy var profileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
-  private lazy var profileChangeButton: UIButton = {
-    let button = UIButton()
-    button.setTitle("변경", for: .normal)
-    button.setTitleColor(.mainBlue, for: .normal)
-    button.titleLabel?.font = .systemFont(ofSize: 12)
-    button.addAction(UIAction { _ in
+  private lazy var profileChangeButton = UIButton().then {
+    $0.setTitle("변경", for: .normal)
+    $0.setTitleColor(.mainBlue, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 12)
+    $0.addAction(UIAction { _ in
       self.changeProfileImageButtonTapped()
     }, for: .touchUpInside)
-    return button
-  }()
-  
-  private lazy var profileDeleteButton: UIButton = {
-    let button = UIButton()
-    button.setTitle("삭제", for: .normal)
-    button.setTitleColor(.unableGray, for: .normal)
-    button.titleLabel?.font = .systemFont(ofSize: 12)
-    button.addAction(UIAction { _ in
+  }
+
+  private lazy var profileDeleteButton = UIButton().then {
+    $0.setTitle("삭제", for: .normal)
+    $0.setTitleColor(.unableGray, for: .normal)
+    $0.titleLabel?.font = .systemFont(ofSize: 12)
+    $0.addAction(UIAction { _ in
       self.deleteProfileImageButtonTapped()
     }, for: .touchUpInside)
-    return button
-  }()
+  }
   
   private lazy var profileEditStaackView = uihelper.createStackView(axis: .horizontal, spacing: 5)
   
@@ -46,12 +43,19 @@ class EditMyProfileViewController: NaviHelper {
   
   private lazy var introduceTextFiled = uihelper.createLoginTextField("소개")
   
+  private lazy var nicknameLabel = uihelper.createSingleLineLabel("닉네임",
+                                                                   .mainBlue,
+                                                                   .boldSystemFont(ofSize: 14))
+  
+  private lazy var editNicknameTextField = uihelper.createLoginTextField("닉네임")
+  
   let editProfileViewModel = EditMyProfileViewModel()
   weak var delegate: ImageSelectionDelegate?
 
   init(delegate: ImageSelectionDelegate? = nil,
        profileImage: UIImage,
-       introduce: String) {
+       introduce: String,
+       nickname: String) {
     super.init()
 
     self.delegate = delegate
@@ -60,6 +64,7 @@ class EditMyProfileViewController: NaviHelper {
     self.profileImageView.clipsToBounds = true
 
     self.introduceTextFiled.text = introduce
+    self.nicknameLabel.text = nickname
   }
   
   required init?(coder: NSCoder) {
@@ -90,7 +95,9 @@ class EditMyProfileViewController: NaviHelper {
       profileImageView,
       profileEditStaackView,
       introduceLabel,
-      introduceTextFiled
+      introduceTextFiled,
+      nicknameLabel,
+      editNicknameTextField
     ].forEach {
       view.addSubview($0)
     }
@@ -121,6 +128,16 @@ class EditMyProfileViewController: NaviHelper {
       $0.leading.equalToSuperview().offset(20)
       $0.trailing.equalToSuperview().offset(-20)
     }
+    
+    nicknameLabel.snp.makeConstraints {
+      $0.top.equalTo(introduceTextFiled.snp.bottom).offset(20)
+      $0.leading.equalTo(introduceTextFiled)
+    }
+    
+    editNicknameTextField.snp.makeConstraints {
+      $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
+      $0.leading.trailing.equalTo(introduceTextFiled)
+    }
   }
   
   override func navigationItemSetting() {
@@ -139,12 +156,28 @@ class EditMyProfileViewController: NaviHelper {
   }
   
   // MARK: - completeButtonTapped
+  
+  // 닉네임을 입력하지 않으면 알람, 닉네임 중복확인필요
   @objc func completeButtonTapped(){
     guard let introduce = introduceTextFiled.text,
-          let image = profileImageView.image else { return }
-    editProfileViewModel.saveMyProfile(introduce: introduce, profileImage: image)
-    changeMyProfile()
-    navigationController?.popViewController(animated: true)
+          let image = profileImageView.image,
+          let nickname = editNicknameTextField.text else { return }
+    SignupViewModel.shared.checkDuplication(checkType: "nickname",
+                                            checkValue: nickname) { [weak self] result in
+      switch result{
+      case true:
+        self?.editProfileViewModel.saveMyProfile(introduce: introduce,
+                                                 nickname: nickname,
+                                                 profileImage: image)
+        self?.changeMyProfile()
+        self?.navigationController?.popViewController(animated: true)
+      case false:
+        self?.editNicknameTextField.resignFirstResponder()
+        self?.showPopupViewWithOnebutton("이미 사용중인 닉네임입니다.")
+        
+      }
+    }
+
   }
   
   // MARK: - changeProfileButtonTapped
@@ -166,8 +199,9 @@ class EditMyProfileViewController: NaviHelper {
   // MARK: - changeMyProfile
   func changeMyProfile() {
     if let newImage = profileImageView.image,
-       let introduce = introduceTextFiled.text {
-      delegate?.didSelectImage(image: newImage, introduce: introduce)
+       let introduce = introduceTextFiled.text,
+       let nickname = editNicknameTextField.text {
+      delegate?.didSelectImage(image: newImage, nickname: nickname, introduce: introduce)
       navigationController?.popViewController(animated: true)
     }
   }
@@ -182,6 +216,7 @@ extension EditMyProfileViewController: BottomSheetDelegate {
   func secondButtonTapped(_ postedData: CreatePostModel?) {
     print("222")
   }
+  
   // 프로필 이미지 변경
   func changeProfileImage(type: UIImagePickerController.SourceType){
     self.dismiss(animated: true)
