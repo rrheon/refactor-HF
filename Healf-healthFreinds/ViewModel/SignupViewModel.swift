@@ -216,11 +216,27 @@ class SignupViewModel: CommonViewModel {
         print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
         return
       }
+
+      if let authorizationCode = appleIDCredential.authorizationCode,
+         let codeString = String(data: authorizationCode, encoding: .utf8) {
+        print(codeString)
+        let url = URL(string: "https://us-central1-healf-7f799.cloudfunctions.net/getRefreshToken?code=\(codeString)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "https://apple.com")!
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+          if let data = data {
+            let refreshToken = String(data: data, encoding: .utf8) ?? ""
+            print(refreshToken)
+            UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
+            UserDefaults.standard.synchronize()
+          }
+        }
+        task.resume()
+      }
+      
       
       // Initialize a Firebase credential, including the user's full name.
       let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
-                                                     rawNonce: nonce,
-                                                     fullName: appleIDCredential.fullName)
+                                                          rawNonce: nonce,
+                                                          fullName: appleIDCredential.fullName)
       
       // Sign in with Firebase.
       Auth.auth().signIn(with: credential) { authResult, error in
@@ -233,6 +249,7 @@ class SignupViewModel: CommonViewModel {
       }
     }
   }
+  
   // MARK: - 애플로그인 시 유저 정보 등록
   func searchUID(){
     ref.child("UserDataInfo").observeSingleEvent(of: .value) { snapshot in

@@ -10,6 +10,7 @@
 		886D5BAFE19D85D85BA5AF19 /* Pods_Healf_healthFreinds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F04A0B48EB9E197C0D72D7 /* Pods_Healf_healthFreinds.framework */; };
 		EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31862B8F7CB500038795 /* HomeViewController.swift */; };
 		EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31882B8F7DEB00038795 /* TapBar.swift */; };
+		EE2E08D02BEB55E70087E735 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */; };
 		EE33D44A2B99D340002BA16C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE33D4492B99D340002BA16C /* GoogleService-Info.plist */; };
 		EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */; };
 		EE4E36692BA27D5200FB60FC /* CommonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */; };
@@ -44,6 +45,8 @@
 		EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */; };
 		EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */; };
 		EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */; };
+		EEC142BE2BEC56FE002FC9A7 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC142BD2BEC56FE002FC9A7 /* SettingViewModel.swift */; };
+		EEC142C12BECC2BE002FC9A7 /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = EEC142C02BECC2BE002FC9A7 /* SwiftJWT */; };
 		EEC414E72BE379B9003FB246 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC414E62BE379B9003FB246 /* UIImage+.swift */; };
 		EEC434E42B9FE53C00FED4EB /* CreatePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */; };
 		EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC434E52B9FFC6100FED4EB /* CreatePostModel.swift */; };
@@ -82,6 +85,7 @@
 		D2FD194A45994E076F03B802 /* Pods-Healf-healthFreinds.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Healf-healthFreinds.debug.xcconfig"; path = "Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds.debug.xcconfig"; sourceTree = "<group>"; };
 		EE0D31862B8F7CB500038795 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		EE0D31882B8F7DEB00038795 /* TapBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBar.swift; sourceTree = "<group>"; };
+		EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		EE33D4492B99D340002BA16C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteHistoryViewModel.swift; sourceTree = "<group>"; };
 		EE4E36682BA27D5200FB60FC /* CommonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonViewModel.swift; sourceTree = "<group>"; };
@@ -118,6 +122,7 @@
 		EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		EEC142BD2BEC56FE002FC9A7 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		EEC414E62BE379B9003FB246 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		EEC414E82BE37AA5003FB246 /* Healf-healthFreinds.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Healf-healthFreinds.entitlements"; sourceTree = "<group>"; };
 		EEC434E32B9FE53C00FED4EB /* CreatePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostViewModel.swift; sourceTree = "<group>"; };
@@ -156,6 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEC142C12BECC2BE002FC9A7 /* SwiftJWT in Frameworks */,
 				886D5BAFE19D85D85BA5AF19 /* Pods_Healf_healthFreinds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				EE4E36892BABE73A00FB60FC /* MypageViewModel.swift */,
+				EEC142BD2BEC56FE002FC9A7 /* SettingViewModel.swift */,
 				EE4E369D2BC0229100FB60FC /* EditMyProfileViewModel.swift */,
 			);
 			path = MyPage;
@@ -349,6 +356,7 @@
 			children = (
 				EECC03282B934F38003ECF95 /* MypageViewController.swift */,
 				EE4E36872BA99E4D00FB60FC /* Calendar.swift */,
+				EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */,
 				EE4E369A2BBE805200FB60FC /* EditMyProfileViewController.swift */,
 			);
 			path = MyPage;
@@ -452,6 +460,7 @@
 			);
 			name = "Healf-healthFreinds";
 			packageProductDependencies = (
+				EEC142C02BECC2BE002FC9A7 /* SwiftJWT */,
 			);
 			productName = "Healf-healthFreinds";
 			productReference = EE98B1CB2B4FDFC30025C4F8 /* Healf-healthFreinds.app */;
@@ -485,6 +494,8 @@
 				EEDD81002B70CE490022302E /* XCRemoteSwiftPackageReference "Then" */,
 				EEDD81032B70CE860022302E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				EEFA6DF32B98103B00147708 /* XCRemoteSwiftPackageReference "MessageKit" */,
+				EEC142BF2BECC2BE002FC9A7 /* XCRemoteSwiftPackageReference "Swift-JWT" */,
+				EEC142C22BECC2D0002FC9A7 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = EE98B1CC2B4FDFC30025C4F8 /* Products */;
 			projectDirPath = "";
@@ -561,6 +572,7 @@
 				EECC03162B92C23F003ECF95 /* PopupViewController.swift in Sources */,
 				EE4E36A02BC0410C00FB60FC /* BottomSheet.swift in Sources */,
 				EED75DCC2B9AC54E00594C68 /* ChatModel.swift in Sources */,
+				EE2E08D02BEB55E70087E735 /* SettingViewController.swift in Sources */,
 				EE5EA4172BE9157F00226188 /* SingupModel.swift in Sources */,
 				EE4E368A2BABE73A00FB60FC /* MypageViewModel.swift in Sources */,
 				EE4E36822BA6F4E100FB60FC /* HomeViewModel.swift in Sources */,
@@ -582,6 +594,7 @@
 				EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */,
 				EE4E36802BA6E98C00FB60FC /* UIViewController+.swift in Sources */,
 				EE4E36842BA8330700FB60FC /* HistoryModel.swift in Sources */,
+				EEC142BE2BEC56FE002FC9A7 /* SettingViewModel.swift in Sources */,
 				EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */,
 				EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */,
 				EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */,
@@ -794,7 +807,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Healf-healthFreinds/Healf-healthFreindsRelease.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Healf-healthFreinds/Healf-healthFreinds.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YQC68LN7U3;
@@ -851,6 +864,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		EEC142BF2BECC2BE002FC9A7 /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Kitura/Swift-JWT";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+		EEC142C22BECC2D0002FC9A7 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
 		EEDD81002B70CE490022302E /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
@@ -876,6 +905,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EEC142C02BECC2BE002FC9A7 /* SwiftJWT */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEC142BF2BECC2BE002FC9A7 /* XCRemoteSwiftPackageReference "Swift-JWT" */;
+			productName = SwiftJWT;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		EE98B1D72B4FDFC30025C4F8 /* Healf_healthFreinds.xcdatamodeld */ = {

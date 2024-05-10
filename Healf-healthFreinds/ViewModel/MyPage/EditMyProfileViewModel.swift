@@ -43,7 +43,7 @@ class EditMyProfileViewModel: CommonViewModel {
   }
   
   func saveImageDownloadURLToFirebaseDatabase(downloadURL: String) {
-    let ref = Database.database().reference().child("UserDataInfo").child(uid ?? "").child("profileImageURL")
+    let ref = ref.child("UserDataInfo").child(uid ?? "").child("profileImageURL")
    
     ref.setValue(downloadURL) { (error, ref) in
       if let error = error {

@@ -64,7 +64,7 @@ class EditMyProfileViewController: NaviHelper {
     self.profileImageView.clipsToBounds = true
 
     self.introduceTextFiled.text = introduce
-    self.nicknameLabel.text = nickname
+    self.editNicknameTextField.text = nickname
   }
   
   required init?(coder: NSCoder) {
@@ -156,9 +156,7 @@ class EditMyProfileViewController: NaviHelper {
   }
   
   // MARK: - completeButtonTapped
-  
-  // 닉네임을 입력하지 않으면 알람, 닉네임 중복확인필요
-  @objc func completeButtonTapped(){
+ @objc func completeButtonTapped(){
     guard let introduce = introduceTextFiled.text,
           let image = profileImageView.image,
           let nickname = editNicknameTextField.text else { return }

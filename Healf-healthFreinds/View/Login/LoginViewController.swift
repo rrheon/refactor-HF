@@ -7,10 +7,12 @@
 
 import UIKit
 
+import Alamofire
 import SnapKit
 import Then
 import AuthenticationServices
 import FirebaseAuth
+import SwiftJWT
 
 // 소셜로그인 할 때 너무 오래걸림
 final class LoginViewController: UIViewController {
@@ -66,6 +68,7 @@ final class LoginViewController: UIViewController {
     
     setupLayout()
     makeUI()
+    
   }
   
   // MARK: - setupLayout
@@ -156,8 +159,6 @@ final class LoginViewController: UIViewController {
   
   // 처음에 계정등록절차를 밟으면 될드
   func appleLogin(){
-    waitingNetworking()
-    
     let nonce = String().randomNonceString()
     currentNonce = nonce
     let appleIDProvider = ASAuthorizationAppleIDProvider()
@@ -215,7 +216,45 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
   
   func authorizationController(controller: ASAuthorizationController,
                                didCompleteWithAuthorization authorization: ASAuthorization) {
-    signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
+//    switch authorization.credential {
+//         case let appleIDCredential as ASAuthorizationAppleIDCredential:
+//             // You can create an account in your system.
+//             let userIdentifier = appleIDCredential.user
+//             let fullName = appleIDCredential.fullName
+//             let email = appleIDCredential.email
+//             
+//             if  let authorizationCode = appleIDCredential.authorizationCode,
+//                 let identityToken = appleIDCredential.identityToken,
+//                 let authCodeString = String(data: authorizationCode, encoding: .utf8),
+//                 let identifyTokenString = String(data: identityToken, encoding: .utf8) {
+//                 print("authorizationCode: \(authorizationCode)")
+//                 print("identityToken: \(identityToken)")
+//                 print("authCodeString: \(authCodeString)")
+//                 print("identifyTokenString: \(identifyTokenString)")
+//             }
+//             
+//             print("useridentifier: \(userIdentifier)")
+//             print("fullName: \(fullName)")
+//             print("email: \(email)")
+////      let jwtString = self.makeJWT()
+//
+//             //Move to MainPage
+//             //let validVC = SignValidViewController()
+//             //validVC.modalPresentationStyle = .fullScreen
+//             //present(validVC, animated: true, completion: nil)
+//             
+//         case let passwordCredential as ASPasswordCredential:
+//             // Sign in using an existing iCloud Keychain credential.
+//             let username = passwordCredential.user
+//             let password = passwordCredential.password
+//             
+//             print("username: \(username)")
+//             print("password: \(password)")
+//             
+//         default:
+//             break
+//         }
+        signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
       self.loginDidSucceed {
         UIApplication.shared.windows.first?.isUserInteractionEnabled = true
 
@@ -230,4 +269,3 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
     print("Sign in with Apple errored: \(error)")
   }
 }
-

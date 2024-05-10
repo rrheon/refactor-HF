@@ -12,8 +12,8 @@ import FSCalendar
 import Kingfisher
 import RxSwift
 import RxCocoa
+import Then
 
-// 설정 추가하기 - 탈퇴 로그아웃 개인정보처리방침
 protocol ImageSelectionDelegate: AnyObject {
   func didSelectImage(image: UIImage, nickname: String, introduce: String )
 }
@@ -61,6 +61,9 @@ final class MypageViewController: NaviHelper {
     super.viewDidLoad()
     
     view.backgroundColor = .white
+    
+    navigationItemSetting()
+    
     mypageViewModel.fectchMyPostData { self.myPostDatas = $0 }
     mypageViewModel.getMyWorkoutHistory { result in
       self.highlightedDates = result
@@ -73,6 +76,17 @@ final class MypageViewController: NaviHelper {
       self.registerCell()
       self.setupButtonActions()
     }
+  }
+  
+  override func navigationItemSetting() {
+    let settingImg = UIImage(named: "SettingImg")?.withRenderingMode(.alwaysOriginal)
+    let settingButton = UIBarButtonItem(image: settingImg,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(moveToSettingVC))
+
+    self.navigationController?.navigationBar.tintColor = .white
+    self.navigationItem.rightBarButtonItem = settingButton
   }
   
   // MARK: - setupLayout
@@ -111,7 +125,7 @@ final class MypageViewController: NaviHelper {
       $0.top.equalTo(view.safeAreaLayoutGuide)
       $0.leading.equalToSuperview().offset(20)
     }
-    
+  
     userProfileImageView.snp.makeConstraints {
       $0.top.equalTo(userNickNameLabel.snp.bottom).offset(10)
       $0.leading.equalTo(userNickNameLabel)
@@ -316,6 +330,11 @@ final class MypageViewController: NaviHelper {
       self.highlightedDates = result
       self.calendarView.reloadData()
     })
+  }
+  
+  @objc func moveToSettingVC(){
+    let settingVC = SettingViewController()
+    navigationController?.pushViewController(settingVC, animated: true)
   }
 }
 
