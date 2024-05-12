@@ -22,13 +22,14 @@ final class SearchViewModel: CommonViewModel {
             let time = postInfo["time"] as? String,
             let userNickname = postInfo["userNickname"] as? String,
             let postedDate = postInfo["postedDate"] as? String,
-            let userUid = postInfo["userUid"] as? String else {
+            let userUid = postInfo["userUid"] as? String,
+            let location = postInfo["location"] as? String else {
           return nil
       }
       
       return CreatePostModel(time: time, workoutTypes: exerciseType,
                              gender: gender, info: info, userNickname: userNickname,
-                             postedDate: postedDate, userUid: userUid)
+                             postedDate: postedDate, userUid: userUid, location: location)
   }
 
   func loadFirstFivePostsFromDatabase(completion: @escaping (([CreatePostModel]) -> Void)){

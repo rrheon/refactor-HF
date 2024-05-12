@@ -41,7 +41,6 @@ final class SearchResultCell: UICollectionViewCell {
     self.backgroundColor = .white
     setViewShadow(backView: self)
     
-    
     addSubviews()
     configure()
   }
@@ -115,6 +114,13 @@ extension SearchResultCell: postedDataConfigurable {
     nickNameLabel.text = data.userNickname
     titleLabel.text = data.info
     postedDate.text = data.postedDate
+    locationLabel.text = "📍 \(data.location)"
+    MypageViewModel.shared.getUserProfileImage(checkMyUid: false,
+                                        otherPersonUid: data.userUid) { result in
+      MypageViewModel.shared.settingProfileImage(profile: self.profileImageView,
+                                               result: result,
+                                               radious: 25)
+    }
     
     participateButton.addAction(UIAction { _ in
       self.delegate?.participateButtonTapped(postedData: data)

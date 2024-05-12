@@ -15,4 +15,5 @@ struct CreatePostModel {
   let userNickname: String
   let postedDate: String
   let userUid: String
+  let location: String
 }

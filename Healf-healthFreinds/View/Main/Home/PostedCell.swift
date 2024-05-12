@@ -103,7 +103,7 @@ final class PostedCell: UICollectionViewCell {
     workoutInfoLabel.text = "🏋🏻 운동종류: \(combinedString)"
     workoutTimeLabel.text = "🕖 선호하는 시간: \(data.time)"
     genderLabel.text = "🚻 성별: \(data.gender)"
-    
+    locationLabel.text = "📍 \(data.location)"
     myPageViewModel.getUserProfileImage(checkMyUid: false,
                                         otherPersonUid: data.userUid) { result in
       self.myPageViewModel.settingProfileImage(profile: self.profileImageView,

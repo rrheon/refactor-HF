@@ -8,10 +8,22 @@
 import UIKit
 
 import SnapKit
+import Then
 
 final class CreatePostViewController: NaviHelper {
   private lazy var setTimeLabel = uihelper.createSingleLineLabel("시간대 ⏰")
-  private lazy var setTimeTextfield = uihelper.createGeneralTextField("메세지를 입력해주세요.")
+  private lazy var selectedTimeLabel = uihelper.createSingleLineLabel("")
+  private lazy var startTimeLabel = uihelper.createSingleLineLabel("시작시간:")
+  private lazy var endTimeLabel = uihelper.createSingleLineLabel("종료시간:")
+  private lazy var startTimePicker = UIDatePicker().then {
+    $0.datePickerMode = .time
+    $0.addTarget(self, action: #selector(didChangeTimeDatePicker(_:)), for: .valueChanged)
+  }
+  
+  private lazy var endTimePicker = UIDatePicker().then {
+    $0.datePickerMode = .time
+    $0.addTarget(self, action: #selector(didChangeTimeDatePicker(_:)), for: .valueChanged)
+  }
   
   private lazy var selectWorkoutTitle = uihelper.createSingleLineLabel("운동 종류 🏋🏻")
   private lazy var cardioButton = uihelper.createButtonWithImage("유산소","EmptyCheckboxImg")
@@ -32,13 +44,13 @@ final class CreatePostViewController: NaviHelper {
   private lazy var writeDetailInfoLabel = uihelper.createSingleLineLabel("내용")
   private lazy var writeDetailInfoTextView = uihelper.createGeneralTextView("내용을 입력하세요.")
   
-  private lazy var writerProfileImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
-  private lazy var wirterNicknameLabel = uihelper.createSingleLineLabel("닉네임")
   private lazy var enterPostButton = uihelper.createHealfButton("매칭 등록하기 📬", .mainBlue, .white)
   
   let createPostViewModel = CreatePostViewModel()
   var workoutTypes: [String] = []
   var selectedGender: String = ""
+  var selectedStartTime: String = ""
+  var selectedEndTime: String = ""
   
   var modifyPostedData: CreatePostModel?
   
@@ -98,15 +110,17 @@ final class CreatePostViewController: NaviHelper {
     
     [
       setTimeLabel,
-      setTimeTextfield,
+      selectedTimeLabel,
+      startTimeLabel,
+      startTimePicker,
+      endTimeLabel,
+      endTimePicker,
       selectWorkoutTitle,
       choiceWorkoutStackView,
       selectGenderTitle,
       selectGenderButtonStackView,
       writeDetailInfoLabel,
       writeDetailInfoTextView,
-      writerProfileImageView,
-      wirterNicknameLabel,
       enterPostButton
     ].forEach {
       view.addSubview($0)
@@ -120,17 +134,38 @@ final class CreatePostViewController: NaviHelper {
       $0.leading.equalToSuperview().offset(20)
     }
     
-    setTimeTextfield.layer.borderColor = UIColor.lightGray.cgColor
-    setTimeTextfield.layer.cornerRadius = 5
-    setTimeTextfield.snp.makeConstraints {
-      $0.top.equalTo(setTimeLabel.snp.bottom).offset(5)
+    selectedTimeLabel.snp.makeConstraints {
+      $0.top.equalTo(setTimeLabel)
+      $0.leading.equalTo(setTimeLabel.snp.trailing).offset(10)
+    }
+    
+    startTimeLabel.snp.makeConstraints {
+      $0.top.equalTo(setTimeLabel.snp.bottom).offset(30)
       $0.leading.equalTo(setTimeLabel)
-      $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(30)
+    }
+
+    startTimePicker.snp.makeConstraints {
+      $0.top.equalTo(startTimeLabel)
+      $0.leading.equalTo(setTimeLabel.snp.trailing).offset(10)
+    }
+      
+    startTimePicker.snp.makeConstraints {
+      $0.top.equalTo(startTimeLabel)
+      $0.leading.equalTo(startTimeLabel.snp.trailing).offset(10)
+    }
+    
+    endTimeLabel.snp.makeConstraints {
+      $0.top.equalTo(startTimeLabel)
+      $0.leading.equalTo(startTimePicker.snp.trailing).offset(10)
+    }
+    
+    endTimePicker.snp.makeConstraints {
+      $0.top.equalTo(startTimeLabel)
+      $0.leading.equalTo(endTimeLabel.snp.trailing).offset(10)
     }
     
     selectWorkoutTitle.snp.makeConstraints {
-      $0.top.equalTo(setTimeTextfield.snp.bottom).offset(10)
+      $0.top.equalTo(startTimeLabel.snp.bottom).offset(30)
       $0.leading.equalTo(setTimeLabel)
     }
     
@@ -159,6 +194,7 @@ final class CreatePostViewController: NaviHelper {
       $0.leading.equalTo(setTimeLabel)
     }
     
+    writeDetailInfoTextView.delegate = self
     writeDetailInfoTextView.snp.makeConstraints {
       $0.top.equalTo(writeDetailInfoLabel.snp.bottom).offset(10)
       $0.leading.equalTo(setTimeLabel)
@@ -166,18 +202,8 @@ final class CreatePostViewController: NaviHelper {
       $0.height.equalTo(167)
     }
     
-    writerProfileImageView.snp.makeConstraints {
-      $0.top.equalTo(writeDetailInfoTextView.snp.bottom).offset(50)
-      $0.leading.equalTo(setTimeLabel)
-    }
-    
-    wirterNicknameLabel.snp.makeConstraints {
-      $0.centerY.equalTo(writerProfileImageView)
-      $0.leading.equalTo(writerProfileImageView.snp.trailing).offset(10)
-    }
-    
     enterPostButton.snp.makeConstraints {
-      $0.centerY.equalTo(writerProfileImageView)
+      $0.top.equalTo(writeDetailInfoTextView.snp.bottom).offset(50)
       $0.trailing.equalToSuperview().offset(-20)
       $0.height.equalTo(41)
       $0.width.equalTo(151)
@@ -231,16 +257,29 @@ final class CreatePostViewController: NaviHelper {
   
   // MARK: - registerPost
   func processPost(isModify: Bool, completion: @escaping () -> Void) {
-    guard let time = setTimeTextfield.text,
-          let info = writeDetailInfoTextView.text else { return }
+    guard let info = writeDetailInfoTextView.text else { return }
+    let time = "\(selectedStartTime) ~ \(selectedEndTime)"
+    MypageViewModel.shared.getMyInfomation { data in
+      let location = data.location?.components(separatedBy: " ")
+      let selectedLoaction = location?[1]
+      
+      if isModify {
+        self.createPostViewModel.createPost(time,
+                                            self.workoutTypes,
+                                            self.selectedGender, 
+                                            info,
+                                            self.modifyPostedData?.postedDate,
+                                            selectedLoaction)
+      } else {
+        self.createPostViewModel.createPost(time,
+                                            self.workoutTypes,
+                                            self.selectedGender,
+                                            info,
+                                            selectedLoaction)
     
-    if isModify {
-      self.createPostViewModel.createPost(time, self.workoutTypes,
-                                          self.selectedGender, info, modifyPostedData?.postedDate)
-    } else {
-      self.createPostViewModel.createPost(time, self.workoutTypes, self.selectedGender, info)
+      }
+      completion()
     }
-    completion()
   }
 
   
@@ -250,9 +289,8 @@ final class CreatePostViewController: NaviHelper {
     
     settingNavigationTitle(title: "게시글 수정하기 📬")
     
-    setTimeTextfield.text = modifyPostedData.time
+    selectedTimeLabel.text = modifyPostedData.time
     writeDetailInfoTextView.text = modifyPostedData.info
-    wirterNicknameLabel.text = modifyPostedData.userNickname
     
     [
       selectMaleButton,
@@ -286,3 +324,37 @@ final class CreatePostViewController: NaviHelper {
   }
 }
 
+extension CreatePostViewController: UITextViewDelegate {
+  func textViewDidBeginEditing(_ textView: UITextView) {
+    if textView.text == "내용을 입력하세요." {
+      textView.text = nil
+      textView.textColor = .black
+    }
+  }
+  
+  func textViewDidEndEditing(_ textView: UITextView) {
+    if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      textView.text = "내용을 입력하세요."
+      textView.textColor = .lightGray
+    }
+  }
+  
+  @objc func didChangeTimeDatePicker(_ picker: UIDatePicker) {
+    // 서울 시간대 설정
+    let seoulTimeZone = TimeZone(identifier: "Asia/Seoul")!
+    picker.timeZone = seoulTimeZone
+    
+    // 시간 형식 설정
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm" // 시:분 형식
+    
+    // 서울 시간으로 변환된 시간을 출력
+    let seoulTime = dateFormatter.string(from: picker.date)
+    print("대한민국 서울 시간: \(seoulTime)")
+    if picker == startTimePicker { selectedStartTime = seoulTime }
+    else { selectedEndTime = seoulTime}
+    print(selectedStartTime)
+    print(selectedEndTime)
+
+  }
+}

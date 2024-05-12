@@ -18,6 +18,7 @@ final class CreatePostViewModel: CommonViewModel {
                   _ workoutTyoes: [String],
                   _ gender: String,
                   _ info: String,
+                  _ location: String? = nil,
                   _ postedDate: String? = nil){
     guard let uid = uid else { return }
   
@@ -32,7 +33,8 @@ final class CreatePostViewModel: CommonViewModel {
           "info": info,
           "userNickname": nickname,
           "postedDate": currentDate,
-          "userUid": uid
+          "userUid": uid,
+          "location": location
         ] as [String : Any]
         
         self.ref.child("users").child(self.uid ?? "").child("posts").child(currentDate ?? "").setValue(userInfo)

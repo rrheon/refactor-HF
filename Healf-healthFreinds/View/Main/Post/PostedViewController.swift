@@ -159,6 +159,7 @@ extension PostedViewController: postedDataConfigurable {
     produceLabel.text = data.info
     writerNickNameLabel.text = data.userNickname
     
+    
     destinationUid = data.userUid
     
     myPageViewModel.getUserProfileImage(checkMyUid: false,

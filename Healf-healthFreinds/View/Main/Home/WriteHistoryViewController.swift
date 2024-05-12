@@ -71,7 +71,6 @@ final class WriteHistoryViewController: NaviHelper {
     navigationItem.rightBarButtonItem = .none
     settingNavigationTitle(title: "오늘의 운동을 기록하세요 ✍🏻")
     self.navigationController?.navigationBar.tintColor = .white
-
   }
   
   // MARK: - setupLayout

@@ -121,16 +121,20 @@ class MypageViewModel: CommonViewModel {
           let postedDate = data["postedDate"] as? String,
           let time = data["time"] as? String,
           let userNickname = data["userNickname"] as? String,
-          let userUid = data["userUid"] as? String
+          let userUid = data["userUid"] as? String,
+          let location = data["location"] as? String
     else {
       return nil
     }
     
-    return CreatePostModel(time: time, workoutTypes: exerciseType,
+    return CreatePostModel(time: time,
+                           workoutTypes: exerciseType,
                            gender: gender,
                            info: info,
-                           userNickname: userNickname, postedDate: postedDate,
-                           userUid: userUid)
+                           userNickname: userNickname,
+                           postedDate: postedDate,
+                           userUid: userUid,
+                           location: location )
   }
   
 // MARK: - 유저 프로필 받아오기
