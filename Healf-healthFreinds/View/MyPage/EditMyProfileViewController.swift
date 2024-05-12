@@ -80,6 +80,8 @@ class EditMyProfileViewController: NaviHelper {
     
     setupLayout()
     makeUI()
+    
+    hideKeyboardWhenTappedAround()
   }
   
   // MARK: - setuplayout

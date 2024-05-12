@@ -12,7 +12,7 @@ import SnapKit
 import Then
 import AuthenticationServices
 import FirebaseAuth
-import SwiftJWT
+
 
 // 소셜로그인 할 때 너무 오래걸림
 final class LoginViewController: UIViewController {
@@ -68,6 +68,8 @@ final class LoginViewController: UIViewController {
     
     setupLayout()
     makeUI()
+    
+    hideKeyboardWhenTappedAround()
     
   }
   
@@ -195,6 +197,7 @@ extension LoginViewController: LoginViewModelDelegate {
     self.present(tapbarcontroller, animated: true, completion: nil)
     
     completion()
+    
   }
   
   func loginDidFail(with error: Error) {

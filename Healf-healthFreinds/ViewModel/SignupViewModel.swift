@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import KakaoSDKAuth
 import KakaoSDKUser
-
+import FirebaseMessaging
 
 protocol LoginViewModelDelegate: AnyObject {
   func loginDidSucceed(completion: @escaping() -> Void)
@@ -56,6 +56,16 @@ class SignupViewModel: CommonViewModel {
         self?.delegate?.loginDidSucceed {
           print("로그인 성공")
           UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+          
+          let uid = Auth.auth().currentUser?.uid
+          Messaging.messaging().token { token, error in
+            if let error = error {
+              print("Error fetching FCM registration token: \(error)")
+            } else if let token = token {
+              print("FCM registration token: \(token)")
+              self?.ref.child("UserDataInfo").child(uid ?? "").updateChildValues(["pushToken": token])
+            }
+          }
         }
       } else {
         // 로그인 실패

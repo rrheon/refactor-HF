@@ -123,16 +123,15 @@ final class MapViewController: NaviHelper {
   func findUserButtonTapped(){
     guard let userPosition = userPosition else { return }
     mapViewModel.updateMyLocation(userPosition)
+    contentVC.getOtherUserData()
     contentVC.printTest()
   }
 }
 
 extension MapViewController: CLLocationManagerDelegate, NMFMapViewCameraDelegate {
   func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
-    print("카메라가 변경됨 : reason : \(reason)")
     let cameraPosition = mapView.cameraPosition
 
-    print(cameraPosition.target.lat, cameraPosition.target.lng)
     userPosition = (cameraPosition.target.lat, cameraPosition.target.lng)
   }
   

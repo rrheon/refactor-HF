@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SelectPersonProtocol {
-  func selectPersonProtocol(_ nickname: String)
+  func selectPersonProtocol(nickname: String, userId: String)
 }
 
 final class SelectPersonViewController: ChatListViewController {
@@ -35,7 +35,6 @@ final class SelectPersonViewController: ChatListViewController {
     settingNavigationTitle(title: "함께한 친구를 선택하세요")
     
     self.navigationController?.navigationBar.backgroundColor = .white
-    self.navigationController?.navigationBar.isTranslucent = false
     
     self.navigationItem.leftBarButtonItem = leftButton
     self.navigationItem.rightBarButtonItem = rightButton
@@ -46,9 +45,8 @@ extension SelectPersonViewController {
   override func tableView(_ tableView: UITableView,
                           didSelectRowAt indexPath: IndexPath) {
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
-  
     guard let nickname = self.usersInChatrooms[userId] else { return }
-    delegate?.selectPersonProtocol(nickname)
+    delegate?.selectPersonProtocol(nickname: nickname, userId: userId)
   }
   
   override func tableView(_ tableView: UITableView,

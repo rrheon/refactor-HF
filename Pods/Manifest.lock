@@ -876,6 +876,7 @@ PODS:
   - Then (3.0.0)
 
 DEPENDENCIES:
+  - Alamofire
   - Cosmos (~> 23.0)
   - Firebase/Database
   - FirebaseAnalytics
@@ -991,6 +992,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: ebf2b76e128e1e6be764e0916820f8f3230f944d
+PODFILE CHECKSUM: 79108da95b801be069c4afb5f997ff38a143262e
 
 COCOAPODS: 1.15.2

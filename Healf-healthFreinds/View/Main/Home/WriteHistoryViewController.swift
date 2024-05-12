@@ -19,10 +19,8 @@ final class WriteHistoryViewController: NaviHelper {
   private lazy var aloneOrTogetherLabel = UIHelper.shared.createSingleLineLabel("함께한 사람 👥")
   
   private lazy var friendImageView = UIImageView(image: UIImage(named: "EmptyProfileImg"))
-  private lazy var friendNameLabel = UIHelper.shared.createSingleLineLabel("이름이름")
-  private lazy var friendLoactionLabel = UIHelper.shared.createSingleLineLabel("📍 송도")
-  private lazy var workoutTimeLabel = UIHelper.shared.createSingleLineLabel("🕖 평일 18:00 - 21:00")
-  private lazy var workoutTypeLabel = UIHelper.shared.createSingleLineLabel("🏋🏻 유산소, 하체운동 위주")
+  private lazy var friendNameTitleLabel = UIHelper.shared.createSingleLineLabel("닉네임")
+  private lazy var friendNameLabel = UIHelper.shared.createSingleLineLabel("이름")
   private lazy var friendInfoStackView = UIHelper.shared.createStackView(axis: .vertical,
                                                                          spacing: 5)
   
@@ -45,6 +43,7 @@ final class WriteHistoryViewController: NaviHelper {
   private lazy var completeButton = UIHelper.shared.createHealfButton("🙌 오늘 운동 끝!", .mainBlue, .white)
   
   let writeHistoryViewModel = WriteHistoryViewModel()
+  let myPageViewModel = MypageViewModel.shared
   var aloneOrTogether: String?
   var workoutTypes: [String] = []
   
@@ -61,6 +60,9 @@ final class WriteHistoryViewController: NaviHelper {
     settingCosmosView()
     
     registerButtonFunc()
+    
+    hideKeyboardWhenTappedAround()
+    setupKeyboardEvent()
   }
   
   override func navigationItemSetting() {
@@ -68,6 +70,8 @@ final class WriteHistoryViewController: NaviHelper {
     
     navigationItem.rightBarButtonItem = .none
     settingNavigationTitle(title: "오늘의 운동을 기록하세요 ✍🏻")
+    self.navigationController?.navigationBar.tintColor = .white
+
   }
   
   // MARK: - setupLayout
@@ -80,10 +84,8 @@ final class WriteHistoryViewController: NaviHelper {
     }
     
     [
-      friendNameLabel,
-      friendLoactionLabel,
-      workoutTimeLabel,
-      workoutTypeLabel
+      friendNameTitleLabel,
+      friendNameLabel
     ].forEach {
       friendInfoStackView.addArrangedSubview($0)
     }
@@ -137,7 +139,7 @@ final class WriteHistoryViewController: NaviHelper {
     friendImageView.snp.makeConstraints {
       $0.top.equalTo(aloneOrTogetherLabel.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
-      $0.height.equalTo(40)
+      $0.height.equalTo(60)
     }
     
     friendInfoStackView.isHidden = true
@@ -236,7 +238,7 @@ final class WriteHistoryViewController: NaviHelper {
     friendImageView.isHidden = !isTogetherSelected
     friendInfoStackView.isHidden = !isTogetherSelected
     
-    let topOffset: CGFloat = isTogetherSelected ? 150 : 10
+    let topOffset: CGFloat = isTogetherSelected ? 120 : 10
     ratingLabel.snp.remakeConstraints {
       $0.top.equalTo(selectAloneOrTogetherStackView.snp.bottom).offset(topOffset)
       $0.leading.equalTo(aloneOrTogetherLabel)
@@ -286,11 +288,21 @@ final class WriteHistoryViewController: NaviHelper {
   func afterCompleButtonTapped() {
     showPopupViewWithOnebutton("오늘 운동을 기록했어요!")
   }
+  
+  override func keyboardWillShow(_ sender: Notification) {
+    view.frame.origin.y -= 290
+  }
 }
 
 extension WriteHistoryViewController: SelectPersonProtocol {
-  func selectPersonProtocol(_ nickname: String) {
+  func selectPersonProtocol(nickname: String, userId: String) {
     friendNameLabel.text = nickname
+    myPageViewModel.getUserProfileImage(checkMyUid: false,
+                                        otherPersonUid: userId) { result in
+      self.myPageViewModel.settingProfileImage(profile: self.friendImageView,
+                                               result: result,
+                                               radious: 25)
+    }
   }
 }
 

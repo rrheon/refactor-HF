@@ -16,9 +16,7 @@ class ChatListViewController: NaviHelper {
   var usersInChatrooms: [String: String] = [:]
   var usersLastMessage: [String: ChatModel.Comment] = [:]
   let currentUserUID = Auth.auth().currentUser?.uid
-  
-  private let searchBar = UISearchBar.createSearchBar(placeholder: "원하는 내용을 검색하세요.")
-  
+    
   private lazy var chatTableView: UITableView = {
     let tableView = UITableView()
     tableView.delegate = self
@@ -28,6 +26,9 @@ class ChatListViewController: NaviHelper {
     
     return tableView
   }()
+  
+  private lazy var noneChatRoomList = uihelper.createMultipleLineLabel(
+    "진행 중인 채팅이 없습니다\n 새로운 헬스 친구를 찾아보세요 💪🏻")
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -41,6 +42,8 @@ class ChatListViewController: NaviHelper {
       self.setupLayout()
       self.makeUI()
     }
+    
+    nonChatList()
   }
   
   override func navigationItemSetting() {
@@ -51,7 +54,6 @@ class ChatListViewController: NaviHelper {
   
   func setupLayout(){
     [
-      searchBar,
       chatTableView
     ].forEach {
       view.addSubview($0)
@@ -59,16 +61,19 @@ class ChatListViewController: NaviHelper {
   }
   
   func makeUI(){
-    searchBar.snp.makeConstraints {
-      $0.top.equalTo(view.safeAreaLayoutGuide)
-      $0.leading.equalToSuperview().offset(20)
-      $0.trailing.equalToSuperview().offset(-20)
-    }
-    
     chatTableView.snp.makeConstraints {
-      $0.top.equalTo(searchBar.snp.bottom).offset(20)
+      $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
       $0.leading.trailing.bottom.equalToSuperview()
       //      $0.height.equalTo(120)
+    }
+  }
+  
+  func nonChatList(){
+    if usersInChatrooms.count == 0 {
+      view.addSubview(noneChatRoomList)
+      noneChatRoomList.snp.makeConstraints {
+        $0.centerX.centerY.equalToSuperview()
+      }
     }
   }
   
@@ -76,7 +81,7 @@ class ChatListViewController: NaviHelper {
     self.usersInChatrooms.removeAll()
     chatListViewModel.getAllChatroomData(currentUserUID: currentUserUID ?? "") { result in
       var numberOfMessagesReceived = 0 // 받은 메시지 수를 추적
-      
+      print(result)
       if result.isEmpty {
         // 데이터가 없는 경우에도 completion을 실행
         self.chatTableView.reloadData()

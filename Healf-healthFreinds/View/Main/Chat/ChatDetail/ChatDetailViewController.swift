@@ -37,7 +37,7 @@ final class ChatDetailViewController: NaviHelper {
     tableView.separatorStyle = .none
     return tableView
   }()
-
+  
   init(destinationUid: String? = nil,
        userNickname: String? = nil) {
     super.init()
@@ -63,6 +63,9 @@ final class ChatDetailViewController: NaviHelper {
     
     checkChatRoom()
     navigationItemSetting()
+    
+    hideKeyboardWhenTappedAround()
+    setupKeyboardEvent()
   }
   
   override func navigationItemSetting() {
@@ -110,6 +113,7 @@ final class ChatDetailViewController: NaviHelper {
           let message = messageTextfield.text, message != "",
           let chatRoomUid = chatRoomUid else { return }
     chatDetailViewModel.sendMessage(uid, message, chatRoomUid) {
+      self.chatDetailViewModel.sendGcm(destinationUid: self.destinationUid ?? "")
       self.messageTextfield.text = ""
       self.arrangeChatCellRecently()
     }
@@ -147,18 +151,18 @@ final class ChatDetailViewController: NaviHelper {
   }
   
   func updateLastCell() {
-      chatTableView.beginUpdates()
-      let newIndexPath = IndexPath(row: self.comments.count - 1, section: 0)
-      chatTableView.insertRows(at: [newIndexPath], with: .bottom)
-      chatTableView.endUpdates()
-
-      // Adjust content offset to prevent constraint issues
-      let contentHeight = chatTableView.contentSize.height
-      let tableViewHeight = chatTableView.bounds.size.height
-      if contentHeight > tableViewHeight {
-          let offset = CGPoint(x: 0, y: contentHeight - tableViewHeight)
-          chatTableView.setContentOffset(offset, animated: true)
-      }
+    chatTableView.beginUpdates()
+    let newIndexPath = IndexPath(row: self.comments.count - 1, section: 0)
+    chatTableView.insertRows(at: [newIndexPath], with: .bottom)
+    chatTableView.endUpdates()
+    
+    // Adjust content offset to prevent constraint issues
+    let contentHeight = chatTableView.contentSize.height
+    let tableViewHeight = chatTableView.bounds.size.height
+    if contentHeight > tableViewHeight {
+      let offset = CGPoint(x: 0, y: contentHeight - tableViewHeight)
+      chatTableView.setContentOffset(offset, animated: true)
+    }
   }
 }
 

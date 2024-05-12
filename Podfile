@@ -25,4 +25,5 @@ pod 'RxCocoa'
 pod 'Kingfisher', '~> 7.0'
 pod 'KakaoSDKUser'
 pod 'KakaoSDKAuth'
+pod 'Alamofire'
 end

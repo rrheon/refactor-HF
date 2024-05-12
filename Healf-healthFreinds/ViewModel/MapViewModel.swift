@@ -71,12 +71,14 @@ class MapViewModel: CommonViewModel {
       guard let value = snapshot.value as? [String: Any],
             let location = value["location"] as? String else {
         print("Failed to load user info")
+        completion([])
         return
       }
       
       self.ref.child("UserLocation").child(location).observeSingleEvent(of: .value) { snapshot in
         guard let data = snapshot.value as? [String: Any] else {
           print("Failed to convert snapshot to dictionary")
+          completion([])
           return
         }
         
@@ -84,8 +86,6 @@ class MapViewModel: CommonViewModel {
           guard let userNickname = result.nickname else { return }
           //uid를 다 받고 순서대로 데이터에 접근해서 유저데이터를 구조체로 변환하고 배열에 하나씩 저장 -> 그 후에 뿌려줌
           for (nickname, uid) in data {
-            print("Nickname:", nickname)
-            print("UID:", uid)
             if userNickname != nickname {
               self.getUserInfomation(uid as? String ?? "") { userData in
                 userDatas.append(userData)

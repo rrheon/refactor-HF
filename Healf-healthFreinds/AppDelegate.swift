@@ -12,9 +12,11 @@ import NMapsMap
 import FirebaseCore
 import KakaoSDKCommon
 import KakaoSDKAuth
+import UserNotifications
+import FirebaseMessaging
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     if (AuthApi.isKakaoTalkLoginUrl(url)) {
       return AuthController.handleOpenUrl(url: url)
@@ -28,6 +30,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     NMFAuthManager.shared().clientId = "xhzqf7uqyy"
     FirebaseApp.configure()
   
+    UNUserNotificationCenter.current().delegate = self
+    
+    let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+    UNUserNotificationCenter.current().requestAuthorization(
+      options: authOptions,
+      completionHandler: { _, _ in }
+    )
+
+    application.registerForRemoteNotifications()
+
+    
     KakaoSDK.initSDK(appKey: "aa5658e72cc7f6d1e860972f93c4a9f6")
 
     return true
@@ -93,4 +106,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
 }
-

@@ -35,6 +35,8 @@ final class SignuplViewController: NaviHelper {
     
     setupLayout()
     makeUI()
+    
+    hideKeyboardWhenTappedAround()
   }
   
   override func navigationItemSetting() {

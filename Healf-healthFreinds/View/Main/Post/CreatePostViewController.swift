@@ -66,6 +66,7 @@ final class CreatePostViewController: NaviHelper {
     registerButtonFunc()
     settingModifyValue()
     
+    hideKeyboardWhenTappedAround()
   }
   
   override func navigationItemSetting() {

@@ -10,9 +10,11 @@ import UIKit
 import SnapKit
 
 class MapPersonListViewController: NaviHelper {
-  private lazy var titleLabel = UIHelper.shared.createSingleLineLabel("👥 함께할 친구 : \(userDatas.count)명",
-                                                                      .mainBlue,
-                                                                      .systemFont(ofSize: 14))
+  private lazy var titleLabel = UIHelper.shared.createSingleLineLabel(
+    "👥 함께할 친구 : \(userDatas.count)명",
+    .mainBlue,
+    .systemFont(ofSize: 14))
+  
   private lazy var personListTableView: UITableView = {
     let tableView = UITableView()
     tableView.delegate = self
@@ -23,19 +25,21 @@ class MapPersonListViewController: NaviHelper {
     return tableView
   }()
   
+  private lazy var nonPersonListLabel = uihelper.createMultipleLineLabel(
+    "해당 위치에 함꼐할 친구가 없어요\n위치를 등록하거나 새로운 장소를 찾아주세요!")
   let mapViewModel = MapViewModel.shared
-  var userDatas: [UserModel] = []
+  var userDatas: [UserModel] = [] {
+    didSet{
+      titleLabel.text = "👥 함께할 친구 : \(userDatas.count)명"
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     // 0일 경우 처리 필요
-    mapViewModel.getOtherPersonLocation { userDatasFromServer in
-      self.userDatas = userDatasFromServer
-
-      self.setupLayout()
-      self.makeUI()
-    }
+    getOtherUserData()
+    nonPersonList()
   }
   
   func setupLayout(){
@@ -58,6 +62,26 @@ class MapPersonListViewController: NaviHelper {
       $0.leading.equalToSuperview().offset(20)
       $0.trailing.equalToSuperview().offset(-20)
       $0.bottom.equalToSuperview()
+    }
+  }
+  
+  func nonPersonList(){
+    if userDatas.count == 0 {
+      view.addSubview(nonPersonListLabel)
+      nonPersonListLabel.snp.makeConstraints {
+        $0.centerX.centerY.equalToSuperview()
+      }
+    }
+  }
+  
+  func getOtherUserData(){
+    mapViewModel.getOtherPersonLocation { userDatasFromServer in
+      print("데이터: \(userDatasFromServer)")
+      self.userDatas = userDatasFromServer
+
+      self.setupLayout()
+      self.makeUI()
+      self.personListTableView.reloadData()
     }
   }
   
