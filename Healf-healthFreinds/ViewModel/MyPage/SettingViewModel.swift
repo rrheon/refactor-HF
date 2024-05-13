@@ -7,9 +7,9 @@
 
 import Foundation
 
+import Alamofire
 import FirebaseAuth
 import FirebaseDatabase
-import Alamofire
 
 class SettingViewModel: CommonViewModel {
   static let shared = SettingViewModel()
@@ -38,18 +38,8 @@ class SettingViewModel: CommonViewModel {
   }
   // 누르면 바로 탈퇴가 아니라 알람 한번 보여주기
   // 로그아웃과 같이 login화면으로 나가야함, 데이터 삭제 필요
+  
   func removeAccount() {
-    let token = UserDefaults.standard.string(forKey: "refreshToken")
-   
-    if let token = token {
-        let url = URL(string:
-                        "https://us-central1-healf-7f799.cloudfunctions.net/revokeToken?refresh_token=\(token)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "https://apple.com")!
-   
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-          guard data != nil else { return }
-        }
-        task.resume()
-    }
     // Delete other information from the database...
     // Sign out on FirebaseAuth
     [
@@ -70,13 +60,30 @@ class SettingViewModel: CommonViewModel {
         print("삭제완료")
       }
     }
-      do {
-          try Auth.auth().signOut()
-      } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
+    
+    let user = Auth.auth().currentUser
+    
+    user?.delete { error in
+      if let error = error {
+        print("사용자 삭제 실패:", error.localizedDescription)
+      } else {
+        print("사용자 삭제 성공")
       }
+    }
   }
   
+  func logout(completion: @escaping () -> Void) {
+    do {
+      // Firebase에서 로그아웃
+      try Auth.auth().signOut()
+      
+      // 로그아웃 성공 후 맨 처음 뷰 컨트롤러로 이동
+      
+     completion()
+    } catch {
+      print("로그아웃 에러:", error.localizedDescription)
+    }
+  }
   // 본인 uid넣고 지우면 될듯
   // userlocation은 userdatainfo에서 위치를 받아서 userinfo 에 들어가서 해당 위치에 속하는 uid 찾아서 삭제
   // userdata, userdatainfo 는 uid찾아서 삭제

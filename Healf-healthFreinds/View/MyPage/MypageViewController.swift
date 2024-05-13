@@ -191,8 +191,8 @@ final class MypageViewController: NaviHelper {
     selectedDayReportLabel.textAlignment = .left
     selectedDayReportLabel.isHidden = true
     selectedDayReportLabel.snp.makeConstraints {
-      $0.top.equalTo(calendarView.snp.bottom).offset(10)
-      $0.leading.equalTo(calendarView)
+      $0.top.equalTo(calendarView.snp.bottom).offset(20)
+      $0.leading.equalTo(calendarView).offset(10)
     }
     
     myPostColletionView.isHidden = true
@@ -251,7 +251,7 @@ final class MypageViewController: NaviHelper {
     selectedDayReportLabel.isHidden = false
     
     let noData = "❌ 해당 날짜의 기록이 존재하지 않습니다 ❌"
-    let existedData = "\(selectedDay)일의 기록\n같이한 사람: \(data.together)\n평점: \(data.rate)\ncomment: \(data.comment)"
+    let existedData = "\(selectedDay)일 💪\n함께한 친구 👥: \(data.together)\n평점 💯: \(data.rate)\n코멘트 📝 : \(data.comment)"
     selectedDayReportLabel.text = data.together == "기록없음" ? noData : existedData
   }
   

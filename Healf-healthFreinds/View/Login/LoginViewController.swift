@@ -144,6 +144,9 @@ final class LoginViewController: UIViewController {
     signupViewModel.loginToHealf(email: email, password: password)
     activityIndicator.stopAnimating()
     UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+    
+    emailTextField.text = nil
+    passwordTextField.text = nil
   }
   
   func kakaoLoginButtonTapped(){
@@ -219,45 +222,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizatio
   
   func authorizationController(controller: ASAuthorizationController,
                                didCompleteWithAuthorization authorization: ASAuthorization) {
-//    switch authorization.credential {
-//         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-//             // You can create an account in your system.
-//             let userIdentifier = appleIDCredential.user
-//             let fullName = appleIDCredential.fullName
-//             let email = appleIDCredential.email
-//             
-//             if  let authorizationCode = appleIDCredential.authorizationCode,
-//                 let identityToken = appleIDCredential.identityToken,
-//                 let authCodeString = String(data: authorizationCode, encoding: .utf8),
-//                 let identifyTokenString = String(data: identityToken, encoding: .utf8) {
-//                 print("authorizationCode: \(authorizationCode)")
-//                 print("identityToken: \(identityToken)")
-//                 print("authCodeString: \(authCodeString)")
-//                 print("identifyTokenString: \(identifyTokenString)")
-//             }
-//             
-//             print("useridentifier: \(userIdentifier)")
-//             print("fullName: \(fullName)")
-//             print("email: \(email)")
-////      let jwtString = self.makeJWT()
-//
-//             //Move to MainPage
-//             //let validVC = SignValidViewController()
-//             //validVC.modalPresentationStyle = .fullScreen
-//             //present(validVC, animated: true, completion: nil)
-//             
-//         case let passwordCredential as ASPasswordCredential:
-//             // Sign in using an existing iCloud Keychain credential.
-//             let username = passwordCredential.user
-//             let password = passwordCredential.password
-//             
-//             print("username: \(username)")
-//             print("password: \(password)")
-//             
-//         default:
-//             break
-//         }
-        signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
+    signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
       self.loginDidSucceed {
         UIApplication.shared.windows.first?.isUserInteractionEnabled = true
 

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 import Then
 import SnapKit
@@ -25,24 +26,30 @@ class SettingViewController: NaviHelper {
     $0.layer.borderWidth = 1.0
     $0.layer.cornerRadius = 10
   }
-  private lazy var settingAlarmButton = UIButton().then {
-    $0.setImage(UIImage(named: "AlaramImg"), for: .normal)
-    $0.setTitle(" 알림", for: .normal)
-    $0.setTitleColor(.black, for: .normal)
-  }
-  
-  private lazy var alarmSwitch = UISwitch().then { $0.onTintColor = .mainBlue }
+  //  private lazy var settingAlarmButton = UIButton().then {
+  //    $0.setImage(UIImage(named: "AlaramImg"), for: .normal)
+  //    $0.setTitle(" 알림", for: .normal)
+  //    $0.setTitleColor(.black, for: .normal)
+  //  }
+  //
+  //  private lazy var alarmSwitch = UISwitch().then { $0.onTintColor = .mainBlue }
   
   private lazy var personInfoButton = UIButton().then {
     $0.setImage(UIImage(named: "PersonInfoImg"), for: .normal)
     $0.setTitle(" 개인정보 처리방침", for: .normal)
     $0.setTitleColor(.black, for: .normal)
+    $0.addAction(UIAction { _ in
+      self.moveToSafari(url: "https://zrr.kr/QNiv")
+    }, for: .touchUpInside)
   }
   
   private lazy var serviceInfoButton = UIButton().then {
     $0.setImage(UIImage(named: "ServiceImg"), for: .normal)
     $0.setTitle(" 서비스 이용방침", for: .normal)
     $0.setTitleColor(.black, for: .normal)
+    $0.addAction(UIAction { _ in
+      self.moveToSafari(url: "https://zrr.kr/cGF5")
+    }, for: .touchUpInside)
   }
   
   private lazy var accountView = UIView().then {
@@ -54,20 +61,22 @@ class SettingViewController: NaviHelper {
   private lazy var accountLabel = uihelper.createSingleLineLabel("⭐️ 계정",
                                                                  .black,
                                                                  .boldSystemFont(ofSize: 20))
-  private lazy var messageOptionButton = UIButton().then {
-    $0.setImage(UIImage(named: "MessgaeImg"), for: .normal)
-    $0.setTitle(" 메세지 수신여부", for: .normal)
-    $0.setTitleColor(.black, for: .normal)
-  }
+  //  private lazy var messageOptionButton = UIButton().then {
+  //    $0.setImage(UIImage(named: "MessgaeImg"), for: .normal)
+  //    $0.setTitle(" 메세지 수신여부", for: .normal)
+  //    $0.setTitleColor(.black, for: .normal)
+  //  }
   
-  private lazy var messageOptionSwitch = UISwitch().then { $0.onTintColor = .mainBlue }
+  //  private lazy var messageOptionSwitch = UISwitch().then { $0.onTintColor = .mainBlue }
   
   private lazy var deleteAccountButton = UIButton().then {
     $0.setImage(UIImage(named: "MessgaeImg"), for: .normal)
     $0.setTitle(" 회원탈퇴", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-      self.settingViewModel.removeAccount()
+      self.showPopupView("회원탈퇴 할까요?"){
+        self.removeAccount()
+      }
     }, for: .touchUpInside)
   }
   
@@ -76,20 +85,21 @@ class SettingViewController: NaviHelper {
     $0.setTitle(" 로그아웃", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-//      self.settingViewModel.removeAccountData()
+      self.showPopupView("로그아웃 할까요?") {
+        self.logout()
+      }
     }, for: .touchUpInside)
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    
     view.backgroundColor = .white
     
     navigationItemSetting()
     
     setupLayout()
     makeUI()
-    print(messageOptionSwitch.isOn)
   }
   
   override func navigationItemSetting() {
@@ -101,8 +111,8 @@ class SettingViewController: NaviHelper {
   
   func setupLayout(){
     [
-      settingAlarmButton,
-      alarmSwitch,
+      //      settingAlarmButton,
+      //      alarmSwitch,
       personInfoButton,
       serviceInfoButton
     ].forEach {
@@ -110,8 +120,8 @@ class SettingViewController: NaviHelper {
     }
     
     [
-      messageOptionButton,
-      messageOptionSwitch,
+      //      messageOptionButton,
+      //      messageOptionSwitch,
       deleteAccountButton,
       logoutButton
     ].forEach {
@@ -138,27 +148,27 @@ class SettingViewController: NaviHelper {
       $0.top.equalTo(serviceLabel.snp.bottom).offset(20)
       $0.leading.equalTo(serviceLabel)
       $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(150)
+      $0.height.equalTo(120)
     }
     
-    settingAlarmButton.snp.makeConstraints {
+    //    settingAlarmButton.snp.makeConstraints {
+    //      $0.top.equalTo(serviceView.snp.top).offset(20)
+    //      $0.leading.equalTo(serviceView.snp.leading).offset(20)
+    //    }
+    //
+    //    alarmSwitch.snp.makeConstraints {
+    //      $0.top.equalTo(settingAlarmButton)
+    //      $0.trailing.equalTo(serviceView.snp.trailing).offset(-20)
+    //    }
+    
+    personInfoButton.snp.makeConstraints {
       $0.top.equalTo(serviceView.snp.top).offset(20)
       $0.leading.equalTo(serviceView.snp.leading).offset(20)
     }
     
-    alarmSwitch.snp.makeConstraints {
-      $0.top.equalTo(settingAlarmButton)
-      $0.trailing.equalTo(serviceView.snp.trailing).offset(-20)
-    }
-    
-    personInfoButton.snp.makeConstraints {
-      $0.top.equalTo(settingAlarmButton.snp.bottom).offset(20)
-      $0.leading.equalTo(settingAlarmButton)
-    }
-    
     serviceInfoButton.snp.makeConstraints {
       $0.top.equalTo(personInfoButton.snp.bottom).offset(20)
-      $0.leading.equalTo(settingAlarmButton)
+      $0.leading.equalTo(personInfoButton)
     }
     
     accountLabel.snp.makeConstraints {
@@ -169,27 +179,64 @@ class SettingViewController: NaviHelper {
     accountView.snp.makeConstraints {
       $0.top.equalTo(accountLabel.snp.bottom).offset(20)
       $0.leading.trailing.equalTo(serviceView)
-      $0.height.equalTo(150)
+      $0.height.equalTo(120)
     }
     
-    messageOptionButton.snp.makeConstraints {
+    //    messageOptionButton.snp.makeConstraints {
+    //      $0.top.equalTo(accountView.snp.top).offset(20)
+    //      $0.leading.equalTo(accountView.snp.leading).offset(20)
+    //    }
+    //
+    //    messageOptionSwitch.snp.makeConstraints {
+    //      $0.top.equalTo(messageOptionButton)
+    //      $0.trailing.equalTo(accountView.snp.trailing).offset(-20)
+    //    }
+    
+    deleteAccountButton.snp.makeConstraints {
       $0.top.equalTo(accountView.snp.top).offset(20)
       $0.leading.equalTo(accountView.snp.leading).offset(20)
     }
     
-    messageOptionSwitch.snp.makeConstraints {
-      $0.top.equalTo(messageOptionButton)
-      $0.trailing.equalTo(accountView.snp.trailing).offset(-20)
-    }
-  
-    deleteAccountButton.snp.makeConstraints {
-      $0.top.equalTo(messageOptionButton.snp.bottom).offset(20)
-      $0.leading.equalTo(messageOptionButton)
-    }
-    
     logoutButton.snp.makeConstraints {
       $0.top.equalTo(deleteAccountButton.snp.bottom).offset(20)
-      $0.leading.equalTo(messageOptionButton)
+      $0.leading.equalTo(deleteAccountButton)
     }
+  }
+  
+  func moveToSafari(url: String){
+    let url = NSURL(string: url)
+    let safariView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+    self.present(safariView, animated: true, completion: nil)
+  }
+  
+  
+  func removeAccount(){
+    self.settingViewModel.removeAccount()
+    logout()
+  }
+  
+  func logout(){
+    if let navigationController = self.navigationController {
+      navigationController.dismiss(animated: true)
+      navigationController.popToRootViewController(animated: false)
+      
+      let loginVC = LoginViewController()
+      loginVC.modalPresentationStyle = .overFullScreen
+      navigationController.present(loginVC, animated: true)
+    }
+  }
+  
+  func showPopupView(_ desc: String, action: (() -> Void)?) {
+    let popupVC = PopupViewController(title: "✅",
+                                      desc: desc,
+                                      rightButtonTilte: "확인",
+                                      checkCompleteButton: false)
+    popupVC.modalPresentationStyle = .overFullScreen
+    popupVC.popupView.rightButtonAction = { [weak self] in
+      self?.dismiss(animated: true) {
+        action?()
+      }
+    }
+    self.present(popupVC, animated: false)
   }
 }
