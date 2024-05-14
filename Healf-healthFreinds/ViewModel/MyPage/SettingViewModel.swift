@@ -51,7 +51,7 @@ class SettingViewModel: CommonViewModel {
       removeAccountData(path: $0)
     }
     
-    getUserLocation { location in
+    getUserData(dataType: "location") { location in
       self.deleteUserData(forValue: location ?? "") { err in
         guard let error = err else {
           print("데이터를 찾을 수 없습니다.")
@@ -99,15 +99,16 @@ class SettingViewModel: CommonViewModel {
     }
   }
   
-  func getUserLocation(completion: @escaping (String?) -> Void) {
+  func getUserData(dataType: String,
+                       completion: @escaping (String?) -> Void) {
     ref.child("UserDataInfo").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
       guard let userData = snapshot.value as? [String: Any],
-            let location = userData["location"] as? String else {
+            let data = userData[dataType] as? String else {
         completion(nil) // 사용자 또는 위치 정보를 찾을 수 없을 때 nil 반환
         return
       }
       
-      completion(location) // 사용자의 위치 정보를 반환하고 완료 핸들러 호출
+      completion(data) // 사용자의 위치 정보를 반환하고 완료 핸들러 호출
     }
   }
   
@@ -129,4 +130,7 @@ class SettingViewModel: CommonViewModel {
     }
   }
   
+  func settingMessageOption(_ messageOption: String){
+    self.ref.child("UserDataInfo").child(self.uid ?? "").child("messageOption").setValue(messageOption)
+  }
 }

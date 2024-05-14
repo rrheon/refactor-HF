@@ -37,7 +37,6 @@ class ChatListViewController: NaviHelper {
     
     navigationItemSetting()
     
-    // 이렇게 설정하면 메세지가 없을 때 아무것도 안뜸
     getChatList {
       self.setupLayout()
       self.makeUI()

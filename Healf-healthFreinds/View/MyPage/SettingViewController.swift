@@ -61,13 +61,13 @@ class SettingViewController: NaviHelper {
   private lazy var accountLabel = uihelper.createSingleLineLabel("⭐️ 계정",
                                                                  .black,
                                                                  .boldSystemFont(ofSize: 20))
-  //  private lazy var messageOptionButton = UIButton().then {
-  //    $0.setImage(UIImage(named: "MessgaeImg"), for: .normal)
-  //    $0.setTitle(" 메세지 수신여부", for: .normal)
-  //    $0.setTitleColor(.black, for: .normal)
-  //  }
+  private lazy var messageOptionButton = UIButton().then {
+    $0.setImage(UIImage(named: "MessgaeImg"), for: .normal)
+    $0.setTitle(" 메세지 수신거부", for: .normal)
+    $0.setTitleColor(.black, for: .normal)
+  }
   
-  //  private lazy var messageOptionSwitch = UISwitch().then { $0.onTintColor = .mainBlue }
+  private lazy var messageOptionSwitch = UISwitch().then { $0.onTintColor = .mainBlue }
   
   private lazy var deleteAccountButton = UIButton().then {
     $0.setImage(UIImage(named: "MessgaeImg"), for: .normal)
@@ -100,13 +100,21 @@ class SettingViewController: NaviHelper {
     
     setupLayout()
     makeUI()
+    
+    dataSetting()
   }
   
   override func navigationItemSetting() {
     super.navigationItemSetting()
     
+    let rightButton = UIBarButtonItem(title: "완료",
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(settingOptions))
+    rightButton.tintColor = .mainBlue
+  
     settingNavigationTitle(title: "설정")
-    navigationItem.rightBarButtonItem = .none
+    self.navigationItem.rightBarButtonItem = rightButton
   }
   
   func setupLayout(){
@@ -120,8 +128,8 @@ class SettingViewController: NaviHelper {
     }
     
     [
-      //      messageOptionButton,
-      //      messageOptionSwitch,
+      messageOptionButton,
+      messageOptionSwitch,
       deleteAccountButton,
       logoutButton
     ].forEach {
@@ -179,21 +187,21 @@ class SettingViewController: NaviHelper {
     accountView.snp.makeConstraints {
       $0.top.equalTo(accountLabel.snp.bottom).offset(20)
       $0.leading.trailing.equalTo(serviceView)
-      $0.height.equalTo(120)
+      $0.height.equalTo(150)
     }
     
-    //    messageOptionButton.snp.makeConstraints {
-    //      $0.top.equalTo(accountView.snp.top).offset(20)
-    //      $0.leading.equalTo(accountView.snp.leading).offset(20)
-    //    }
-    //
-    //    messageOptionSwitch.snp.makeConstraints {
-    //      $0.top.equalTo(messageOptionButton)
-    //      $0.trailing.equalTo(accountView.snp.trailing).offset(-20)
-    //    }
+    messageOptionButton.snp.makeConstraints {
+      $0.top.equalTo(accountView.snp.top).offset(20)
+      $0.leading.equalTo(accountView.snp.leading).offset(20)
+    }
+    
+    messageOptionSwitch.snp.makeConstraints {
+      $0.top.equalTo(messageOptionButton)
+      $0.trailing.equalTo(accountView.snp.trailing).offset(-20)
+    }
     
     deleteAccountButton.snp.makeConstraints {
-      $0.top.equalTo(accountView.snp.top).offset(20)
+      $0.top.equalTo(messageOptionButton.snp.bottom).offset(20)
       $0.leading.equalTo(accountView.snp.leading).offset(20)
     }
     
@@ -203,12 +211,18 @@ class SettingViewController: NaviHelper {
     }
   }
   
+  func dataSetting(){
+    self.settingViewModel.getUserData(dataType: "messageOption") { result in
+      if result == "true" { self.messageOptionSwitch.isOn = true}
+      else { self.messageOptionSwitch.isOn = false}
+    }
+  }
+  
   func moveToSafari(url: String){
     let url = NSURL(string: url)
     let safariView: SFSafariViewController = SFSafariViewController(url: url! as URL)
     self.present(safariView, animated: true, completion: nil)
   }
-  
   
   func removeAccount(){
     self.settingViewModel.removeAccount()
@@ -238,5 +252,10 @@ class SettingViewController: NaviHelper {
       }
     }
     self.present(popupVC, animated: false)
+  }
+  
+  @objc func settingOptions(){
+    self.settingViewModel.settingMessageOption(String(messageOptionSwitch.isOn))
+    self.navigationController?.popViewController(animated: true)
   }
 }

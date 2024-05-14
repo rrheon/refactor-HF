@@ -140,12 +140,19 @@ final class PostedViewController: UIViewController {
   }
   
   func participateButtonTapped(){
-    chatDetailViewModel.createRoom(destinationUid ?? "") { result in
-      switch result{
-      case true:
-        self.showPopupViewWithOnebutton("채팅방이 생성되었습니다!", checkNavi: false)
-      case false:
-        self.showPopupViewWithOnebutton("본인과는 채팅이 불가능합니다", checkNavi: false)
+    chatDetailViewModel.checkMessageOption(destinationUid: destinationUid ?? "") { result in
+      if result == "true" { 
+        self.showPopupViewWithOnebutton("채팅이 불가능합니다!", checkNavi: false)
+        return
+      } else {
+        self.chatDetailViewModel.createRoom(self.destinationUid ?? "") { result in
+          switch result{
+          case true:
+            self.showPopupViewWithOnebutton("채팅방이 생성되었습니다!", checkNavi: false)
+          case false:
+            self.showPopupViewWithOnebutton("채팅이 불가능합니다!", checkNavi: false)
+          }
+        }
       }
     }
   }

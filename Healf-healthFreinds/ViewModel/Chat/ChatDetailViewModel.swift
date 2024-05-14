@@ -19,22 +19,40 @@ final class ChatDetailViewModel: CommonViewModel {
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
   
-  func createRoom(_ destinationUid: String = "",
+  func createRoom(_ destinationUid: String,
                   completion: @escaping (Bool) -> Void){
-    if uid == destinationUid {
-      print("나 자신임")
-      completion(false)
-      return
-    } else {
-      let createRoomInfo = [ "UserData": [ "\(uid!)": true,
-                                           "\(destinationUid)": true] ]
-      ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
-        if err == nil {
-          self.checkChatRoom(self.uid!, destinationUid) { _ in
-            completion(true)
+//    checkMessageOption(destinationUid: destinationUid) { [weak self] messageOption in
+//      if messageOption == "true" {
+//        completion(false)
+//        return
+//      }
+      
+    if self.uid == destinationUid {
+        print("나 자신임")
+        completion(false)
+        return
+      } else {
+        let createRoomInfo = [ "UserData": [ "\(self.uid ?? "")": true,
+                                             "\(destinationUid)": true] ]
+        self.ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
+          if err == nil {
+            self.checkChatRoom(self.uid ?? "", destinationUid) { _ in
+              completion(true)
+            }
           }
         }
       }
+ 
+  }
+  
+  func checkMessageOption(destinationUid: String,
+                          completion: @escaping (String?) -> Void) {
+    ref.child("UserDataInfo").child(destinationUid).observeSingleEvent(of: .value) { snapshot in
+      guard let userData = snapshot.value as? [String: Any],
+            let messageOption = userData["messageOption"] as? String else {
+        return
+      }
+      completion(messageOption)
     }
   }
   
@@ -53,7 +71,7 @@ final class ChatDetailViewModel: CommonViewModel {
     let url = "https://fcm.googleapis.com/v1/projects/healf-7f799/messages:send"
     let header: HTTPHeaders = [
       "Content-Type" : "application/json",
-      "Authorization" : "Bearer ya29.a0AXooCgsMxVqbpXCgMwBi7ZBiHB5l7l-tT5MOBzgH_5tV8uxjXiD8cpJav7gM9JpWD5fWrVxcUegOw3Jbv26URSHgP42qw38fonws3VnLhRXf0bMUkgWrjyum5tuQWUSbN3ouRC0KvFpRz27eeivg8LhOWflrgofAwWvuaCgYKAXMSARASFQHGX2MiDesBtcIrxjfadWMyuNCbkw0171"
+      "Authorization" : "Bearer"
     ]
     
     getUserToken { token in

@@ -78,6 +78,7 @@ final class CreatePostViewController: NaviHelper {
     registerButtonFunc()
     settingModifyValue()
     
+    setupKeyboardEvent()
     hideKeyboardWhenTappedAround()
   }
   
