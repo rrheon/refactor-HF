@@ -10,6 +10,10 @@ import UIKit
 import Cosmos
 import SnapKit
 
+protocol UpdateHomeVCDatas: AnyObject{
+  func updateDatas()
+}
+
 final class WriteHistoryViewController: NaviHelper {
   private lazy var aloneButton = UIHelper.shared.createSelectButton("혼자 했어요")
   private lazy var togetherButton = UIHelper.shared.createSelectButton("같이 했어요")
@@ -44,6 +48,8 @@ final class WriteHistoryViewController: NaviHelper {
   
   let writeHistoryViewModel = WriteHistoryViewModel()
   let myPageViewModel = MypageViewModel.shared
+  weak var delegate: UpdateHomeVCDatas?
+  
   var aloneOrTogether: String?
   var workoutTypes: [String] = []
   
@@ -227,6 +233,11 @@ final class WriteHistoryViewController: NaviHelper {
     completeButton.addAction(UIAction { _ in
       self.completButtonTapped()
     }, for: .touchUpInside)
+    
+    completeButton.rx.tap
+      .subscribe { [weak self] _  in
+        self?.completButtonTapped()
+      }.disposed(by: HomeViewModel.shared.disposeBag)
   }
 
   // 같이 일때 화면 이동해서 유저 선택
@@ -275,7 +286,6 @@ final class WriteHistoryViewController: NaviHelper {
     
     guard let aloneOrTogether = aloneOrTogether,
           let comment = commentTextView.text else { return }
-    // 같이 한 경우 해당 유저의 닉네임과 프사도 같이? 혹은 uid?
     if aloneOrTogether == "같이 했어요" {
       guard let userNickname = friendNameLabel.text else { return }
       writeHistoryViewModel.createPost(userNickname, rate, workoutTypes, comment, vc: self)
@@ -286,6 +296,8 @@ final class WriteHistoryViewController: NaviHelper {
 
   func afterCompleButtonTapped() {
     showPopupViewWithOnebutton("오늘 운동을 기록했어요!")
+    delegate?.updateDatas()
+
   }
   
   override func keyboardWillShow(_ sender: Notification) {

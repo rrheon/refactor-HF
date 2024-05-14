@@ -48,6 +48,28 @@ class MypageViewModel: CommonViewModel {
     }
   }
 
+  func fetchThisMonthData(checkMoveMonth: Bool = false,
+                          year: String = "",
+                          month: String = "",
+                          completion: @escaping ([String: Any]?) -> Void) {
+    var startDate = getStartDate()
+    if checkMoveMonth {
+      startDate[0] = year
+      startDate[1] = month
+    }
+    // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
+    ref.child("History")
+      .child(uid!)
+      .child(startDate[0])
+      .child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
+        if let value = snapshot.value as? [String: Any] {
+          completion(value)
+        } else {
+          completion(nil)
+        }
+      }
+  }
+  
   // MARK: - 달력 데이터 가져오기
   func getMyWorkoutHistory(checkMoveMonth: Bool = false,
                            year: String = "",

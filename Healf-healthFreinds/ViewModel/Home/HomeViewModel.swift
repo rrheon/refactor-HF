@@ -7,46 +7,67 @@
 
 import Foundation
 
-import FirebaseDatabase
+import RxSwift
+import RxCocoa
 
 final class HomeViewModel: CommonViewModel {
-  var weeklyCompletion: [Bool] = []
+  static let shared = HomeViewModel()
   
-  func getWorkoutData(completion: @escaping (([HistoryModel]) -> Void)) {
-    let startDate = getStartDate()
-    var workoutDatas: [HistoryModel] = []
-    
-    self.fetchThisMonthData { value in
-      guard let value = value else {
-        completion(workoutDatas)
-        return
+  lazy var startDate = getStartDate()
+  lazy var montlyDatasObservable = BehaviorRelay<[String: Any]?>(value: nil)
+  
+  lazy var weeklyCompletionDatas = montlyDatasObservable
+    .flatMapLatest { data -> Observable<[Bool]> in
+      guard let data = data else { return Observable.just([]) }
+      
+      return Observable.create { observer in
+        let weeklyCompletionDatas = (0..<7).map { dayOffset in
+          let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
+          return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data) != nil
+        }
+        observer.onNext(weeklyCompletionDatas)
+        observer.onCompleted()
+        
+        return Disposables.create()
       }
-      for dayOffset in 0..<7 {
-        let currentDay = (Int(startDate[2]) ?? 0) + dayOffset
-        if let workoutData = self.convertToHistoryModelWithDate(for: "\(currentDay)",
-                                                                data: value) {
-          self.weeklyCompletion.append(true)
-          workoutDatas.append(workoutData)
-        } else { self.weeklyCompletion.append(false) }
-      }
-      completion(workoutDatas)
     }
+  
+  lazy var weeklyDatas = montlyDatasObservable
+    .flatMapLatest { data -> Observable<[HistoryModel]> in
+      guard let data = data else { return Observable.just([]) }
+      
+      return Observable.create { observer in
+        let weeklyDatas = (0..<7).compactMap { dayOffset in
+          let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
+          return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data)
+        }
+        observer.onNext(weeklyDatas)
+        observer.onCompleted()
+        
+        return Disposables.create()
+      }
+    }
+  
+  lazy var weeklySummaryDatas = weeklyDatas.map { weeklyDatas in
+    let digit: Double = pow(10, 2)
+    let workoutCount = weeklyDatas.count
+    let together = weeklyDatas.filter { $0.together != "혼자 했어요" }.count
+    let weeklyRate = workoutCount == 0 ? 0.0 : weeklyDatas.reduce(0.0) { $0 + $1.rate } / Double(workoutCount)
+    
+    return (workoutCount, round(weeklyRate * digit) / digit, together)
   }
   
-  func getHomeVCData(completion: @escaping ((Int, Double, Int)) -> Void) {
-    var workoutCount: Int = 0
-    var weeklyRate: Double = 0
-    var together: Int = 0
-    
-    getWorkoutData { workoutDatas in
-      workoutCount = workoutDatas.count
-      workoutDatas.map { workoutData in
-        if workoutData.together != "혼자 했어요" { together += 1 }
-        weeklyRate += workoutData.rate
-      }
-      if weeklyRate != 0.0 { weeklyRate = weeklyRate/Double(workoutCount)}
-      let digit: Double = pow(10, 2)
-      completion((workoutCount, round(weeklyRate * digit) / digit, together))
-    }
+  override init() {
+    super.init()
+    self.updateMontlyDatas()
+  }
+  
+  // 새로운 데이터를 가져오는 함수
+  func updateMontlyDatas() {
+    fetchThisMonthData()
+      .subscribe(onNext: { [weak self] newData in
+        self?.montlyDatasObservable.accept(newData)
+      })
+      .disposed(by: disposeBag)
   }
 }

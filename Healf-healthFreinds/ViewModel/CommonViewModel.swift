@@ -9,8 +9,11 @@ import Foundation
 
 import FirebaseAuth
 import FirebaseDatabase
+import RxSwift
 
 class CommonViewModel {
+  let disposeBag = DisposeBag()
+
   let uid = Auth.auth().currentUser?.uid
   let ref = Database.database().reference()
   
@@ -58,26 +61,26 @@ class CommonViewModel {
   
   func fetchThisMonthData(checkMoveMonth: Bool = false,
                           year: String = "",
-                          month: String = "",
-                          completion: @escaping ([String: Any]?) -> Void) {
-    var startDate = getStartDate()
-    if checkMoveMonth {
-      startDate[0] = year
-      startDate[1] = month
-    }
-    // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
-    ref.child("History")
-      .child(uid!)
-      .child(startDate[0])
-      .child(startDate[1]).observeSingleEvent(of: .value) { snapshot in
-        if let value = snapshot.value as? [String: Any] {
-          completion(value)
-        } else {
-          completion(nil)
-        }
+                          month: String = "") -> Observable<[String: Any]?> {
+    return Observable.create { observer in
+      var startDate = self.getStartDate()
+      if checkMoveMonth {
+        startDate[0] = year
+        startDate[1] = month
       }
+      // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
+      let ref = self.ref.child("History").child(self.uid!).child(startDate[0]).child(startDate[1])
+      ref.observeSingleEvent(of: .value) { snapshot in
+        if let value = snapshot.value as? [String: Any] {
+          observer.onNext(value)
+        } else {
+          observer.onNext(nil)
+        }
+        observer.onCompleted()
+      }
+      return Disposables.create()
+    }
   }
-  
   
   func convertToHistoryModelWithDate(for date: String,
                                      data: [String: Any]) -> HistoryModel? {
@@ -127,7 +130,8 @@ class CommonViewModel {
   }
   
   func updateCount(childType: String, checkCraete: Bool = true){
-    let ref = Database.database().reference().child("UserDataInfo").child(uid ?? "").child("\(childType)")
+    
+    let ref = ref.child("UserDataInfo").child(uid ?? "").child("\(childType)")
     
     ref.observeSingleEvent(of: .value) { snapshot in
       if var count = snapshot.value as? Int {

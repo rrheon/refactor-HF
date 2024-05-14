@@ -13,7 +13,7 @@ import RxCocoa
 
 // init할 때 데이터 로드해오기
 final class HomeViewController: NaviHelper {
-  let homeViewModel = HomeViewModel()
+  let homeViewModel = HomeViewModel.shared
   let searchViewModel = SearchViewModel.shared
   
   var recentPosts: [CreatePostModel] = []
@@ -23,7 +23,7 @@ final class HomeViewController: NaviHelper {
   private lazy var mainImageView = UIImageView(image: UIImage(named: "Healf_advertiseImg"))
   private lazy var weeklySummaryDataLabel = uihelper.createSingleLineLabel("주간 요약 📊")
   private lazy var weeklySummaryStackView = uihelper.createStackView(axis: .horizontal,
-                                                                            spacing: 5)
+                                                                     spacing: 5)
   private lazy var timeCountLabel = uihelper.createMultipleLineLabel("운동 횟수\n0회")
   private lazy var timeSummaryLabel = uihelper.createMultipleLineLabel("주간 평점\n0점")
   private lazy var withFriendsLabel = uihelper.createMultipleLineLabel("함께한 친구\n0명")
@@ -32,8 +32,8 @@ final class HomeViewController: NaviHelper {
   
   private lazy var weeklyCompleteLabel = uihelper.createSingleLineLabel("주간 달성률 🏆")
   private lazy var weeklyCompleteStackView = uihelper.createStackView(axis: .horizontal,
-                                                                             spacing: 1,
-                                                                             backgroundColor: .white)
+                                                                      spacing: 1,
+                                                                      backgroundColor: .white)
   private lazy var mondayLabel = uihelper.createWeeklyCompleteLabel("월")
   private lazy var tuesdayLabel = uihelper.createWeeklyCompleteLabel("화")
   private lazy var wensdayLabel = uihelper.createWeeklyCompleteLabel("수")
@@ -41,20 +41,20 @@ final class HomeViewController: NaviHelper {
   private lazy var fridayLabel = uihelper.createWeeklyCompleteLabel("금")
   private lazy var satdayLabel = uihelper.createWeeklyCompleteLabel("토")
   private lazy var sundayLabel = uihelper.createWeeklyCompleteLabel("일")
-
+  
   private lazy var newPostContentStackView = uihelper.createStackView(axis: .vertical,
-                                                                             spacing: 10,
-                                                                             backgroundColor: .white)
+                                                                      spacing: 10,
+                                                                      backgroundColor: .white)
   private lazy var newPostTitleLabel = uihelper.createSingleLineLabel("New 매칭 🙌🏻")
   
   private lazy var postCollectionView = uihelper.createCollectionView(scrollDirection: .horizontal,
-                                                                             spacing: 50)
-
+                                                                      spacing: 50)
+  
   private lazy var startButton = uihelper.createHealfButton("💪🏻 운동 기록하기", .mainBlue, .white)
   private lazy var contentView = UIView()
-
+  
   var weekLabels: [UILabel] = []
-
+  
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -70,7 +70,7 @@ final class HomeViewController: NaviHelper {
     setupLayout()
     makeUI()
     
-    settingHomeVCDatas()
+    bindViewModel()
     
     changeLabelColor()
   }
@@ -81,11 +81,11 @@ final class HomeViewController: NaviHelper {
     let logo = UIBarButtonItem(image: logoImg, style: .done, target: nil, action: nil)
     logo.imageInsets = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
     logo.isEnabled = false
-
+    
     self.navigationController?.navigationBar.tintColor = .white
     navigationItem.leftBarButtonItem = logo
   }
-    
+  
   // MARK: - setupLayout
   func setupLayout(){
     [
@@ -110,7 +110,7 @@ final class HomeViewController: NaviHelper {
       weeklyCompleteStackView.addArrangedSubview($0)
       weekLabels.append($0)
     }
-   
+    
     [
       newPostTitleLabel,
       postCollectionView
@@ -193,12 +193,12 @@ final class HomeViewController: NaviHelper {
       $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(30)
       $0.leading.equalTo(weeklyCompleteStackView.snp.leading)
     }
-
+    
     postCollectionView.snp.makeConstraints {
       $0.top.equalTo(newPostTitleLabel.snp.bottom).offset(10)
       $0.height.equalTo(170)
     }
-
+    
     startButton.addAction(UIAction { _ in
       self.startButtonTapped()
     }, for: .touchUpInside)
@@ -207,7 +207,7 @@ final class HomeViewController: NaviHelper {
       $0.leading.trailing.equalTo(weeklySummaryStackView)
       $0.height.equalTo(50)
     }
-
+    
     contentView.snp.makeConstraints {
       $0.top.equalTo(mainImageView.snp.bottom)
       $0.leading.trailing.bottom.equalToSuperview()
@@ -225,8 +225,8 @@ final class HomeViewController: NaviHelper {
   // MARK: - changeLabelColor
   func changeLabelColor(){
     uihelper.changeColor(label: newPostTitleLabel,
-                                wantToChange: "New",
-                                color: .labelBlue)
+                         wantToChange: "New",
+                         color: .labelBlue)
   }
   
   // MARK: - startButtonTapped
@@ -238,6 +238,7 @@ final class HomeViewController: NaviHelper {
       guard let self = self else { return }
       self.dismiss(animated: true) {
         let writeHistoryVC = WriteHistoryViewController()
+        writeHistoryVC.delegate = self
         writeHistoryVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(writeHistoryVC, animated: true)
       }
@@ -245,27 +246,23 @@ final class HomeViewController: NaviHelper {
     self.present(popupVC, animated: false)
   }
   
-  func settingHomeVCDatas(){
-    homeViewModel.getHomeVCData { datas in
-      DispatchQueue.main.async {
-        self.timeCountLabel.text = "운동 횟수\n \(datas.0)회"
-        self.timeSummaryLabel.text = "주간 평점\n \(datas.1)점"
-        self.withFriendsLabel.text = "함께한 친구\n \(datas.2)명"
-        
-        self.uihelper.changeColor(label: self.timeCountLabel,
-                                  wantToChange: "\(datas.0)회", color: .lightGray)
-        self.uihelper.changeColor(label: self.timeSummaryLabel,
-                                  wantToChange: "\(datas.1)점", color: .lightGray)
-        self.uihelper.changeColor(label: self.withFriendsLabel,
-                                  wantToChange: "\(datas.2)명", color: .lightGray)
-      
-        for (index, isCompleted) in self.homeViewModel.weeklyCompletion.enumerated() {
+  func bindViewModel() {
+    homeViewModel.weeklySummaryDatas
+      .subscribe { workoutCount, weeklyRate, together in
+        self.timeCountLabel.text = "운동 횟수\n \(workoutCount)회"
+        self.timeSummaryLabel.text = "주간 평점\n \(weeklyRate)점"
+        self.withFriendsLabel.text = "함께한 친구\n \(together)명"
+      }.disposed(by: homeViewModel.disposeBag)
+    
+    homeViewModel.weeklyCompletionDatas
+      .subscribe(onNext: { [weak self] completionDatas in
+        guard let self = self else { return }
+        completionDatas.enumerated().forEach { index, isCompleted in
           if let label = self.weekLabels[safe: index] {
             label.backgroundColor = isCompleted ? .mainBlue : .unableLabelGray
           }
         }
-      }
-    }
+      }).disposed(by: homeViewModel.disposeBag)
   }
   
   func loadRecentPosts(){
@@ -311,5 +308,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: ParticipateButtonDelegate {
   func participateButtonTapped(postedData: CreatePostModel) {
     moveToPostedVC(postedData)
+  }
+}
+
+extension HomeViewController: UpdateHomeVCDatas {
+  func updateDatas() {
+    homeViewModel.updateMontlyDatas()
   }
 }

@@ -33,7 +33,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
                             mapVCwithNavi, chatVCwithNavi, mypageVCwithNavi]
     
     homeVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(named: "HomeImg"), tag: 0)
-    searchVC.tabBarItem = UITabBarItem(title: "서치", image: UIImage(named: "SearchImg"), tag: 1)
+    searchVC.tabBarItem = UITabBarItem(title: "탐색", image: UIImage(named: "SearchImg"), tag: 1)
     mapVCwithNavi.tabBarItem = UITabBarItem(title: "지도", image: UIImage(named: "MapImg"), tag: 2)
     chatVCwithNavi.tabBarItem = UITabBarItem(title: "채팅", image: UIImage(named: "ChatImg"), tag: 3)
     mypageVCwithNavi.tabBarItem = UITabBarItem(title: "채팅", image: UIImage(named: "MypageIconImg"), tag: 3)
