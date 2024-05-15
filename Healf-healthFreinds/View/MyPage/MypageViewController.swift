@@ -49,11 +49,10 @@ final class MypageViewController: NaviHelper {
   private lazy var calendarPrevButton = FSCalendarCustom.shared.createButton(image: "LeftArrowImg")
   private lazy var calendarNextButton = FSCalendarCustom.shared.createButton(image: "RightArrowImg")
   
-  private lazy var selectedDayReportLabel = uiHelper.createMultipleLineLabel(selectedDayReportLabelTitle)
+  private lazy var selectedDayReportLabel = uiHelper.createMultipleLineLabel("")
   
   let mypageViewModel = MypageViewModel()
   
-  var selectedDayReportLabelTitle: String = "21일의 기록\n같이한 사람: test\n평점: 4.24\ncomment:good"
   var highlightedDates: [Int] = []
   var myPostDatas: [CreatePostModel] = []
   
@@ -76,6 +75,14 @@ final class MypageViewController: NaviHelper {
       self.registerCell()
       self.setupButtonActions()
     }
+    
+    bindViewModel()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    mypageViewModel.updatesMyInfomation()
   }
   
   override func navigationItemSetting() {
@@ -255,23 +262,46 @@ final class MypageViewController: NaviHelper {
     selectedDayReportLabel.text = data.together == "기록없음" ? noData : existedData
   }
   
+  func bindViewModel() {
+    mypageViewModel.myInfomationDatas
+      .map { "작성한 글\n\($0?.postCount ?? 0)개" }
+      .asDriver(onErrorJustReturn: "")
+      .drive(postedCountLabel.rx.text)
+      .disposed(by: mypageViewModel.disposeBag)
+    
+    mypageViewModel.myInfomationDatas
+      .map { "운동 횟수\n\($0?.workoutCount ?? 0)번" }
+      .asDriver(onErrorJustReturn: "")
+      .drive(workoutCountLabel.rx.text)
+      .disposed(by: mypageViewModel.disposeBag)
+    
+    mypageViewModel.myInfomationDatas
+      .map { "매칭 회수\n\($0?.togetherCount ?? 0)번" }
+      .asDriver(onErrorJustReturn: "")
+      .drive(matchingCountLabel.rx.text)
+      .disposed(by: mypageViewModel.disposeBag)
+    
+    mypageViewModel.myInfomationDatas
+      .compactMap { $0?.nickname }
+      .asDriver(onErrorJustReturn: "")
+      .drive(userNickNameLabel.rx.text)
+      .disposed(by: mypageViewModel.disposeBag)
+    
+    mypageViewModel.myInfomationDatas
+      .compactMap { $0?.introduce }
+      .asDriver(onErrorJustReturn: "")
+      .drive(userIntroduceLabel.rx.text)
+      .disposed(by: mypageViewModel.disposeBag)
+  }
+
+  
   // MARK: - settingMyPageValue
   func settingMyPageValue(){
-    self.mypageViewModel.getMyInfomation { result in
-      guard let togetherCount = result.togetherCount,
-            let workoutCount = result.workoutCount,
-            let postCount = result.postCount else { return }
-      self.userNickNameLabel.text = result.nickname
-      self.matchingCountLabel.text = "매칭 횟수\n\(togetherCount)번"
-      self.workoutCountLabel.text = "운동 횟수\n\(workoutCount)번"
-      self.postedCountLabel.text = "작성한 글\n\(postCount)개"
-      self.userIntroduceLabel.text = result.introduce
+    self.mypageViewModel.getUserProfileImage { result in
+      self.mypageViewModel.settingProfileImage(profile: self.userProfileImageView,
+                                               result: result,
+                                               radious: 35)
       
-      self.mypageViewModel.getUserProfileImage { result in
-        self.mypageViewModel.settingProfileImage(profile: self.userProfileImageView,
-                                                 result: result,
-                                                 radious: 35)
-      }
     }
   }
   
@@ -323,6 +353,12 @@ final class MypageViewController: NaviHelper {
         self?.tappedMoveMonth(next: true)
       })
       .disposed(by: uiHelper.disposeBag)
+    
+    myPostNotExitButton.rx.tap
+      .subscribe(onNext: { [weak self] in
+        self?.createPostButtonTapped()
+      })
+      .disposed(by: uiHelper.disposeBag)
   }
   
   func tappedMoveMonth(next: Bool){
@@ -330,6 +366,12 @@ final class MypageViewController: NaviHelper {
       self.highlightedDates = result
       self.calendarView.reloadData()
     })
+  }
+  
+  func createPostButtonTapped(){
+    let createPostVC = CreatePostViewController()
+    createPostVC.hidesBottomBarWhenPushed = true
+    self.navigationController?.pushViewController(createPostVC, animated: true)
   }
   
   @objc func moveToSettingVC(){

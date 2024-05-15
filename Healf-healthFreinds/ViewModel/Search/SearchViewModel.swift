@@ -14,23 +14,6 @@ protocol postedDataConfigurable {
 final class SearchViewModel: CommonViewModel {
   let createViewModel = CreatePostViewModel.shared
   static let shared = SearchViewModel()
-  
-  func parsePostInfo(_ postInfo: [String: Any]) -> CreatePostModel? {
-      guard let exerciseType = postInfo["exerciseType"] as? [String],
-            let gender = postInfo["gender"] as? String,
-            let info = postInfo["info"] as? String,
-            let time = postInfo["time"] as? String,
-            let userNickname = postInfo["userNickname"] as? String,
-            let postedDate = postInfo["postedDate"] as? String,
-            let userUid = postInfo["userUid"] as? String,
-            let location = postInfo["location"] as? String else {
-          return nil
-      }
-      
-      return CreatePostModel(time: time, workoutTypes: exerciseType,
-                             gender: gender, info: info, userNickname: userNickname,
-                             postedDate: postedDate, userUid: userUid, location: location)
-  }
 
   func loadFirstFivePostsFromDatabase(completion: @escaping (([CreatePostModel]) -> Void)){
     var userPostsArray: [CreatePostModel] = []

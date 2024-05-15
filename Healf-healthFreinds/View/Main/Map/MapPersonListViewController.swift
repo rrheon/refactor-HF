@@ -108,8 +108,15 @@ extension MapPersonListViewController: UITableViewDelegate, UITableViewDataSourc
                  cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: MapPersonCell.cellId,
                                              for: indexPath) as! MapPersonCell
+    cell.delegate = self
     cell.cellDataSetting(userDatas[indexPath.row])
     return cell
   }
   
+}
+
+extension MapPersonListViewController: MapPersonCellButton {
+  func chatButtonTapped(destinationUid: String) {
+    uihelper.createChatRoom(destinationUid: destinationUid, vc: self,checkNavi: true)
+  }
 }

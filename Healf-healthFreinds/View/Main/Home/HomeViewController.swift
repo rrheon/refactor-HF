@@ -9,7 +9,6 @@ import UIKit
 
 import SnapKit
 import RxSwift
-import RxCocoa
 
 // init할 때 데이터 로드해오기
 final class HomeViewController: NaviHelper {

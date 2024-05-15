@@ -263,4 +263,22 @@ final class UIHelper: UIViewController {
       toastContainer.removeFromSuperview()
     })
   }
+  
+  func createChatRoom(destinationUid: String, vc: UIViewController, checkNavi: Bool = false){
+    ChatDetailViewModel.shared.checkMessageOption(destinationUid: destinationUid) { result in
+      if result == "true" {
+        vc.showPopupViewWithOnebutton("채팅이 불가능합니다!", checkNavi: checkNavi)
+        return
+      } else {
+        ChatDetailViewModel.shared.createRoom(destinationUid) { result in
+          switch result{
+          case true:
+            vc.showPopupViewWithOnebutton("채팅방이 생성되었습니다!", checkNavi: checkNavi)
+          case false:
+            vc.showPopupViewWithOnebutton("채팅이 불가능합니다!", checkNavi: checkNavi)
+          }
+        }
+      }
+    }
+  }
 }

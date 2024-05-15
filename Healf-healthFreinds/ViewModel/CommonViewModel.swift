@@ -13,7 +13,7 @@ import RxSwift
 
 class CommonViewModel {
   let disposeBag = DisposeBag()
-
+  
   let uid = Auth.auth().currentUser?.uid
   let ref = Database.database().reference()
   
@@ -129,6 +129,23 @@ class CommonViewModel {
     
   }
   
+  func parsePostInfo(_ postInfo: [String: Any]) -> CreatePostModel? {
+      guard let exerciseType = postInfo["exerciseType"] as? [String],
+            let gender = postInfo["gender"] as? String,
+            let info = postInfo["info"] as? String,
+            let time = postInfo["time"] as? String,
+            let userNickname = postInfo["userNickname"] as? String,
+            let postedDate = postInfo["postedDate"] as? String,
+            let userUid = postInfo["userUid"] as? String,
+            let location = postInfo["location"] as? String else {
+          return nil
+      }
+      
+      return CreatePostModel(time: time, workoutTypes: exerciseType,
+                             gender: gender, info: info, userNickname: userNickname,
+                             postedDate: postedDate, userUid: userUid, location: location)
+  }
+  
   func updateCount(childType: String, checkCraete: Bool = true){
     
     let ref = ref.child("UserDataInfo").child(uid ?? "").child("\(childType)")
@@ -143,20 +160,34 @@ class CommonViewModel {
     }
   }
   
+  func getUserDataFromUserDataInfo(dataType: String,
+                                   uid: String,
+                                   completion: @escaping (String?) -> Void) {
+    ref.child("UserDataInfo").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
+      guard let userData = snapshot.value as? [String: Any],
+            let data = userData[dataType] as? String else {
+        completion(nil) // 사용자 또는 위치 정보를 찾을 수 없을 때 nil 반환
+        return
+      }
+      
+      completion(data) // 사용자의 위치 정보를 반환하고 완료 핸들러 호출
+    }
+  }
+  
   func getKoreanYearAndMonth(from date: Date) -> (year: String, month: String) {
-      let koreaTimeZone = TimeZone(identifier: "Asia/Seoul")!
-      var koreaCalendar = Calendar.current
-      koreaCalendar.timeZone = koreaTimeZone
-      
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateFormat = "yyyy-M"
-      dateFormatter.timeZone = koreaTimeZone
-      let dateString = dateFormatter.string(from: date)
-      
-      let dateComponents = dateString.split(separator: "-")
-      let year = String(dateComponents[0])
-      let month = String(dateComponents[1])
-      
-      return (year, month)
+    let koreaTimeZone = TimeZone(identifier: "Asia/Seoul")!
+    var koreaCalendar = Calendar.current
+    koreaCalendar.timeZone = koreaTimeZone
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-M"
+    dateFormatter.timeZone = koreaTimeZone
+    let dateString = dateFormatter.string(from: date)
+    
+    let dateComponents = dateString.split(separator: "-")
+    let year = String(dateComponents[0])
+    let month = String(dateComponents[1])
+    
+    return (year, month)
   }
 }

@@ -100,7 +100,7 @@ class SettingViewModel: CommonViewModel {
   }
   
   func getUserData(dataType: String,
-                       completion: @escaping (String?) -> Void) {
+                   completion: @escaping (String?) -> Void) {
     ref.child("UserDataInfo").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
       guard let userData = snapshot.value as? [String: Any],
             let data = userData[dataType] as? String else {

@@ -3,6 +3,10 @@ import UIKit
 
 import SnapKit
 
+protocol MapPersonCellButton: AnyObject {
+  func chatButtonTapped(destinationUid: String)
+}
+
 final class MapPersonCell: UITableViewCell {
 
   static let cellId = "MapPersonCell"
@@ -17,6 +21,8 @@ final class MapPersonCell: UITableViewCell {
                                                                            .systemFont(ofSize: 10))
   private lazy var chatButton = UIHelper.shared.createButtonWithImage("", "ChatButtonImg")
   
+  weak var delegate: MapPersonCellButton?
+  
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     
@@ -29,11 +35,11 @@ final class MapPersonCell: UITableViewCell {
     [
       userProfileImageView,
       userNickNameLabel,
-      userProducLabel,
-      chatButton
+      userProducLabel
     ].forEach {
       self.addSubview($0)
     }
+    self.contentView.addSubview(chatButton)
   }
   
   // MARK: - layout 설정
@@ -53,7 +59,8 @@ final class MapPersonCell: UITableViewCell {
       $0.top.equalTo(userNickNameLabel.snp.bottom).offset(5)
       $0.leading.equalTo(userProfileImageView.snp.trailing).offset(10)
     }
-    
+  
+    chatButton.isExclusiveTouch = false // 버튼이 터치 이벤트를 가로채지 않음
     chatButton.snp.makeConstraints {
       $0.centerY.equalTo(userProfileImageView)
       $0.trailing.equalToSuperview().offset(50)
@@ -65,7 +72,19 @@ final class MapPersonCell: UITableViewCell {
   }
   
   func cellDataSetting(_ userData: UserModel){
+    chatButton.addAction(UIAction { _ in
+      print("1")
+      self.delegate?.chatButtonTapped(destinationUid: userData.uid ?? "")
+    }, for: .touchUpInside)
+    
     userNickNameLabel.text = userData.nickname
     userProducLabel.text = userData.introduce
+    
+    MypageViewModel.shared.getUserProfileImage(checkMyUid: false,
+                                               otherPersonUid: userData.uid ?? "") { result in
+      MypageViewModel.shared.settingProfileImage(profile: self.userProfileImageView,
+                                               result: result,
+                                               radious: 15)
+    }
   }
 }

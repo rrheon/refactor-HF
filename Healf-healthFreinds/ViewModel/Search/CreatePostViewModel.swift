@@ -41,27 +41,10 @@ final class CreatePostViewModel: CommonViewModel {
       }
       self.updateCount(childType: "postCount")
     }
-    
-// 기존 db에 데이터 추가
-//    ref.child("UserData").child(uid ?? "").child("testKey").setValue("testValue") { (error, ref) in
-//        if let error = error {
-//            print("Error adding new key: \(error.localizedDescription)")
-//        } else {
-//            print("New key added successfully!")
-//        }
-//    }
   }
   
   // 특정 유저의 게시물 불러오기
   func loadUserNicknameFromDatabase(completion: @escaping ([String: Any]) -> Void) {
-//    ref.child("users").child(uid ?? "").child("posts").observeSingleEvent(of: .value) { snapshot in
-//      guard let value = snapshot.value as? [String: Any] else {
-//        print("Failed to load user posts")
-//        return
-//      }
-//      completion(value)
-//    }
-    
     ref.child("UserData").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
       guard let value = snapshot.value as? [String: Any] else {
         print("Failed to load user posts")
@@ -112,8 +95,7 @@ final class CreatePostViewModel: CommonViewModel {
         updatedData["postedDate"] as? String
         updatedData["time"] as? String
         updatedData["userNickname"] as? String
-        
-       
+      
       }
     }
   }

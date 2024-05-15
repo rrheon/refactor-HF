@@ -9,6 +9,8 @@ import UIKit
 
 import Kingfisher
 import FirebaseDatabase
+import RxSwift
+import RxRelay
 
 enum MyPageError: Error {
   case imageURLNotFound
@@ -22,8 +24,34 @@ class MypageViewModel: CommonViewModel {
   let createViewModel = CreatePostViewModel.shared
   static let shared = MypageViewModel()
   
-  // 받아와야할 것 - 1.해당 월 전체(데이터 있으면 표시 없으면 냅두기), 2. 선택한 날짜의 데이터 뿌려주기
-  // uid를 매개변수로 따로 빼서 값이 들어오면 상대방 없으면 내꺼
+  lazy var myInfomationDatas = BehaviorRelay<UserModel?>(value: nil)
+  
+  override init() {
+    super.init()
+    updatesMyInfomation()
+  }
+  
+  func updatesMyInfomation(){
+    getMyInfomation()
+      .subscribe(onNext: { [weak self] newData in
+        self?.myInfomationDatas.accept(newData)
+      })
+      .disposed(by: disposeBag)
+  }
+
+  func getMyInfomation(checkMyUid: Bool = true,
+                       otherPersonUid: String = "") -> Observable<UserModel>{
+    return Observable.create { observer in
+      let userUid = checkMyUid == true ? self.uid : otherPersonUid
+      self.ref.child("UserDataInfo").child(userUid ?? "").observeSingleEvent(of: .value) { snapshot in
+        guard let value = snapshot.value as? [String: Any] else { return }
+        guard let userData = self.convertUserModel(data: value) else { return}
+        observer.onNext(userData)
+      }
+      return Disposables.create()
+    }
+  }
+  
   func getMyInfomation(checkMyUid: Bool = true,
                        otherPersonUid: String = "",
                        completion: @escaping(UserModel) -> Void){
@@ -127,7 +155,7 @@ class MypageViewModel: CommonViewModel {
     getMyPostData { result in
       var posts: [CreatePostModel] = []
       for (_, postDict) in result {
-        if let postDict = postDict as? [String: Any], let post = self.parsePostData(postDict) {
+        if let postDict = postDict as? [String: Any], let post = self.parsePostInfo(postDict) {
           posts.append(post)
         }
       }
@@ -135,31 +163,7 @@ class MypageViewModel: CommonViewModel {
     }
   }
   
-  // MARK: - postData to 구조체
-  func parsePostData(_ data: [String: Any]) -> CreatePostModel? {
-    guard let exerciseType = data["exerciseType"] as? [String],
-          let gender = data["gender"] as? String,
-          let info = data["info"] as? String,
-          let postedDate = data["postedDate"] as? String,
-          let time = data["time"] as? String,
-          let userNickname = data["userNickname"] as? String,
-          let userUid = data["userUid"] as? String,
-          let location = data["location"] as? String
-    else {
-      return nil
-    }
-    
-    return CreatePostModel(time: time,
-                           workoutTypes: exerciseType,
-                           gender: gender,
-                           info: info,
-                           userNickname: userNickname,
-                           postedDate: postedDate,
-                           userUid: userUid,
-                           location: location )
-  }
-  
-// MARK: - 유저 프로필 받아오기
+  // MARK: - 유저 프로필 받아오기
   func getUserProfileImage(checkMyUid: Bool = true,
                            otherPersonUid: String = "",
                            completion: @escaping (Result<UIImage, Error>) -> Void) {

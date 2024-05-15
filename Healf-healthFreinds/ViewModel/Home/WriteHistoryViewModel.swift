@@ -11,14 +11,6 @@ import FirebaseAuth
 import FirebaseDatabase
 
 final class WriteHistoryViewModel: CommonViewModel {
-  // 기존 db에 데이터 추가
-  //    ref.child("UserData").child(uid ?? "").child("testKey").setValue("testValue") { (error, ref) in
-  //        if let error = error {
-  //            print("Error adding new key: \(error.localizedDescription)")
-  //        } else {
-  //            print("New key added successfully!")
-  //        }
-  //    }
   func createPost(_ together: String,
                   _ rate: Double,
                   _ workoutTyes: [String],

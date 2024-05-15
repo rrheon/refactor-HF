@@ -16,35 +16,23 @@ final class HomeViewModel: CommonViewModel {
   lazy var startDate = getStartDate()
   lazy var montlyDatasObservable = BehaviorRelay<[String: Any]?>(value: nil)
   
-  lazy var weeklyCompletionDatas = montlyDatasObservable
-    .flatMapLatest { data -> Observable<[Bool]> in
-      guard let data = data else { return Observable.just([]) }
+  lazy var weeklyCompletionDatas: Observable<[Bool]> = {
+    return montlyDatasObservable.map { data in
+      guard let data = data else { return [Bool]() }
       
-      return Observable.create { observer in
-        let weeklyCompletionDatas = (0..<7).map { dayOffset in
-          let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
-          return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data) != nil
-        }
-        observer.onNext(weeklyCompletionDatas)
-        observer.onCompleted()
-        
-        return Disposables.create()
+      return (0..<7).map { dayOffset in
+        let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
+        return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data) != nil
       }
     }
+  }()
   
-  lazy var weeklyDatas = montlyDatasObservable
-    .flatMapLatest { data -> Observable<[HistoryModel]> in
-      guard let data = data else { return Observable.just([]) }
+  lazy var weeklyDatas = montlyDatasObservable.map { data -> [HistoryModel] in
+      guard let data = data else { return [] }
       
-      return Observable.create { observer in
-        let weeklyDatas = (0..<7).compactMap { dayOffset in
-          let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
-          return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data)
-        }
-        observer.onNext(weeklyDatas)
-        observer.onCompleted()
-        
-        return Disposables.create()
+      return (0..<7).compactMap { dayOffset in
+        let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
+        return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data)
       }
     }
   

@@ -49,6 +49,7 @@ class EditMyProfileViewController: NaviHelper {
   
   private lazy var editNicknameTextField = uihelper.createLoginTextField("닉네임")
   
+  var existingNickname = ""
   let editProfileViewModel = EditMyProfileViewModel()
   weak var delegate: ImageSelectionDelegate?
 
@@ -65,6 +66,7 @@ class EditMyProfileViewController: NaviHelper {
 
     self.introduceTextFiled.text = introduce
     self.editNicknameTextField.text = nickname
+    existingNickname = nickname
   }
   
   required init?(coder: NSCoder) {
@@ -158,26 +160,33 @@ class EditMyProfileViewController: NaviHelper {
   }
   
   // MARK: - completeButtonTapped
- @objc func completeButtonTapped(){
+  @objc func completeButtonTapped(){
     guard let introduce = introduceTextFiled.text,
           let image = profileImageView.image,
           let nickname = editNicknameTextField.text else { return }
-    SignupViewModel.shared.checkDuplication(checkType: "nickname",
-                                            checkValue: nickname) { [weak self] result in
-      switch result{
-      case true:
-        self?.editProfileViewModel.saveMyProfile(introduce: introduce,
-                                                 nickname: nickname,
-                                                 profileImage: image)
-        self?.changeMyProfile()
-        self?.navigationController?.popViewController(animated: true)
-      case false:
-        self?.editNicknameTextField.resignFirstResponder()
-        self?.showPopupViewWithOnebutton("이미 사용중인 닉네임입니다.")
-        
+    if existingNickname == nickname {
+      self.editProfileViewModel.saveMyProfile(introduce: introduce,
+                                              nickname: nickname,
+                                              profileImage: image)
+      self.changeMyProfile()
+      self.navigationController?.popViewController(animated: true)
+    } else {
+      SignupViewModel.shared.checkDuplication(checkType: "nickname",
+                                              checkValue: nickname) { [weak self] result in
+        switch result{
+        case true:
+          self?.editProfileViewModel.saveMyProfile(introduce: introduce,
+                                                   nickname: nickname,
+                                                   profileImage: image)
+          self?.changeMyProfile()
+          self?.navigationController?.popViewController(animated: true)
+        case false:
+          self?.editNicknameTextField.resignFirstResponder()
+          self?.showPopupViewWithOnebutton("이미 사용중인 닉네임입니다.")
+          
+        }
       }
     }
-
   }
   
   // MARK: - changeProfileButtonTapped

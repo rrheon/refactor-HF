@@ -113,7 +113,6 @@ final class MapViewController: NaviHelper {
     let longitude = userLocation.coordinate.longitude
     
     userPosition = (latitude, longitude)
-//    mapViewModel.updateMyLocation(userPosition ?? (0.0 , 0.0))
 
     let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude))
     naverMapView.mapView.moveCamera(cameraUpdate)

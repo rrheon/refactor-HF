@@ -212,7 +212,7 @@ class SettingViewController: NaviHelper {
   }
   
   func dataSetting(){
-    self.settingViewModel.getUserData(dataType: "messageOption") { result in
+    self.settingViewModel.getUserData(dataType: "messageOption" ) { result in
       if result == "true" { self.messageOptionSwitch.isOn = true}
       else { self.messageOptionSwitch.isOn = false}
     }
