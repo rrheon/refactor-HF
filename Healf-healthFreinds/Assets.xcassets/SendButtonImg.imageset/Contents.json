@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "avatar_m.png",
+      "filename" : "SendButtonImg.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "avatar_m 1.png",
+      "filename" : "Send.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "avatar_m 2.png",
+      "filename" : "Send 1.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

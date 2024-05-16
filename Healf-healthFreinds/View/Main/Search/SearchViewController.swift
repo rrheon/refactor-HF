@@ -7,12 +7,7 @@ import Then
 import RxSwift
 
 final class SearchViewController: NaviHelper {
-  
-  // MARK: - 서치바
-  var locations: [String] = ["전 체","서울특별시","인천광역시","경기도","부산광역시","대구광역시","광주광역시",
-                             "대전광역시","울산광역시","세종특별자치시","강원도","충청북도","충청남도",
-                             "전라북도","전라남도","경상북도","경상남도","제주특별자치도"]
-  
+    
   private lazy var selectLocationButton = UIButton().then {
     $0.setTitle("📍 지역: 전 체 ", for: .normal)
     $0.backgroundColor = .white
@@ -119,18 +114,17 @@ final class SearchViewController: NaviHelper {
   
   func selectLocationButtonTapped(){
     let dropDownView = DropDown()
-    dropDownView.dataSource = self.locations // 어떤 데이터를 보여줄건지
-    dropDownView.cellHeight = 40 // 각 칸의 높이
+    dropDownView.dataSource = self.locations
+    dropDownView.cellHeight = 40
     dropDownView.separatorColor = .black
     dropDownView.textFont = .boldSystemFont(ofSize: 20)
     dropDownView.anchorView = selectLocationButton
-    dropDownView.cornerRadius = 5.0 // 전체 코너 둥글게
+    dropDownView.cornerRadius = 5.0
     dropDownView.offsetFromWindowBottom = 80
     dropDownView.bottomOffset = CGPoint(x: 0, y: selectLocationButton.bounds.height)
-    // 이걸 설정안하면 뷰를 가리면서 메뉴가 나오게됩니다!
     
-    dropDownView.direction = .bottom // 드랍 다운 방향
-    dropDownView.show() // 드랍다운 보여주기
+    dropDownView.direction = .bottom
+    dropDownView.show()
     
     dropDownView.selectionAction = { [unowned self] (index: Int, item: String) in
       selectLocationButton.setTitle("📍 지역: \(item)", for: .normal)

@@ -46,8 +46,8 @@ class DestinationChatCelll: ChatCell  {
     
     messageLabel.backgroundColor = .lightGray
     messageLabel.snp.makeConstraints {
-      $0.trailing.greaterThanOrEqualTo(contentView.snp.trailing).offset(-65)
       $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
+      $0.trailing.lessThanOrEqualTo(contentView.snp.trailing).offset(-65)
     }
     
     messageLabel.addTipViewToLeftTop(with: messageLabel.backgroundColor)

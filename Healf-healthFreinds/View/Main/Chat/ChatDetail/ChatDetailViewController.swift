@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import FirebaseAuth
+import Then
 
 // 메세지 보낼 때 키보드가 가림
 final class ChatDetailViewController: NaviHelper {
@@ -22,8 +23,18 @@ final class ChatDetailViewController: NaviHelper {
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
   
-  private lazy var messageTextfield = UIHelper.shared.createGeneralTextField("메세지를 입력해주세요.")
-  private lazy var sendMessageButton = UIHelper.shared.createHealfButton("전송", .mainBlue, .white)
+  private lazy var messageTextfield = UITextField().then {
+    $0.layer.borderWidth = 1
+    $0.placeholder = "메세지를 입력해주세요."
+    $0.layer.borderWidth = 1
+    $0.layer.borderColor = UIColor.black.cgColor
+    $0.layer.cornerRadius = 10
+    $0.backgroundColor =  .init(hexCode: "F5F5F5")
+  }
+  
+  private lazy var sendMessageButton = UIButton().then {
+    $0.setImage(UIImage(named: "SendButtonImg"), for: .normal)
+  }
   
   private lazy var chatTableView: UITableView = {
     let tableView = UITableView()
@@ -94,8 +105,9 @@ final class ChatDetailViewController: NaviHelper {
     
     messageTextfield.snp.makeConstraints {
       $0.leading.equalToSuperview().offset(20)
-      $0.trailing.equalTo(sendMessageButton.snp.leading).offset(-20)
-      $0.top.equalTo(sendMessageButton.snp.top).offset(5)
+      $0.trailing.equalTo(sendMessageButton.snp.leading).offset(-10)
+      $0.top.equalTo(view.snp.bottom).offset(-60)
+      $0.height.equalTo(40)
     }
     
     sendMessageButton.addAction(UIAction { _ in
@@ -103,8 +115,8 @@ final class ChatDetailViewController: NaviHelper {
     }, for: .touchUpInside)
     sendMessageButton.snp.makeConstraints {
       $0.trailing.equalToSuperview().offset(-20)
-      $0.bottom.equalToSuperview().offset(-20)
-      $0.width.equalTo(100)
+      $0.centerY.equalTo(messageTextfield)
+      $0.width.equalTo(50)
     }
   }
   
