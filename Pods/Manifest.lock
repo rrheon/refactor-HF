@@ -636,6 +636,7 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
   - Cosmos (23.0.0)
+  - DropDown (2.3.13)
   - Firebase/CoreOnly (10.21.0):
     - FirebaseCore (= 10.21.0)
   - Firebase/Database (10.21.0):
@@ -878,6 +879,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - Cosmos (~> 23.0)
+  - DropDown
   - Firebase/Database
   - FirebaseAnalytics
   - FirebaseAuth
@@ -903,6 +905,7 @@ SPEC REPOS:
     - Alamofire
     - BoringSSL-GRPC
     - Cosmos
+    - DropDown
     - Firebase
     - FirebaseAnalytics
     - FirebaseAppCheckInterop
@@ -950,6 +953,7 @@ SPEC CHECKSUMS:
   Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
   Firebase: 4453b799f72f625384dc23f412d3be92b0e3b2a0
   FirebaseAnalytics: 8d0ff929c63b7f72260f332b86ccf569776b75d3
   FirebaseAppCheckInterop: 69fc7d8f6a1cbfa973efb8d1723651de30d12525
@@ -992,6 +996,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 79108da95b801be069c4afb5f997ff38a143262e
+PODFILE CHECKSUM: d42ef0114350ff30f1ef69c05de2bbd00ae55584
 
 COCOAPODS: 1.15.2

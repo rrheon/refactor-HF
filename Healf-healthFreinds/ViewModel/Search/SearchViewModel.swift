@@ -7,6 +7,9 @@
 
 import Foundation
 
+import RxSwift
+import RxRelay
+
 protocol postedDataConfigurable {
   func configure(with data: CreatePostModel, checkMyPost: Bool)
 }
@@ -14,7 +17,22 @@ protocol postedDataConfigurable {
 final class SearchViewModel: CommonViewModel {
   let createViewModel = CreatePostViewModel.shared
   static let shared = SearchViewModel()
-
+  
+  lazy var allPostDatas = BehaviorRelay<[CreatePostModel]?>(value: nil)
+  
+  override init() {
+    super.init()
+    updateAllPosts(location: nil)
+  }
+  
+  func updateAllPosts(location: String?){
+    loadPostsFromDatabase(location: location)
+      .subscribe(onNext: { [weak self] newData in
+        self?.allPostDatas.accept(newData)
+      })
+      .disposed(by: disposeBag)
+  }
+  
   func loadFirstFivePostsFromDatabase(completion: @escaping (([CreatePostModel]) -> Void)){
     var userPostsArray: [CreatePostModel] = []
     
@@ -42,25 +60,36 @@ final class SearchViewModel: CommonViewModel {
     }
   }
   
-  func loadAllPostsFromDatabase(completion: @escaping (([CreatePostModel]) -> Void)){
-    var userPostsArray: [CreatePostModel] = []
-    
-    createViewModel.loadAllPostsFromDatabase { result in
-      for (_, userData) in result {
-        guard let userDataDict = userData as? [String: Any],
-              let postsDict = userDataDict["posts"] as? [String: [String: Any]] else {
-          continue
-        }
-        
-        for (_, postInfo) in postsDict {
-          guard let post = self.parsePostInfo(postInfo) else {
+  func loadPostsFromDatabase(location: String?) -> Observable<[CreatePostModel]?> {
+    return Observable.create { emitter in
+      var userPostsArray: [CreatePostModel] = []
+      
+      self.createViewModel.loadAllPostsFromDatabase { result in
+        for (_, userData) in result {
+          guard let userDataDict = userData as? [String: Any],
+                let postsDict = userDataDict["posts"] as? [String: [String: Any]] else {
             continue
           }
-          userPostsArray.append(post)
+          
+          for (_, postInfo) in postsDict {
+            guard let post = self.parsePostInfo(postInfo) else {
+              continue
+            }
+            userPostsArray.append(post)
+          }
         }
+        if let location = location {
+          let filteredPosts = userPostsArray.filter { $0.location == location }
+          emitter.onNext(filteredPosts)
+        } else {
+          emitter.onNext(userPostsArray)
+        }
+        emitter.onCompleted()
       }
-      completion(userPostsArray)
+      
+      return Disposables.create()
     }
   }
+  
 }
 
