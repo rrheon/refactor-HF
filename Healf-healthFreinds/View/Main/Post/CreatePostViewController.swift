@@ -9,9 +9,22 @@ import UIKit
 
 import SnapKit
 import Then
+import DropDown
 
 final class CreatePostViewController: NaviHelper {
-  private lazy var setTimeLabel = uihelper.createSingleLineLabel("시간대 ⏰")
+  private lazy var selectLocationButton = UIButton().then {
+    $0.setTitle("📍 지역: 전 체 ", for: .normal)
+    $0.backgroundColor = .white
+    $0.setTitleColor(.black, for: .normal)
+    $0.layer.cornerRadius = 10
+    $0.titleLabel?.font = .boldSystemFont(ofSize: 20)
+    $0.setImage(UIImage(named: "SearchImg"), for: .normal)
+    $0.semanticContentAttribute = .forceRightToLeft
+    $0.addAction(UIAction { _ in
+      self.selectLocationButtonTapped()
+    }, for: .touchUpInside)
+  }
+  
   private lazy var selectedTimeLabel = uihelper.createSingleLineLabel("")
   private lazy var startTimeLabel = uihelper.createSingleLineLabel("시작시간:")
   private lazy var endTimeLabel = uihelper.createSingleLineLabel("종료시간:")
@@ -64,6 +77,10 @@ final class CreatePostViewController: NaviHelper {
     fatalError("init(coder:) has not been implemented")
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    SearchViewModel.shared.updateAllPosts(location: "전 체")
+  }
+  
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -110,7 +127,7 @@ final class CreatePostViewController: NaviHelper {
     }
     
     [
-      setTimeLabel,
+      selectLocationButton,
       selectedTimeLabel,
       startTimeLabel,
       startTimePicker,
@@ -130,26 +147,21 @@ final class CreatePostViewController: NaviHelper {
   
   // MARK: - makeUI
   func makeUI(){
-    setTimeLabel.snp.makeConstraints {
+    selectLocationButton.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide).offset(30)
       $0.leading.equalToSuperview().offset(20)
     }
     
     selectedTimeLabel.snp.makeConstraints {
-      $0.top.equalTo(setTimeLabel)
-      $0.leading.equalTo(setTimeLabel.snp.trailing).offset(10)
+      $0.top.equalTo(selectLocationButton)
+      $0.leading.equalTo(selectLocationButton)
     }
     
     startTimeLabel.snp.makeConstraints {
-      $0.top.equalTo(setTimeLabel.snp.bottom).offset(30)
-      $0.leading.equalTo(setTimeLabel)
+      $0.top.equalTo(selectLocationButton.snp.bottom).offset(30)
+      $0.leading.equalTo(selectedTimeLabel)
     }
 
-    startTimePicker.snp.makeConstraints {
-      $0.top.equalTo(startTimeLabel)
-      $0.leading.equalTo(setTimeLabel.snp.trailing).offset(10)
-    }
-      
     startTimePicker.snp.makeConstraints {
       $0.top.equalTo(startTimeLabel)
       $0.leading.equalTo(startTimeLabel.snp.trailing).offset(10)
@@ -167,38 +179,38 @@ final class CreatePostViewController: NaviHelper {
     
     selectWorkoutTitle.snp.makeConstraints {
       $0.top.equalTo(startTimeLabel.snp.bottom).offset(30)
-      $0.leading.equalTo(setTimeLabel)
+      $0.leading.equalTo(selectLocationButton)
     }
     
     choiceWorkoutStackView.alignment = .leading
     choiceWorkoutStackView.backgroundColor = .clear
     choiceWorkoutStackView.snp.makeConstraints {
       $0.top.equalTo(selectWorkoutTitle.snp.bottom).offset(5)
-      $0.leading.equalTo(setTimeLabel)
+      $0.leading.equalTo(selectLocationButton)
     }
     
     selectGenderTitle.snp.makeConstraints {
       $0.top.equalTo(choiceWorkoutStackView.snp.bottom).offset(10)
-      $0.leading.equalTo(setTimeLabel)
+      $0.leading.equalTo(selectLocationButton)
     }
     
     selectGenderButtonStackView.distribution = .fillEqually
     selectGenderButtonStackView.backgroundColor = .clear
     selectGenderButtonStackView.snp.makeConstraints {
       $0.top.equalTo(selectGenderTitle.snp.bottom).offset(10)
-      $0.leading.equalTo(setTimeLabel)
+      $0.leading.equalTo(selectLocationButton)
       $0.trailing.equalToSuperview().offset(-20)
     }
     
     writeDetailInfoLabel.snp.makeConstraints {
       $0.top.equalTo(selectGenderButtonStackView.snp.bottom).offset(10)
-      $0.leading.equalTo(setTimeLabel)
+      $0.leading.equalTo(selectLocationButton)
     }
     
     writeDetailInfoTextView.delegate = self
     writeDetailInfoTextView.snp.makeConstraints {
       $0.top.equalTo(writeDetailInfoLabel.snp.bottom).offset(10)
-      $0.leading.equalTo(setTimeLabel)
+      $0.leading.equalTo(selectLocationButton)
       $0.trailing.equalToSuperview().offset(-20)
       $0.height.equalTo(167)
     }
@@ -214,7 +226,7 @@ final class CreatePostViewController: NaviHelper {
   // MARK: - button Func register
   func registerButtonFunc(){
     enterPostButton.addAction(UIAction { _ in
-      self.processPost(isModify: false) {
+      self.processPost(location: "", isModify: false) {
         self.navigationController?.popViewController(animated: true)
         self.uihelper.showToast(message: "✅ 게시글이 등록되었어요!")
       }
@@ -257,33 +269,23 @@ final class CreatePostViewController: NaviHelper {
   }
   
   // MARK: - registerPost
-  func processPost(isModify: Bool, completion: @escaping () -> Void) {
-    guard let info = writeDetailInfoTextView.text else { return }
-    let time = "\(selectedStartTime) ~ \(selectedEndTime)"
-    MypageViewModel.shared.getMyInfomation { data in
-      let location = data.location?.components(separatedBy: " ")
-      let selectedLoaction = location?[1]
+  func processPost(location: String,
+                   isModify: Bool,
+                   completion: @escaping () -> Void) {
+      guard let info = writeDetailInfoTextView.text,
+            let location = selectLocationButton.currentTitle else { return }
+      let time = "\(selectedStartTime) ~ \(selectedEndTime)"
+      let fileterdLocation = filteringLocation(location: location)
+      createPostViewModel.createPost(time,
+                                     self.workoutTypes,
+                                     self.selectedGender,
+                                     info,
+                                     fileterdLocation,
+                                     isModify ? self.modifyPostedData?.postedDate : nil)
       
-      if isModify {
-        self.createPostViewModel.createPost(time,
-                                            self.workoutTypes,
-                                            self.selectedGender, 
-                                            info,
-                                            self.modifyPostedData?.postedDate,
-                                            selectedLoaction)
-      } else {
-        self.createPostViewModel.createPost(time,
-                                            self.workoutTypes,
-                                            self.selectedGender,
-                                            info,
-                                            selectedLoaction)
-    
-      }
       completion()
-    }
   }
 
-  
   // MARK: - settingModifyValue
   func settingModifyValue(){
     guard let modifyPostedData = modifyPostedData else { return }
@@ -317,7 +319,7 @@ final class CreatePostViewController: NaviHelper {
     enterPostButton.removeTarget(nil, action: nil, for: .allEvents)
 
     enterPostButton.addAction(UIAction { _ in
-      self.processPost(isModify: true) {
+      self.processPost(location: "", isModify: true) {
         self.navigationController?.popViewController(animated: true)
         self.uihelper.showToast(message: "✅ 게시글이 등록되었어요!")
       }
@@ -356,6 +358,36 @@ extension CreatePostViewController: UITextViewDelegate {
     else { selectedEndTime = seoulTime}
     print(selectedStartTime)
     print(selectedEndTime)
-
+  }
+  
+  func selectLocationButtonTapped(){
+    let dropDownView = DropDown()
+    dropDownView.dataSource = self.locations
+    dropDownView.cellHeight = 40
+    dropDownView.separatorColor = .black
+    dropDownView.textFont = .boldSystemFont(ofSize: 20)
+    dropDownView.anchorView = selectLocationButton
+    dropDownView.cornerRadius = 5.0
+    dropDownView.offsetFromWindowBottom = 80
+    dropDownView.bottomOffset = CGPoint(x: 0, y: selectLocationButton.bounds.height)
+    
+    dropDownView.direction = .bottom
+    dropDownView.show()
+    
+    dropDownView.selectionAction = { [unowned self] (index: Int, item: String) in
+      selectLocationButton.setTitle("📍 지역: \(item)", for: .normal)
+    }
+  }
+  
+  func filteringLocation(location: String) -> String{
+    let filteredLocation = location.components(separatedBy: "📍 지역:")
+    
+    // 나눠진 문자열의 두 번째 부분을 가져옵니다.
+    if filteredLocation.count > 1 {
+      let extractedValue = filteredLocation[1].trimmingCharacters(in: .whitespacesAndNewlines)
+      return extractedValue
+    } else {
+      return "전 체"
+    }
   }
 }

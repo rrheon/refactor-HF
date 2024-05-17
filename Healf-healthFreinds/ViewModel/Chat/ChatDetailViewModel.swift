@@ -21,35 +21,35 @@ final class ChatDetailViewModel: CommonViewModel {
   
   func createRoom(_ destinationUid: String,
                   completion: @escaping (Bool) -> Void) {
-      if self.uid == destinationUid {
-          print("나 자신임")
-          completion(false)
-          return
-      }
-      
-      // 이미 채팅방이 존재하는지 확인
-      checkChatRoom(self.uid ?? "", destinationUid) { chatRoomId in
-          if let roomId = chatRoomId {
-              // 이미 채팅방이 존재하는 경우
-              print("이미 채팅방이 존재합니다.")
-              completion(false)
+    if self.uid == destinationUid {
+      print("나 자신임")
+      completion(false)
+      return
+    }
+    
+    // 이미 채팅방이 존재하는지 확인
+    checkChatRoom(self.uid ?? "", destinationUid) { chatRoomId in
+      if let roomId = chatRoomId {
+        // 이미 채팅방이 존재하는 경우
+        print("이미 채팅방이 존재합니다.")
+        completion(false)
+      } else {
+        // 채팅방 생성
+        let createRoomInfo = [ "UserData": [ "\(self.uid ?? "")": true,
+                                             "\(destinationUid)": true] ]
+        self.ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
+          if err == nil {
+            self.checkChatRoom(self.uid ?? "", destinationUid) { _ in
+              completion(true)
+            }
           } else {
-              // 채팅방 생성
-              let createRoomInfo = [ "UserData": [ "\(self.uid ?? "")": true,
-                                                   "\(destinationUid)": true] ]
-              self.ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
-                  if err == nil {
-                      self.checkChatRoom(self.uid ?? "", destinationUid) { _ in
-                          completion(true)
-                      }
-                  } else {
-                      completion(false)
-                  }
-              }
+            completion(false)
           }
+        }
       }
+    }
   }
-
+  
   
   
   func checkMessageOption(destinationUid: String,
@@ -160,6 +160,31 @@ final class ChatDetailViewModel: CommonViewModel {
     completion()
   }
   
+  func deleteChatroom(otherUserUID: String,
+                      completion: @escaping () -> Void) {
+    ref.child("chatrooms")
+      .queryOrdered(byChild: "UserData/\(uid ?? "")")
+      .queryEqual(toValue: true)
+      .observeSingleEvent(of: .value, with: { (snapshot) in
+        guard let chatroomsSnapshot = snapshot.children.allObjects as? [DataSnapshot] else {
+          completion()
+          return
+        }
+        for roomSnapshot in chatroomsSnapshot {
+          guard let userData = roomSnapshot.childSnapshot(forPath: "UserData").value as? [String: Bool],
+                let currentUserParticipated = userData[self.uid ?? ""],
+                let otherUserParticipated = userData[otherUserUID],
+                currentUserParticipated && otherUserParticipated else {
+            continue
+          }
+          // 채팅방 ID를 얻어옵니다.
+          let chatroomId = roomSnapshot.key
+          // 채팅방 데이터베이스에서 채팅방 삭제
+          self.ref.child("chatrooms").child(chatroomId).removeValue()
+        }
+        completion()
+      })
+  }
 }
 
 

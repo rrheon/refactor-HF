@@ -63,7 +63,7 @@
 		EECC031E2B92FFBE003ECF95 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC031D2B92FFBE003ECF95 /* SearchResultCell.swift */; };
 		EECC03212B933A52003ECF95 /* PostedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03202B933A52003ECF95 /* PostedViewController.swift */; };
 		EECC03242B934A34003ECF95 /* ChatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03232B934A34003ECF95 /* ChatListViewController.swift */; };
-		EECC03262B934C3E003ECF95 /* getUserProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03252B934C3E003ECF95 /* getUserProfileImage.swift */; };
+		EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03252B934C3E003ECF95 /* ChatListCell.swift */; };
 		EECC03292B934F39003ECF95 /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC03282B934F38003ECF95 /* MypageViewController.swift */; };
 		EECC032B2B95EA9D003ECF95 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */; };
 		EECC032D2B95F286003ECF95 /* CompleteSignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */; };
@@ -141,7 +141,7 @@
 		EECC031D2B92FFBE003ECF95 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		EECC03202B933A52003ECF95 /* PostedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostedViewController.swift; sourceTree = "<group>"; };
 		EECC03232B934A34003ECF95 /* ChatListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListViewController.swift; sourceTree = "<group>"; };
-		EECC03252B934C3E003ECF95 /* getUserProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getUserProfileImage.swift; sourceTree = "<group>"; };
+		EECC03252B934C3E003ECF95 /* ChatListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListCell.swift; sourceTree = "<group>"; };
 		EECC03282B934F38003ECF95 /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
 		EECC032A2B95EA9D003ECF95 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteSignupViewController.swift; sourceTree = "<group>"; };
@@ -366,7 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				EECC03232B934A34003ECF95 /* ChatListViewController.swift */,
-				EECC03252B934C3E003ECF95 /* getUserProfileImage.swift */,
+				EECC03252B934C3E003ECF95 /* ChatListCell.swift */,
 			);
 			path = ChatList;
 			sourceTree = "<group>";
@@ -624,7 +624,7 @@
 				EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */,
 				EE4E36972BB3B0A200FB60FC /* SignupViewModel.swift in Sources */,
 				EE4E36AA2BE0F8A600FB60FC /* ChatCell.swift in Sources */,
-				EECC03262B934C3E003ECF95 /* getUserProfileImage.swift in Sources */,
+				EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */,
 				EEC414E72BE379B9003FB246 /* UIImage+.swift in Sources */,
 				EE4E36952BB3168000FB60FC /* MapViewModel.swift in Sources */,
 				EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */,

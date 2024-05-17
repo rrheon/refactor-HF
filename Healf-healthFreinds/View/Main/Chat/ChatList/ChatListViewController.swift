@@ -129,14 +129,14 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(withIdentifier: ChatListCell.cellId,
                                              for: indexPath) as! ChatListCell
     let userId = Array(self.usersInChatrooms.keys)[indexPath.row]
-    if let nickname = self.usersInChatrooms[userId],
-       let lastMessage = self.usersLastMessage[userId] {
-      cell.model = .init(uid: userId,
-                         nickname: nickname,
-                         lastMessage: lastMessage.message ?? "",
-                         timeStamp: lastMessage.timeStamp?.todayTime ?? "")
-    }
+    
+    let nickname = self.usersInChatrooms[userId]
+    let lastMessage = self.usersLastMessage[userId]
+    cell.model = .init(uid: userId,
+                       nickname: nickname ?? "이름",
+                       lastMessage: lastMessage?.message ?? "채팅내역 없음",
+                       timeStamp: lastMessage?.timeStamp?.todayTime ?? "")
+    
     return cell
   }
-  
 }

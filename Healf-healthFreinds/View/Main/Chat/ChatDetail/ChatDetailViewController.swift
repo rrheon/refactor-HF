@@ -81,9 +81,10 @@ final class ChatDetailViewController: NaviHelper {
   
   override func navigationItemSetting() {
     super.navigationItemSetting()
-    
-    navigationItem.rightBarButtonItem = .none
+
     settingNavigationTitle(title: userNickname ?? "")
+
+    self.navigationItem.rightBarButtonItem = .none
   }
   
   func setupLayout(){

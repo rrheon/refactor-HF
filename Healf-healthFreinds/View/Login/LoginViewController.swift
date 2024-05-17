@@ -31,21 +31,21 @@ final class LoginViewController: UIViewController {
   
   private lazy var loginButton = UIHelper.shared.createHealfButton("로그인", .mainBlue, .white)
   
-  private lazy var kakaoLoginButton = UIButton().then {
-    $0.setImage(UIImage(named: "KakaoLoginImg"), for: .normal)
-    $0.addAction(UIAction { _ in
-      self.kakaoLoginButtonTapped()
-    }, for: .touchUpInside)
-  }
-  
-  private lazy var appleLoginButton = UIButton().then {
-    let resizedImage = UIImage(named: "AppleLoginImg")?.resize(targetSize: .init(width: 300,
-                                                                                 height: 200))
-    $0.setImage(resizedImage,for: .normal)
-    $0.addAction(UIAction { _ in
-      self.appleLogin()
-    }, for: .touchUpInside)
-  }
+//  private lazy var kakaoLoginButton = UIButton().then {
+//    $0.setImage(UIImage(named: "KakaoLoginImg"), for: .normal)
+//    $0.addAction(UIAction { _ in
+//      self.kakaoLoginButtonTapped()
+//    }, for: .touchUpInside)
+//  }
+//  
+//  private lazy var appleLoginButton = UIButton().then {
+//    let resizedImage = UIImage(named: "AppleLoginImg")?.resize(targetSize: .init(width: 300,
+//                                                                                 height: 200))
+//    $0.setImage(resizedImage,for: .normal)
+//    $0.addAction(UIAction { _ in
+//      self.appleLogin()
+//    }, for: .touchUpInside)
+//  }
   
   private lazy var signupButton = UIButton().then {
     $0.setTitle("이메일로 회원가입", for: .normal)
@@ -80,8 +80,6 @@ final class LoginViewController: UIViewController {
       emailTextField,
       passwordTextField,
       loginButton,
-      kakaoLoginButton,
-      appleLoginButton,
       signupButton
     ].forEach {
       view.addSubview($0)
@@ -117,21 +115,21 @@ final class LoginViewController: UIViewController {
       $0.height.equalTo(48)
     }
     
-    kakaoLoginButton.snp.makeConstraints {
-      $0.top.equalTo(loginButton.snp.bottom).offset(60)
-      $0.leading.trailing.equalTo(emailTextField)
-      //      $0.height.equalTo(48)
-    }
-    
-    appleLoginButton.snp.makeConstraints {
-      $0.top.equalTo(kakaoLoginButton.snp.bottom).offset(20)
-      $0.leading.trailing.equalTo(emailTextField)
-      $0.height.equalTo(48)
-    }
+//    kakaoLoginButton.snp.makeConstraints {
+//      $0.top.equalTo(loginButton.snp.bottom).offset(60)
+//      $0.leading.trailing.equalTo(emailTextField)
+//      //      $0.height.equalTo(48)
+//    }
+//    
+//    appleLoginButton.snp.makeConstraints {
+//      $0.top.equalTo(kakaoLoginButton.snp.bottom).offset(20)
+//      $0.leading.trailing.equalTo(emailTextField)
+//      $0.height.equalTo(48)
+//    }
     
     signupButton.snp.makeConstraints {
-      $0.top.equalTo(appleLoginButton.snp.bottom).offset(20)
-      $0.centerX.equalTo(appleLoginButton)
+      $0.top.equalTo(loginButton.snp.bottom).offset(50)
+      $0.centerX.equalTo(loginButton)
     }
   }
   
@@ -215,7 +213,8 @@ extension LoginViewController: LoginViewModelDelegate {
   }
 }
 
-extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+extension LoginViewController: ASAuthorizationControllerDelegate,
+                               ASAuthorizationControllerPresentationContextProviding {
   func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
     return self.view.window!
   }
