@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import RxSwift
 
+
 // init할 때 데이터 로드해오기
 final class HomeViewController: NaviHelper {
   let homeViewModel = HomeViewModel.shared
@@ -19,7 +20,7 @@ final class HomeViewController: NaviHelper {
   
   private lazy var topUnderLineView = UIView()
   
-  private lazy var mainImageView = UIImageView(image: UIImage(named: "Healf_advertiseImg"))
+  private lazy var mainImageView = UIImageView(image: UIImage(named: "HomeMainImg"))
   private lazy var weeklySummaryDataLabel = uihelper.createSingleLineLabel("주간 요약 📊")
   private lazy var weeklySummaryStackView = uihelper.createStackView(axis: .horizontal,
                                                                      spacing: 5)
@@ -51,6 +52,7 @@ final class HomeViewController: NaviHelper {
   
   private lazy var startButton = uihelper.createHealfButton("💪🏻 운동 기록하기", .mainBlue, .white)
   private lazy var contentView = UIView()
+  private lazy var scrollView = UIScrollView()
   
   var weekLabels: [UILabel] = []
   
@@ -69,13 +71,13 @@ final class HomeViewController: NaviHelper {
     setupLayout()
     makeUI()
     
+    scrollView.bounces = true
     bindViewModel()
     
     changeLabelColor()
   }
   
   override func navigationItemSetting() {
-    
     let logoImg = UIImage(named: "MainTitleImg")?.withRenderingMode(.alwaysOriginal)
     let logo = UIBarButtonItem(image: logoImg, style: .done, target: nil, action: nil)
     logo.imageInsets = UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
@@ -86,133 +88,141 @@ final class HomeViewController: NaviHelper {
   }
   
   // MARK: - setupLayout
-  func setupLayout(){
-    [
-      timeCountLabel,
-      rightTimeCountView,
-      timeSummaryLabel,
-      rightTimeSummaryView,
-      withFriendsLabel
-    ].forEach {
-      weeklySummaryStackView.addArrangedSubview($0)
-    }
-    
-    [
-      mondayLabel,
-      tuesdayLabel,
-      wensdayLabel,
-      thursayLabel,
-      fridayLabel,
-      satdayLabel,
-      sundayLabel
-    ].forEach {
-      weeklyCompleteStackView.addArrangedSubview($0)
-      weekLabels.append($0)
-    }
-    
-    [
-      newPostTitleLabel,
-      postCollectionView
-    ].forEach {
-      newPostContentStackView.addArrangedSubview($0)
-    }
-    
-    [
-      mainImageView,
-      weeklySummaryDataLabel,
-      weeklySummaryStackView,
-      weeklyCompleteLabel,
-      weeklyCompleteStackView,
-      newPostContentStackView,
-      startButton
-    ].forEach {
-      contentView.addSubview($0)
-    }
-    
-    view.addSubview(topUnderLineView)
-    view.addSubview(contentView)
-  }
-  
-  // MARK: - makeUI
-  func makeUI(){
-    topUnderLineView.backgroundColor = .unableGray
-    topUnderLineView.snp.makeConstraints {
-      $0.height.equalTo(1)
-      $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-      $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-    }
-    
-    mainImageView.snp.makeConstraints {
-      $0.top.equalTo(topUnderLineView.snp.bottom)
-      $0.leading.trailing.equalTo(contentView.safeAreaLayoutGuide)
-      $0.height.equalTo(150)
-    }
-    
-    weeklySummaryDataLabel.snp.makeConstraints {
-      $0.top.equalTo(mainImageView.snp.bottom).offset(10)
-      $0.leading.equalTo(contentView.safeAreaLayoutGuide).offset(30)
-    }
-    
-    rightTimeCountView.backgroundColor = .lightGray
-    rightTimeCountView.snp.makeConstraints {
-      $0.width.equalTo(1)
-      $0.height.equalTo(40)
-    }
-    
-    rightTimeSummaryView.backgroundColor = .lightGray
-    rightTimeSummaryView.snp.makeConstraints {
-      $0.width.equalTo(1)
-      $0.height.equalTo(40)
-    }
-    
-    weeklySummaryStackView.alignment = .center
-    weeklySummaryStackView.distribution = .equalCentering
-    weeklySummaryStackView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-    weeklySummaryStackView.snp.makeConstraints {
-      $0.top.equalTo(weeklySummaryDataLabel.snp.bottom).offset(10)
-      $0.leading.equalTo(weeklySummaryDataLabel)
-      $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(-30)
-    }
-    
-    weeklyCompleteLabel.snp.makeConstraints {
-      $0.top.equalTo(weeklySummaryStackView.snp.bottom).offset(10)
-      $0.leading.equalTo(weeklySummaryStackView)
-    }
-    
-    weeklyCompleteStackView.alignment = .center
-    weeklyCompleteStackView.distribution = .fillEqually
-    weeklyCompleteStackView.snp.makeConstraints {
-      $0.top.equalTo(weeklyCompleteLabel.snp.bottom).offset(10)
-      $0.leading.equalTo(weeklySummaryStackView.snp.leading).offset(-10)
-      $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(-20)
-    }
-    
-    newPostContentStackView.snp.makeConstraints {
-      $0.top.equalTo(weeklyCompleteStackView.snp.bottom)
-      $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(30)
-      $0.leading.equalTo(weeklyCompleteStackView.snp.leading)
-    }
-    
-    postCollectionView.snp.makeConstraints {
-      $0.top.equalTo(newPostTitleLabel.snp.bottom).offset(10)
-      $0.height.equalTo(170)
-    }
-    
-    startButton.addAction(UIAction { _ in
-      self.startButtonTapped()
-    }, for: .touchUpInside)
-    startButton.snp.makeConstraints {
-      $0.top.equalTo(newPostContentStackView.snp.bottom).offset(10)
-      $0.leading.trailing.equalTo(weeklySummaryStackView)
-      $0.height.equalTo(50)
-    }
-    
-    contentView.snp.makeConstraints {
-      $0.top.equalTo(mainImageView.snp.bottom)
-      $0.leading.trailing.bottom.equalToSuperview()
-      $0.width.equalTo(view.safeAreaLayoutGuide)
-    }
-  }
+   func setupLayout(){
+     [
+       timeCountLabel,
+       rightTimeCountView,
+       timeSummaryLabel,
+       rightTimeSummaryView,
+       withFriendsLabel
+     ].forEach {
+       weeklySummaryStackView.addArrangedSubview($0)
+     }
+     
+     [
+       mondayLabel,
+       tuesdayLabel,
+       wensdayLabel,
+       thursayLabel,
+       fridayLabel,
+       satdayLabel,
+       sundayLabel
+     ].forEach {
+       weeklyCompleteStackView.addArrangedSubview($0)
+       weekLabels.append($0)
+     }
+     
+     [
+       newPostTitleLabel,
+       postCollectionView
+     ].forEach {
+       newPostContentStackView.addArrangedSubview($0)
+     }
+     
+     [
+       mainImageView,
+       weeklySummaryDataLabel,
+       weeklySummaryStackView,
+       weeklyCompleteLabel,
+       weeklyCompleteStackView,
+       newPostContentStackView,
+       startButton
+     ].forEach {
+       contentView.addSubview($0)
+     }
+     
+     scrollView.addSubview(contentView)
+     view.addSubview(topUnderLineView)
+     view.addSubview(scrollView)
+   }
+   
+   // MARK: - makeUI
+   func makeUI(){
+     topUnderLineView.backgroundColor = .unableGray
+     topUnderLineView.snp.makeConstraints {
+       $0.height.equalTo(1)
+       $0.top.equalTo(view.safeAreaLayoutGuide)
+       $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+     }
+     
+     settingViewSize = UIScreen.main.isWiderThan375pt ? 150 : 100
+     mainImageView.snp.makeConstraints {
+       $0.top.equalTo(topUnderLineView.snp.bottom)
+       $0.leading.trailing.equalTo(contentView.safeAreaLayoutGuide)
+       $0.height.equalTo(settingViewSize)
+     }
+     
+     weeklySummaryDataLabel.snp.makeConstraints {
+       $0.top.equalTo(mainImageView.snp.bottom).offset(10)
+       $0.leading.equalTo(contentView.safeAreaLayoutGuide).offset(30)
+     }
+     
+     rightTimeCountView.backgroundColor = .lightGray
+     rightTimeCountView.snp.makeConstraints {
+       $0.width.equalTo(1)
+       $0.height.equalTo(40)
+     }
+     
+     rightTimeSummaryView.backgroundColor = .lightGray
+     rightTimeSummaryView.snp.makeConstraints {
+       $0.width.equalTo(1)
+       $0.height.equalTo(40)
+     }
+     
+     weeklySummaryStackView.alignment = .center
+     weeklySummaryStackView.distribution = .equalCentering
+     weeklySummaryStackView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+     weeklySummaryStackView.snp.makeConstraints {
+       $0.top.equalTo(weeklySummaryDataLabel.snp.bottom).offset(10)
+       $0.leading.equalTo(weeklySummaryDataLabel)
+       $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(-30)
+     }
+     
+     weeklyCompleteLabel.snp.makeConstraints {
+       $0.top.equalTo(weeklySummaryStackView.snp.bottom).offset(10)
+       $0.leading.equalTo(weeklySummaryStackView)
+     }
+     
+     weeklyCompleteStackView.alignment = .center
+     weeklyCompleteStackView.distribution = .fillEqually
+     weeklyCompleteStackView.snp.makeConstraints {
+       $0.top.equalTo(weeklyCompleteLabel.snp.bottom).offset(10)
+       $0.leading.equalTo(weeklySummaryStackView.snp.leading).offset(-10)
+       $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(-20)
+     }
+     
+     newPostContentStackView.snp.makeConstraints {
+       $0.top.equalTo(weeklyCompleteStackView.snp.bottom)
+       $0.trailing.equalTo(contentView.safeAreaLayoutGuide).offset(30)
+       $0.leading.equalTo(weeklyCompleteStackView.snp.leading)
+     }
+     
+     settingViewSize = UIScreen.main.isWiderThan375pt ? 170 : 130
+     postCollectionView.snp.makeConstraints {
+       $0.top.equalTo(newPostTitleLabel.snp.bottom).offset(10)
+       $0.height.equalTo(settingViewSize)
+     }
+     
+     startButton.addAction(UIAction { _ in
+       self.startButtonTapped()
+     }, for: .touchUpInside)
+     startButton.snp.makeConstraints {
+       $0.top.equalTo(newPostContentStackView.snp.bottom).offset(10)
+       $0.leading.trailing.equalTo(weeklySummaryStackView)
+       $0.height.equalTo(50)
+     }
+     
+     contentView.snp.makeConstraints {
+       $0.top.equalTo(mainImageView.snp.bottom)
+       $0.leading.trailing.equalTo(scrollView.contentLayoutGuide)
+       $0.width.equalTo(view.safeAreaLayoutGuide)
+       $0.bottom.equalTo(startButton.snp.bottom).offset(20) // Adjust bottom constraint
+     }
+     
+     scrollView.snp.makeConstraints {
+       $0.edges.equalTo(view)
+     }
+   }
   
   private func registerCell() {
     postCollectionView.delegate = self

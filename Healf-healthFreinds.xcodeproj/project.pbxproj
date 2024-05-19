@@ -42,6 +42,7 @@
 		EE98B1DB2B4FDFC60025C4F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE98B1DA2B4FDFC60025C4F8 /* Assets.xcassets */; };
 		EE98B1DE2B4FDFC60025C4F8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE98B1DC2B4FDFC60025C4F8 /* LaunchScreen.storyboard */; };
 		EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE98B1E82B4FE4190025C4F8 /* UIColor+.swift */; };
+		EEA4A3252BFA3A2800351872 /* UIScreen+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA4A3242BFA3A2800351872 /* UIScreen+.swift */; };
 		EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */; };
 		EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */; };
 		EEA8ACB92B8CDC2100FD2A72 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */; };
@@ -119,6 +120,7 @@
 		EE98B1DD2B4FDFC60025C4F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EE98B1DF2B4FDFC60025C4F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE98B1E82B4FE4190025C4F8 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		EEA4A3242BFA3A2800351872 /* UIScreen+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+.swift"; sourceTree = "<group>"; };
 		EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		EEA8ACB62B8CDB5000FD2A72 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		EEA8ACB82B8CDC2100FD2A72 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 			children = (
 				EE4E36982BBB203A00FB60FC /* Disposable+.swift */,
 				EE4E368E2BABE93800FB60FC /* Double+.swift */,
+				EEA4A3242BFA3A2800351872 /* UIScreen+.swift */,
 				EE4E36852BA9181800FB60FC /* Array+.swift */,
 				EE4E36A12BD2003300FB60FC /* String+.swift */,
 				EE4E36A72BE0757C00FB60FC /* Int+.swift */,
@@ -627,6 +630,7 @@
 				EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */,
 				EEC414E72BE379B9003FB246 /* UIImage+.swift in Sources */,
 				EE4E36952BB3168000FB60FC /* MapViewModel.swift in Sources */,
+				EEA4A3252BFA3A2800351872 /* UIScreen+.swift in Sources */,
 				EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */,
 				EE4E368F2BABE93800FB60FC /* Double+.swift in Sources */,
 				EECC03112B91B725003ECF95 /* UISearchBar+.swift in Sources */,

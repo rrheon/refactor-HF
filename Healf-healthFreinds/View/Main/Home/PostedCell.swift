@@ -32,6 +32,7 @@ final class PostedCell: UICollectionViewCell {
                                                                        .black,
                                                                        .boldSystemFont(ofSize: 12))
 
+  var settingViewSize: Int = 0
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -63,9 +64,11 @@ final class PostedCell: UICollectionViewCell {
   }
   
   private func configure() {
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 56 : 30
     profileImageView.snp.makeConstraints {
       $0.top.equalToSuperview().offset(20)
       $0.leading.equalToSuperview().offset(20)
+      $0.width.height.equalTo(settingViewSize)
     }
     
     nickNameLabel.snp.makeConstraints {
@@ -73,8 +76,9 @@ final class PostedCell: UICollectionViewCell {
       $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
     }
     
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 10 : 5
     locationLabel.snp.makeConstraints {
-      $0.top.equalTo(nickNameLabel.snp.bottom).offset(10)
+      $0.top.equalTo(nickNameLabel.snp.bottom).offset(settingViewSize)
       $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
     }
     
@@ -84,12 +88,12 @@ final class PostedCell: UICollectionViewCell {
     }
     
     workoutInfoLabel.snp.makeConstraints {
-      $0.top.equalTo(workoutTimeLabel.snp.bottom).offset(10)
+      $0.top.equalTo(workoutTimeLabel.snp.bottom).offset(settingViewSize)
       $0.leading.equalTo(profileImageView)
     }
     
     genderLabel.snp.makeConstraints {
-      $0.top.equalTo(workoutInfoLabel.snp.bottom).offset(10)
+      $0.top.equalTo(workoutInfoLabel.snp.bottom).offset(settingViewSize)
       $0.leading.equalTo(profileImageView)
     }
   }
@@ -104,11 +108,17 @@ final class PostedCell: UICollectionViewCell {
     workoutTimeLabel.text = "🕖 선호하는 시간: \(data.time)"
     genderLabel.text = "🚻 성별: \(data.gender)"
     locationLabel.text = "📍 \(data.location)"
-    myPageViewModel.getUserProfileImage(checkMyUid: false,
+    
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 56 : 30
+    myPageViewModel.getUserProfileImage(width: settingViewSize,
+                                        hegiht: settingViewSize,
+                                        checkMyUid: false,
                                         otherPersonUid: data.userUid) { result in
+      self.settingViewSize = UIScreen.main.isWiderThan375pt ? 25 : 10
+
       self.myPageViewModel.settingProfileImage(profile: self.profileImageView,
                                                result: result,
-                                               radious: 25)
+                                               radious: CGFloat(self.settingViewSize))
     }
   }
 }

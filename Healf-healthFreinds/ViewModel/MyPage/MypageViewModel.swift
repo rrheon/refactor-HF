@@ -164,7 +164,9 @@ class MypageViewModel: CommonViewModel {
   }
   
   // MARK: - 유저 프로필 받아오기
-  func getUserProfileImage(checkMyUid: Bool = true,
+  func getUserProfileImage(width: Int = 56,
+                           hegiht: Int = 56,
+                           checkMyUid: Bool = true,
                            otherPersonUid: String = "",
                            completion: @escaping (Result<UIImage, Error>) -> Void) {
     getMyInfomation(checkMyUid: checkMyUid,
@@ -175,7 +177,8 @@ class MypageViewModel: CommonViewModel {
         return
       }
       
-      let processor = ResizingImageProcessor(referenceSize: CGSize(width: 56, height: 56))
+      //원래 56 56
+      let processor = ResizingImageProcessor(referenceSize: CGSize(width: width, height: hegiht))
       
       KingfisherManager.shared.cache.removeImage(forKey: imageURL.absoluteString)
       

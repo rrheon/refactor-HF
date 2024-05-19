@@ -140,11 +140,13 @@ final class WriteHistoryViewController: NaviHelper {
       $0.leading.equalTo(selectAloneOrTogetherStackView)
     }
     
+    // 원래 60
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 60 : 30
     friendImageView.isHidden = true
     friendImageView.snp.makeConstraints {
       $0.top.equalTo(aloneOrTogetherLabel.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
-      $0.height.equalTo(60)
+      $0.height.width.equalTo(settingViewSize)
     }
     
     friendInfoStackView.isHidden = true
@@ -184,19 +186,21 @@ final class WriteHistoryViewController: NaviHelper {
       $0.leading.equalTo(aloneOrTogetherLabel)
     }
     
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 120 : 80
     commentTextView.delegate = self
     commentTextView.snp.makeConstraints {
       $0.top.equalTo(commentLabel.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
       $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(120)
+      $0.height.equalTo(settingViewSize)
     }
     
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 56 : 50
     completeButton.snp.makeConstraints {
       $0.top.equalTo(commentTextView.snp.bottom).offset(10)
       $0.leading.equalTo(aloneOrTogetherLabel)
       $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(56)
+      $0.height.equalTo(settingViewSize)
     }
   }
   
@@ -248,7 +252,9 @@ final class WriteHistoryViewController: NaviHelper {
     friendImageView.isHidden = !isTogetherSelected
     friendInfoStackView.isHidden = !isTogetherSelected
     
-    let topOffset: CGFloat = isTogetherSelected ? 120 : 10
+    // 원래 120
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 120 : 85
+    let topOffset: CGFloat = isTogetherSelected ? CGFloat(settingViewSize) : 10
     ratingLabel.snp.remakeConstraints {
       $0.top.equalTo(selectAloneOrTogetherStackView.snp.bottom).offset(topOffset)
       $0.leading.equalTo(aloneOrTogetherLabel)

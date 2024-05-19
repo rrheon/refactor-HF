@@ -147,8 +147,9 @@ final class CreatePostViewController: NaviHelper {
   
   // MARK: - makeUI
   func makeUI(){
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 30 : 10
     selectLocationButton.snp.makeConstraints {
-      $0.top.equalTo(view.safeAreaLayoutGuide).offset(30)
+      $0.top.equalTo(view.safeAreaLayoutGuide).offset(settingViewSize)
       $0.leading.equalToSuperview().offset(20)
     }
     
@@ -207,16 +208,18 @@ final class CreatePostViewController: NaviHelper {
       $0.leading.equalTo(selectLocationButton)
     }
     
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 167 : 120
     writeDetailInfoTextView.delegate = self
     writeDetailInfoTextView.snp.makeConstraints {
       $0.top.equalTo(writeDetailInfoLabel.snp.bottom).offset(10)
       $0.leading.equalTo(selectLocationButton)
       $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(167)
+      $0.height.equalTo(settingViewSize)
     }
     
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 50 : 10
     enterPostButton.snp.makeConstraints {
-      $0.top.equalTo(writeDetailInfoTextView.snp.bottom).offset(50)
+      $0.top.equalTo(writeDetailInfoTextView.snp.bottom).offset(settingViewSize)
       $0.trailing.equalToSuperview().offset(-20)
       $0.height.equalTo(41)
       $0.width.equalTo(151)

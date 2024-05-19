@@ -176,13 +176,14 @@ final class MypageViewController: NaviHelper {
       $0.leading.equalTo(userWorkoutCalenderButton.snp.trailing).offset(80)
     }
     
+    settingViewSize = UIScreen.main.isWiderThan375pt ? 296 : 250
     calendarView.dataSource = self
     calendarView.delegate = self
     calendarView.snp.makeConstraints {
       $0.top.equalTo(userWorkoutCalenderButton.snp.bottom).offset(20)
       $0.leading.equalToSuperview().offset(10)
       $0.trailing.equalToSuperview().offset(-10)
-      $0.height.equalTo(296)
+      $0.height.equalTo(settingViewSize)
     }
     
     calendarPrevButton.snp.makeConstraints {

@@ -21,7 +21,7 @@ final class HomeViewModel: CommonViewModel {
       guard let data = data else { return [Bool]() }
       
       return (0..<7).map { dayOffset in
-        let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset
+        let currentDay = (Int(self.startDate[2]) ?? 0) + dayOffset - 1
         return self.convertToHistoryModelWithDate(for: "\(currentDay)", data: data) != nil
       }
     }
