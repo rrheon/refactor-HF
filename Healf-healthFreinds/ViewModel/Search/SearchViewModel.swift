@@ -78,6 +78,10 @@ final class SearchViewModel: CommonViewModel {
             userPostsArray.append(post)
           }
         }
+        
+        // 게시글 배열 정렬
+        userPostsArray.sort { $0.postedDate > $1.postedDate }
+        
         if let location = location {
           let filteredPosts = userPostsArray.filter { $0.location == location }
           emitter.onNext(filteredPosts)
@@ -90,6 +94,5 @@ final class SearchViewModel: CommonViewModel {
       return Disposables.create()
     }
   }
-  
 }
 

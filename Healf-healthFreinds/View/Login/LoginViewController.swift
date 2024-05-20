@@ -141,7 +141,6 @@ final class LoginViewController: UIViewController {
     UIApplication.shared.windows.first?.isUserInteractionEnabled = false
     signupViewModel.loginToHealf(email: email, password: password)
     activityIndicator.stopAnimating()
-    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
     
     emailTextField.text = nil
     passwordTextField.text = nil
@@ -196,7 +195,8 @@ extension LoginViewController: LoginViewModelDelegate {
     let tapbarcontroller = TabBarController()
     tapbarcontroller.modalPresentationStyle = .fullScreen
     self.present(tapbarcontroller, animated: true, completion: nil)
-    
+    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+
     completion()
     
   }
