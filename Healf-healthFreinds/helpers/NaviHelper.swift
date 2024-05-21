@@ -5,6 +5,7 @@
 //  Created by 최용헌 on 2024/02/05.
 //
 import UIKit
+import SafariServices
 
 class NaviHelper: UIViewController {
   lazy var uihelper = UIHelper.shared
@@ -67,5 +68,11 @@ class NaviHelper: UIViewController {
     logo.isEnabled = false
     
     navigationItem.leftBarButtonItem = logo
+  }
+  
+  func moveToSafari(url: String){
+    let url = NSURL(string: url)
+    let safariView: SFSafariViewController = SFSafariViewController(url: url! as URL)
+    self.present(safariView, animated: true, completion: nil)
   }
 }

@@ -37,7 +37,7 @@ extension UIViewController {
     self.present(postedVC, animated: true, completion: nil)
   }
   
-  func showPopupViewWithOnebutton(_ desc: String, checkNavi: Bool = true) {
+  func showPopupViewWithOnebuttonAndDisappearVC(_ desc: String, checkNavi: Bool = true) {
     let popupVC = PopupViewController(title: "🙌",
                                       desc: desc,
                                       checkCompleteButton: true)
@@ -49,6 +49,18 @@ extension UIViewController {
       }
     }
     self.present(popupVC, animated: false)
+  }
+  
+  func showPopupViewWithOneButton(_ desc: String, checkNavi: Bool = true){
+    let popupVC = PopupViewController(title: "🚨",
+                                      desc: desc,
+                                      checkCompleteButton: true)
+    popupVC.modalPresentationStyle = .overFullScreen
+    popupVC.popupView.completButtonAction = { [weak self] in
+      self?.dismiss(animated: true)
+    }
+    self.present(popupVC, animated: false)
+
   }
   
   func hideKeyboardWhenTappedAround() {

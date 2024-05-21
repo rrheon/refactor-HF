@@ -111,7 +111,7 @@ final class SignuplViewController: NaviHelper {
     if !passwordTextField.isHidden {
       passwordTextField.resignFirstResponder()
     }
-    showPopupViewWithOnebutton(desc)
+    showPopupViewWithOnebuttonAndDisappearVC(desc)
   }
   
   func afterEnteredEmail() {

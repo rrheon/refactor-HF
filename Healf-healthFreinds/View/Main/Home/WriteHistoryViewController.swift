@@ -301,7 +301,7 @@ final class WriteHistoryViewController: NaviHelper {
   }
 
   func afterCompleButtonTapped() {
-    showPopupViewWithOnebutton("오늘 운동을 기록했어요!")
+    showPopupViewWithOnebuttonAndDisappearVC("오늘 운동을 기록했어요!")
     delegate?.updateDatas()
   }
 

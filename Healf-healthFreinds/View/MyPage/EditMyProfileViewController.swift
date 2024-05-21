@@ -182,7 +182,7 @@ class EditMyProfileViewController: NaviHelper {
           self?.navigationController?.popViewController(animated: true)
         case false:
           self?.editNicknameTextField.resignFirstResponder()
-          self?.showPopupViewWithOnebutton("이미 사용중인 닉네임입니다.")
+          self?.showPopupViewWithOnebuttonAndDisappearVC("이미 사용중인 닉네임입니다.")
           
         }
       }

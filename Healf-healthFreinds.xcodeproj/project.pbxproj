@@ -10,6 +10,8 @@
 		886D5BAFE19D85D85BA5AF19 /* Pods_Healf_healthFreinds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F04A0B48EB9E197C0D72D7 /* Pods_Healf_healthFreinds.framework */; };
 		EE0D31872B8F7CB500038795 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31862B8F7CB500038795 /* HomeViewController.swift */; };
 		EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31882B8F7DEB00038795 /* TapBar.swift */; };
+		EE0D71EC2BFC4A2500C97364 /* UserAgreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D71EB2BFC4A2500C97364 /* UserAgreeViewController.swift */; };
+		EE0D71EE2BFC628200C97364 /* URLSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D71ED2BFC628200C97364 /* URLSet.swift */; };
 		EE2E08D02BEB55E70087E735 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */; };
 		EE33D44A2B99D340002BA16C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE33D4492B99D340002BA16C /* GoogleService-Info.plist */; };
 		EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */; };
@@ -86,6 +88,8 @@
 		D2FD194A45994E076F03B802 /* Pods-Healf-healthFreinds.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Healf-healthFreinds.debug.xcconfig"; path = "Target Support Files/Pods-Healf-healthFreinds/Pods-Healf-healthFreinds.debug.xcconfig"; sourceTree = "<group>"; };
 		EE0D31862B8F7CB500038795 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		EE0D31882B8F7DEB00038795 /* TapBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBar.swift; sourceTree = "<group>"; };
+		EE0D71EB2BFC4A2500C97364 /* UserAgreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreeViewController.swift; sourceTree = "<group>"; };
+		EE0D71ED2BFC628200C97364 /* URLSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSet.swift; sourceTree = "<group>"; };
 		EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		EE33D4492B99D340002BA16C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteHistoryViewModel.swift; sourceTree = "<group>"; };
@@ -405,6 +409,7 @@
 				EECC03152B92C23F003ECF95 /* PopupViewController.swift */,
 				EECC03172B92C260003ECF95 /* PopupView.swift */,
 				EE4E369F2BC0410C00FB60FC /* BottomSheet.swift */,
+				EE0D71ED2BFC628200C97364 /* URLSet.swift */,
 				EE0D31882B8F7DEB00038795 /* TapBar.swift */,
 				EEA8ACB42B8CD70700FD2A72 /* UIHelper.swift */,
 			);
@@ -414,6 +419,7 @@
 		EEDD810D2B70E6C10022302E /* Signup */ = {
 			isa = PBXGroup;
 			children = (
+				EE0D71EB2BFC4A2500C97364 /* UserAgreeViewController.swift */,
 				EEDD810B2B70E6B80022302E /* SignuplViewController.swift */,
 				EECC032C2B95F286003ECF95 /* CompleteSignupViewController.swift */,
 			);
@@ -587,6 +593,7 @@
 				EECC032D2B95F286003ECF95 /* CompleteSignupViewController.swift in Sources */,
 				EE4E36912BB2CB3600FB60FC /* MapPersonListViewController.swift in Sources */,
 				EECC03212B933A52003ECF95 /* PostedViewController.swift in Sources */,
+				EE0D71EC2BFC4A2500C97364 /* UserAgreeViewController.swift in Sources */,
 				EED75DCE2B9AC76900594C68 /* ChatDetailViewModel.swift in Sources */,
 				EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */,
 				EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */,
@@ -606,6 +613,7 @@
 				EECC030A2B90CED5003ECF95 /* UIView+.swift in Sources */,
 				EECC031E2B92FFBE003ECF95 /* SearchResultCell.swift in Sources */,
 				EECC030E2B91B000003ECF95 /* SearchViewController.swift in Sources */,
+				EE0D71EE2BFC628200C97364 /* URLSet.swift in Sources */,
 				EED75DC72B9AC1EF00594C68 /* ChatListViewModel.swift in Sources */,
 				EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */,
 				EECC03182B92C260003ECF95 /* PopupView.swift in Sources */,

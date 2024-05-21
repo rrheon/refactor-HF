@@ -39,7 +39,7 @@ class SettingViewController: NaviHelper {
     $0.setTitle(" 개인정보 처리방침", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-      self.moveToSafari(url: "https://zrr.kr/QNiv")
+      self.moveToSafari(url: URLSet.personInfo.rawValue)
     }, for: .touchUpInside)
   }
   
@@ -48,7 +48,16 @@ class SettingViewController: NaviHelper {
     $0.setTitle(" 서비스 이용방침", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-      self.moveToSafari(url: "https://zrr.kr/cGF5")
+      self.moveToSafari(url: URLSet.seriveInfo.rawValue)
+    }, for: .touchUpInside)
+  }
+  
+  private lazy var contactButton = UIButton().then {
+    $0.setImage(UIImage(named: "ChatImg"), for: .normal)
+    $0.setTitle(" 문의하기", for: .normal)
+    $0.setTitleColor(.black, for: .normal)
+    $0.addAction(UIAction { _ in
+      self.moveToSafari(url: URLSet.contact.rawValue)
     }, for: .touchUpInside)
   }
   
@@ -122,7 +131,8 @@ class SettingViewController: NaviHelper {
       //      settingAlarmButton,
       //      alarmSwitch,
       personInfoButton,
-      serviceInfoButton
+      serviceInfoButton,
+      contactButton
     ].forEach {
       serviceView.addSubview($0)
     }
@@ -156,7 +166,7 @@ class SettingViewController: NaviHelper {
       $0.top.equalTo(serviceLabel.snp.bottom).offset(20)
       $0.leading.equalTo(serviceLabel)
       $0.trailing.equalToSuperview().offset(-20)
-      $0.height.equalTo(120)
+      $0.height.equalTo(150)
     }
     
     //    settingAlarmButton.snp.makeConstraints {
@@ -176,6 +186,11 @@ class SettingViewController: NaviHelper {
     
     serviceInfoButton.snp.makeConstraints {
       $0.top.equalTo(personInfoButton.snp.bottom).offset(20)
+      $0.leading.equalTo(personInfoButton)
+    }
+    
+    contactButton.snp.makeConstraints {
+      $0.top.equalTo(serviceInfoButton.snp.bottom).offset(20)
       $0.leading.equalTo(personInfoButton)
     }
     
@@ -216,12 +231,6 @@ class SettingViewController: NaviHelper {
       if result == "true" { self.messageOptionSwitch.isOn = true}
       else { self.messageOptionSwitch.isOn = false}
     }
-  }
-  
-  func moveToSafari(url: String){
-    let url = NSURL(string: url)
-    let safariView: SFSafariViewController = SFSafariViewController(url: url! as URL)
-    self.present(safariView, animated: true, completion: nil)
   }
   
   func removeAccount(){

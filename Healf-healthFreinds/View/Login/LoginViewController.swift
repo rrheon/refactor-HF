@@ -153,7 +153,7 @@ final class LoginViewController: UIViewController {
   
   // MARK: - signupButtonTapped
   func signupButtonTapped(){
-    let registerEmailVC = SignuplViewController()
+    let registerEmailVC = UserAgreeViewController()
     let navigationVC = UINavigationController(rootViewController: registerEmailVC)
     navigationVC.modalPresentationStyle = .fullScreen
     self.present(navigationVC, animated: true, completion: nil)
@@ -209,7 +209,9 @@ extension LoginViewController: LoginViewModelDelegate {
       $0.resignFirstResponder()
     }
     
-    showPopupViewWithOnebutton("아이디,비밀번호를 확인해주세요")
+    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+
+    showPopupViewWithOnebuttonAndDisappearVC("아이디,비밀번호를 확인해주세요")
   }
 }
 
