@@ -86,7 +86,13 @@ final class ChatDetailViewController: NaviHelper {
 
     settingNavigationTitle(title: userNickname ?? "")
 
-    self.navigationItem.rightBarButtonItem = .none
+    let rightButtonImg = UIImage(named: "ChatMenuImg")?.withRenderingMode(.alwaysOriginal)
+    let rightButton = UIBarButtonItem(image: rightButtonImg,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(participateButtonTapped))
+    rightButton.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+    self.navigationItem.rightBarButtonItem = rightButton
   }
   
   func setupLayout(){
@@ -127,10 +133,17 @@ final class ChatDetailViewController: NaviHelper {
     guard let uid = uid,
           let message = messageTextfield.text, message != "",
           let chatRoomUid = chatRoomUid else { return }
-    chatDetailViewModel.sendMessage(uid, message, chatRoomUid) {
-      self.chatDetailViewModel.sendGcm(destinationUid: self.destinationUid ?? "")
+    chatDetailViewModel.sendMessage(uid,
+                                    message,
+                                    chatRoomUid,
+                                    destinationUid: destinationUid ?? "") { result in
       self.messageTextfield.text = ""
-      self.arrangeChatCellRecently()
+      if result {
+        self.chatDetailViewModel.sendGcm(destinationUid: self.destinationUid ?? "")
+        self.arrangeChatCellRecently()
+      } else {
+        self.showPopupViewWithOneButton("채팅을 보낼 수 없습니다.")
+      }
     }
   }
   
@@ -179,6 +192,16 @@ final class ChatDetailViewController: NaviHelper {
       chatTableView.setContentOffset(offset, animated: true)
     }
   }
+  
+  @objc func participateButtonTapped() {
+    let bottomSheetVC = BottomSheet(firstButtonTitle: "신고하기",
+                                    secondButtonTitle: "사용자 차단하기",
+                                    checkPost: true)
+    bottomSheetVC.delegate = self
+    
+    uihelper.settingBottomeSheet(bottomSheetVC: bottomSheetVC, size: 220)
+    present(bottomSheetVC, animated: true, completion: nil)
+  }
 }
 
 // MARK: - tableView setting
@@ -213,5 +236,21 @@ extension ChatDetailViewController: UITableViewDelegate, UITableViewDataSource {
     let comment = comments[indexPath.row]
       let estimatedFrame = comment.message?.getEstimatedFrame(with: .systemFont(ofSize: 18))
       return (estimatedFrame?.height ?? 0) + 30
+  }
+}
+
+extension ChatDetailViewController: BottomSheetDelegate {
+  func firstButtonTapped(_ postedData: CreatePostModel?) {
+// 신고하기 페이지로 이동, 본인 uid, 상대방 uid, 내용
+    dismiss(animated: true)
+    let declarationVC = DeclarationViewController(destinationUid: destinationUid ?? "")
+    navigationController?.pushViewController(declarationVC, animated: true)
+  }
+  
+  func secondButtonTapped(_ postedData: CreatePostModel?) {
+    chatDetailViewModel.addBlockList(destinationUid: destinationUid ?? "") {
+      self.dismiss(animated: true)
+      self.showPopupViewWithOneButton("차단이 완료되었습니다")
+    }
   }
 }

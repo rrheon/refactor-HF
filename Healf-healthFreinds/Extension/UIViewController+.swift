@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
+extension UIViewController: UITextViewDelegate {
   
 // MARK: - 운동종류 선택하는 버튼누를 때
   func workoutTypeButtonTapped(_ sender: UIButton,
@@ -101,4 +101,17 @@ extension UIViewController {
     }
   }
   
+  public func textViewDidBeginEditing(_ textView: UITextView) {
+    if textView.text == "내용을 입력하세요." {
+      textView.text = nil
+      textView.textColor = .black
+    }
+  }
+  
+  public func textViewDidEndEditing(_ textView: UITextView) {
+    if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      textView.text = "내용을 입력하세요."
+      textView.textColor = .lightGray
+    }
+  }
 }

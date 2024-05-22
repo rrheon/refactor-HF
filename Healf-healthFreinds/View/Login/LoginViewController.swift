@@ -13,7 +13,6 @@ import Then
 import AuthenticationServices
 import FirebaseAuth
 
-
 // 소셜로그인 할 때 너무 오래걸림
 final class LoginViewController: UIViewController {
   fileprivate var currentNonce: String?

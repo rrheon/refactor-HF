@@ -12,6 +12,7 @@
 		EE0D31892B8F7DEB00038795 /* TapBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D31882B8F7DEB00038795 /* TapBar.swift */; };
 		EE0D71EC2BFC4A2500C97364 /* UserAgreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D71EB2BFC4A2500C97364 /* UserAgreeViewController.swift */; };
 		EE0D71EE2BFC628200C97364 /* URLSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D71ED2BFC628200C97364 /* URLSet.swift */; };
+		EE0D71F02BFD8C1300C97364 /* DeclarationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0D71EF2BFD8C1300C97364 /* DeclarationViewController.swift */; };
 		EE2E08D02BEB55E70087E735 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */; };
 		EE33D44A2B99D340002BA16C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE33D4492B99D340002BA16C /* GoogleService-Info.plist */; };
 		EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */; };
@@ -90,6 +91,7 @@
 		EE0D31882B8F7DEB00038795 /* TapBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapBar.swift; sourceTree = "<group>"; };
 		EE0D71EB2BFC4A2500C97364 /* UserAgreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreeViewController.swift; sourceTree = "<group>"; };
 		EE0D71ED2BFC628200C97364 /* URLSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSet.swift; sourceTree = "<group>"; };
+		EE0D71EF2BFD8C1300C97364 /* DeclarationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclarationViewController.swift; sourceTree = "<group>"; };
 		EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		EE33D4492B99D340002BA16C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteHistoryViewModel.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				EE4E36A92BE0F8A600FB60FC /* ChatCell.swift */,
 				EE4E36A52BDFA68500FB60FC /* MyChatCell.swift */,
 				EECC03512B96FABC003ECF95 /* DestinationChatCelll.swift */,
+				EE0D71EF2BFD8C1300C97364 /* DeclarationViewController.swift */,
 			);
 			path = ChatDetail;
 			sourceTree = "<group>";
@@ -633,6 +636,7 @@
 				EED75DCA2B9AC54600594C68 /* ChatUserModel.swift in Sources */,
 				EECC03502B96FAA3003ECF95 /* ChatDetailViewController.swift in Sources */,
 				EE98B1E92B4FE4190025C4F8 /* UIColor+.swift in Sources */,
+				EE0D71F02BFD8C1300C97364 /* DeclarationViewController.swift in Sources */,
 				EE4E36972BB3B0A200FB60FC /* SignupViewModel.swift in Sources */,
 				EE4E36AA2BE0F8A600FB60FC /* ChatCell.swift in Sources */,
 				EECC03262B934C3E003ECF95 /* ChatListCell.swift in Sources */,

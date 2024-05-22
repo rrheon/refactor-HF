@@ -322,15 +322,15 @@ extension WriteHistoryViewController: SelectPersonProtocol {
   }
 }
 
-extension WriteHistoryViewController: UITextViewDelegate {
-  func textViewDidBeginEditing(_ textView: UITextView) {
+extension WriteHistoryViewController {
+  override func textViewDidBeginEditing(_ textView: UITextView) {
     if textView.text == textViewPlaceHolder {
       textView.text = nil
       textView.textColor = .black
     }
   }
   
-  func textViewDidEndEditing(_ textView: UITextView) {
+  override func textViewDidEndEditing(_ textView: UITextView) {
     if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
       textView.text = textViewPlaceHolder
       textView.textColor = .lightGray

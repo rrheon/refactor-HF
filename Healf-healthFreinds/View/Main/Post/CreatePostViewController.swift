@@ -332,21 +332,7 @@ final class CreatePostViewController: NaviHelper {
   }
 }
 
-extension CreatePostViewController: UITextViewDelegate {
-  func textViewDidBeginEditing(_ textView: UITextView) {
-    if textView.text == "내용을 입력하세요." {
-      textView.text = nil
-      textView.textColor = .black
-    }
-  }
-  
-  func textViewDidEndEditing(_ textView: UITextView) {
-    if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-      textView.text = "내용을 입력하세요."
-      textView.textColor = .lightGray
-    }
-  }
-  
+extension CreatePostViewController {
   @objc func didChangeTimeDatePicker(_ picker: UIDatePicker) {
     // 서울 시간대 설정
     let seoulTimeZone = TimeZone(identifier: "Asia/Seoul")!

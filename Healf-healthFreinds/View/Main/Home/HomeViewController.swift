@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import RxSwift
 
-
 // init할 때 데이터 로드해오기
 final class HomeViewController: NaviHelper {
   let homeViewModel = HomeViewModel.shared

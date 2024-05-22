@@ -27,30 +27,35 @@ final class ChatDetailViewModel: CommonViewModel {
       return
     }
     
-    // 이미 채팅방이 존재하는지 확인
-    checkChatRoom(self.uid ?? "", destinationUid) { chatRoomId in
-      if let roomId = chatRoomId {
-        // 이미 채팅방이 존재하는 경우
-        print("이미 채팅방이 존재합니다.")
-        completion(false)
-      } else {
-        // 채팅방 생성
-        let createRoomInfo = [ "UserData": [ "\(self.uid ?? "")": true,
-                                             "\(destinationUid)": true] ]
-        self.ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
-          if err == nil {
-            self.checkChatRoom(self.uid ?? "", destinationUid) { _ in
-              completion(true)
-            }
-          } else {
+    checkBlockList(to: destinationUid) { result in
+      if result {
+        self.checkChatRoom(self.uid ?? "", destinationUid) { chatRoomId in
+          if let roomId = chatRoomId {
+            // 이미 채팅방이 존재하는 경우
+            print("이미 채팅방이 존재합니다.")
             completion(false)
+          } else {
+            // 채팅방 생성
+            let createRoomInfo = [ "UserData": [ "\(self.uid ?? "")": true,
+                                                 "\(destinationUid)": true] ]
+            self.ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
+              if err == nil {
+                self.checkChatRoom(self.uid ?? "", destinationUid) { _ in
+                  completion(true)
+                }
+              } else {
+                completion(false)
+              }
+            }
           }
         }
+        
+        completion(true)
+      } else {
+        completion(false)
       }
     }
   }
-  
-  
   
   func checkMessageOption(destinationUid: String,
                           completion: @escaping (String?) -> Void) {
@@ -150,14 +155,21 @@ final class ChatDetailViewModel: CommonViewModel {
   func sendMessage(_ uid: String,
                    _ message: String,
                    _ chatRoomUid: String,
-                   completion: @escaping () -> Void){
-    let value: Dictionary<String,Any> = [
-      "uid": uid,
-      "message": message,
-      "timeStamp": ServerValue.timestamp()
-    ]
-    ref.child("chatrooms").child(chatRoomUid).child("comments").childByAutoId().setValue(value)
-    completion()
+                   destinationUid: String,
+                   completion: @escaping (Bool) -> Void){
+    checkBlockList(to: destinationUid) { result in
+      if result {
+        let value: Dictionary<String,Any> = [
+          "uid": uid,
+          "message": message,
+          "timeStamp": ServerValue.timestamp()
+        ]
+        self.ref.child("chatrooms").child(chatRoomUid).child("comments").childByAutoId().setValue(value)
+        completion(true)
+      } else {
+        completion(false)
+      }
+    }
   }
   
   func deleteChatroom(otherUserUID: String,
@@ -185,8 +197,46 @@ final class ChatDetailViewModel: CommonViewModel {
         completion()
       })
   }
+  
+  func addBlockList(destinationUid: String,
+                    completion: @escaping () -> Void){
+    self.ref.child("BlckList").child(uid ?? "").child(destinationUid).setValue(true) { (error, ref) in
+      if let error = error {
+        print("Error:", error.localizedDescription)
+      } else {
+        print("사용자 차단 완료")
+        completion()
+      }
+    }
+  }
+  
+  func checkBlockList(to destinationUid: String,
+                      completion: @escaping (Bool) -> Void) {
+    // 상대방의 블랙리스트를 확인합니다.
+    self.ref.child("BlckList").child(destinationUid).child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
+      if snapshot.exists() {
+        // 상대방의 블랙리스트에 본인의 UID가 존재하면 메시지를 보낼 수 없습니다.
+        completion(false)
+      } else {
+        // 상대방의 블랙리스트에 본인의 UID가 없으면 메시지를 보낼 수 있습니다.
+        completion(true)
+      }
+    }
+  }
+  
+  func sumitDeclartion(info: String,
+                       destinationUid: String,
+                       completion: @escaping () -> Void){
+    self.ref.child("DeclartionList").child(uid ?? "").child(destinationUid).setValue(info) { (error, ref) in
+      if let error = error {
+        print("Error:", error.localizedDescription)
+      } else {
+        print("사용자 신고 완료")
+        completion()
+      }
+    }
+  }
 }
 
 
 
-// 보내는 주체가 상대방의 fcm토큰을 알아서 거기에 메세지를 요청한다, 제목은 보내는 사람의 아이디, 내용은 텍스트
