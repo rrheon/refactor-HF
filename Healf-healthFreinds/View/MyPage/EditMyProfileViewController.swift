@@ -168,53 +168,54 @@ class EditMyProfileViewController: NaviHelper {
       self.editProfileViewModel.saveMyProfile(introduce: introduce,
                                               nickname: nickname,
                                               profileImage: image)
-      self.changeMyProfile()
+//      self.changeMyProfile()
       self.navigationController?.popViewController(animated: true)
     } else {
-      SignupViewModel.shared.checkDuplication(checkType: "nickname",
-                                              checkValue: nickname) { [weak self] result in
-        switch result{
-        case true:
-          self?.editProfileViewModel.saveMyProfile(introduce: introduce,
-                                                   nickname: nickname,
-                                                   profileImage: image)
-          self?.changeMyProfile()
-          self?.navigationController?.popViewController(animated: true)
-        case false:
-          self?.editNicknameTextField.resignFirstResponder()
-          self?.showPopupViewWithOnebuttonAndDisappearVC("이미 사용중인 닉네임입니다.")
-          
+//      SignupViewModel.shared.checkDuplication(checkType: "nickname",
+//                                              checkValue: nickname) { [weak self] result in
+//        switch result{
+//        case true:
+//          self?.editProfileViewModel.saveMyProfile(introduce: introduce,
+//                                                   nickname: nickname,
+//                                                   profileImage: image)
+//          self?.changeMyProfile()
+//          self?.navigationController?.popViewController(animated: true)
+//        case false:
+//          self?.editNicknameTextField.resignFirstResponder()
+//          self?.showPopupViewWithOnebuttonAndDisappearVC("이미 사용중인 닉네임입니다.")
+//          
         }
       }
-    }
-  }
+    
+
   
   // MARK: - changeProfileButtonTapped
   func changeProfileImageButtonTapped(){
-    let bottomSheetVC = BottomSheet(firstButtonTitle: "앨범에서 선택하기",
-                                    secondButtonTitle: "닫기")
-    bottomSheetVC.delegate = self
-    
-    uihelper.settingBottomeSheet(bottomSheetVC: bottomSheetVC, size: 150)
-    present(bottomSheetVC, animated: true, completion: nil)
+//    let bottomSheetVC = BottomSheet(firstButtonTitle: "앨범에서 선택하기",
+//                                    secondButtonTitle: "닫기")
+//    bottomSheetVC.delegate = self
+//    
+//    uihelper.settingBottomeSheet(bottomSheetVC: bottomSheetVC, size: 150)
+//    present(bottomSheetVC, animated: true, completion: nil)
   }
   
   // MARK: - deleteProfile
   func deleteProfileImageButtonTapped(){
-    profileImageView.image = UIImage(named: "EmptyProfileImg")
-    uihelper.showToast(message: "✅ 기존 프로필 이미지를 삭제했어요!")
+//    profileImageView.image = UIImage(named: "EmptyProfileImg")
+//    uihelper.showToast(message: "✅ 기존 프로필 이미지를 삭제했어요!")
   }
   
   // MARK: - changeMyProfile
   func changeMyProfile() {
-    if let newImage = profileImageView.image,
-       let introduce = introduceTextFiled.text,
-       let nickname = editNicknameTextField.text {
-      delegate?.didSelectImage(image: newImage, nickname: nickname, introduce: introduce)
-      navigationController?.popViewController(animated: true)
-    }
+//    if let newImage = profileImageView.image,
+//       let introduce = introduceTextFiled.text,
+//       let nickname = editNicknameTextField.text {
+//      delegate?.didSelectImage(image: newImage, nickname: nickname, introduce: introduce)
+//      navigationController?.popViewController(animated: true)
+//    }
   }
 }
+
 // MARK: - bottomSheet Delegate
 extension EditMyProfileViewController: BottomSheetDelegate {
   // 앨범에서 선택하기

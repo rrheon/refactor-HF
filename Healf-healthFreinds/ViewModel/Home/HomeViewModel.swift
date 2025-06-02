@@ -9,8 +9,11 @@ import Foundation
 
 import RxSwift
 import RxCocoa
+import RxFlow
 
-final class HomeViewModel: CommonViewModel {
+final class HomeViewModel: CommonViewModel, Stepper {
+  var steps: RxRelay.PublishRelay<any RxFlow.Step> = PublishRelay()
+  
   static let shared = HomeViewModel()
   
   lazy var startDate = getStartDate()
@@ -50,7 +53,6 @@ final class HomeViewModel: CommonViewModel {
     self.updateMontlyDatas()
   }
   
-  // 새로운 데이터를 가져오는 함수
   func updateMontlyDatas() {
     fetchThisMonthData()
       .subscribe(onNext: { [weak self] newData in

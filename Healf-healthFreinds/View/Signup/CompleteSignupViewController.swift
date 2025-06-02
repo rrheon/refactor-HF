@@ -9,65 +9,72 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
-final class CompleSignupViewController: NaviHelper {
+/// Healf-front-SignupFlow
+/// Healf-front-CompleteSignupScreen
+/// 회원가입 완료 화면
+final class CompleteSignupViewController: UIViewController {
+  var disposeBag: DisposeBag = DisposeBag()
   
-  private lazy var completedSignupImage = UIImageView().then { 
+  private lazy var completedSignupImage = UIImageView().then {
     $0.image = UIImage(named: "CompleteSignupImg")
   }
-  private lazy var mainImageView = UIImageView().then { $0.image = UIImage(named: "MainTitleImg") }
-  private lazy var mainTitleLabel = UIHelper.shared.createMultipleLineLabel(
-    "가입을 완료했어요 🎉\n로그인하여 운동친구를 찾아보세요.",
-    .black, .boldSystemFont(ofSize: 17),
-    .center)
+  
+  private lazy var mainImageView = UIImageView().then {
+    $0.image = UIImage(named: "MainTitleImg")
+  }
+  
+  private lazy var mainTitleLabel = UILabel().then {
+    $0.text =  "가입을 완료했어요 🎉\n로그인하여 운동친구를 찾아보세요."
+    $0.textColor = .black
+    $0.font = .boldSystemFont(ofSize: 17)
+  }
+  
   private lazy var startButton = UIHelper.shared.createHealfButton("시작하기", .mainBlue, .white)
 
   // MARK: - viewDidLoad
+  
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
     view.backgroundColor = .white
     
-    navigationItemSetting()
-    
-    setupLayout()
     makeUI()
-  }
-  
-  override func navigationItemSetting() {}
-  
-  // MARK: - setupLayout
-  func setupLayout() {
-    [
-      completedSignupImage,
-      mainImageView,
-      mainTitleLabel,
-      startButton
-    ].forEach {
-      view.addSubview($0)
-    }
+    
+    // 시작버튼 탭
+    // 회원가입 Flow 종료
+    startButton.rx.tap
+      .subscribe(onDisposed: {
+        self.navigationController?.dismiss(animated: true)
+      })
+      .disposed(by: disposeBag)
   }
   
   // MARK: - makeUI
+  
   func makeUI(){
+    view.addSubview(completedSignupImage)
     completedSignupImage.snp.makeConstraints {
       $0.top.equalToSuperview().offset(150)
       $0.centerX.equalToSuperview()
     }
     
+    view.addSubview(mainImageView)
     mainImageView.snp.makeConstraints {
       $0.top.equalTo(completedSignupImage.snp.bottom).offset(20)
       $0.centerX.equalToSuperview()
     }
   
+    view.addSubview(mainTitleLabel)
     mainTitleLabel.snp.makeConstraints {
       $0.top.equalTo(mainImageView.snp.bottom).offset(50)
       $0.centerX.equalToSuperview()
     }
     
-    startButton.addAction(UIAction { _ in
-      self.startButtonTapped()
-    } , for: .touchUpInside)
+    view.addSubview(startButton)
     startButton.snp.makeConstraints {
       $0.bottom.equalToSuperview().offset(-150)
       $0.centerX.equalToSuperview()
@@ -75,12 +82,4 @@ final class CompleSignupViewController: NaviHelper {
       $0.height.equalTo(50)
     }
   }
-  
-  func startButtonTapped(){
-    let loginVC = LoginViewController()
-    
-    let loginVCWithNavi = UINavigationController(rootViewController: loginVC)
-    loginVCWithNavi.modalPresentationStyle = .fullScreen
-    
-    present(loginVCWithNavi, animated: true, completion: nil)  }
 }

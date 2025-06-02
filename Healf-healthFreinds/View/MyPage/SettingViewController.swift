@@ -239,14 +239,14 @@ class SettingViewController: NaviHelper {
   }
   
   func logout(){
-    if let navigationController = self.navigationController {
-      navigationController.dismiss(animated: true)
-      navigationController.popToRootViewController(animated: false)
-      
-      let loginVC = LoginViewController()
-      loginVC.modalPresentationStyle = .overFullScreen
-      navigationController.present(loginVC, animated: true)
-    }
+//    if let navigationController = self.navigationController {
+//      navigationController.dismiss(animated: true)
+//      navigationController.popToRootViewController(animated: false)
+//      
+//      let loginVC = LoginViewController()
+//      loginVC.modalPresentationStyle = .overFullScreen
+//      navigationController.present(loginVC, animated: true)
+//    }
   }
   
   func showPopupView(_ desc: String, action: (() -> Void)?) {

@@ -58,7 +58,8 @@ final class HomeViewController: NaviHelper {
   // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    print(#fileID, #function, #line, "- homevc viewdidLoad")
+
     view.backgroundColor = .white
     
     navigationItemSetting()
@@ -232,9 +233,7 @@ final class HomeViewController: NaviHelper {
   
   // MARK: - changeLabelColor
   func changeLabelColor(){
-    uihelper.changeColor(label: newPostTitleLabel,
-                         wantToChange: "New",
-                         color: .labelBlue)
+    uihelper.changeColor(label: newPostTitleLabel, wantToChange: "New", color: .labelBlue)
   }
   
   // MARK: - startButtonTapped

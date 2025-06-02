@@ -297,7 +297,6 @@ final class CreatePostViewController: NaviHelper {
     
     settingNavigationTitle(title: "게시글 수정하기 📬")
     
-    selectedTimeLabel.text = modifyPostedData.time
     writeDetailInfoTextView.text = modifyPostedData.info
     
     [

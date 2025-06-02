@@ -7,142 +7,82 @@
 
 import UIKit
 
-import Alamofire
 import SnapKit
 import Then
 import AuthenticationServices
 import FirebaseAuth
+import RxSwift
+import RxCocoa
+import RxRelay
 
-// 소셜로그인 할 때 너무 오래걸림
+/// Healf-front-AppFlow
+/// Healf-front-LoginScreen
+/// 로그인화면
 final class LoginViewController: UIViewController {
   fileprivate var currentNonce: String?
   
-  let signupViewModel = SignupViewModel()
+  var disposeBag: DisposeBag = DisposeBag()
   
-  private lazy var titleLabel = UIHelper.shared.createMultipleLineLabel(
-    "나만을 위한 헬스 친구 찾기,\nHeal F 🏋🏻",
-    .black,
-    .boldSystemFont(ofSize: 16),
-    .left)
+  var signupViewModel: SignupViewModel
   
-  private lazy var emailTextField = UIHelper.shared.createLoginTextField("이메일")
-  private lazy var passwordTextField = UIHelper.shared.createLoginTextField("비밀번호")
+  private var customView = LoginView()
   
-  private lazy var loginButton = UIHelper.shared.createHealfButton("로그인", .mainBlue, .white)
-  
-//  private lazy var kakaoLoginButton = UIButton().then {
-//    $0.setImage(UIImage(named: "KakaoLoginImg"), for: .normal)
-//    $0.addAction(UIAction { _ in
-//      self.kakaoLoginButtonTapped()
-//    }, for: .touchUpInside)
-//  }
-//  
-//  private lazy var appleLoginButton = UIButton().then {
-//    let resizedImage = UIImage(named: "AppleLoginImg")?.resize(targetSize: .init(width: 300,
-//                                                                                 height: 200))
-//    $0.setImage(resizedImage,for: .normal)
-//    $0.addAction(UIAction { _ in
-//      self.appleLogin()
-//    }, for: .touchUpInside)
-//  }
-  
-  private lazy var signupButton = UIButton().then {
-    $0.setTitle("이메일로 회원가입", for: .normal)
-    $0.setTitleColor(.black, for: .normal)
-    $0.setUnderline(.gray)
-    $0.addAction(UIAction { _ in
-      self.signupButtonTapped()
-    }, for: .touchUpInside)
+  init(_ viewModel : SignupViewModel){
+    self.signupViewModel = viewModel
+    
+    super.init(nibName: nil, bundle: nil)
   }
   
-  private lazy var activityIndicator = UIActivityIndicatorView(style: .large)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
-  // MARK: - viewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    view.backgroundColor = .white
+    self.view.backgroundColor = .white
     
-    signupViewModel.delegate = self
-    
-    setupLayout()
-    makeUI()
-    
-    hideKeyboardWhenTappedAround()
-    
+    customView.loginButton
+      .rx.tap
+      .withUnretained(self)
+      .filter({ vc, _ in
+        guard let email = vc.customView.emailTextField.text,
+              let password = vc.customView.passwordTextField.text,
+              !email.isEmpty,
+              !password.isEmpty else { return false }
+        return true
+      })
+      .subscribe(onNext: { vc, _ in
+        UIApplication.shared.windows.first?.isUserInteractionEnabled = false
+//        signupViewModel.loginToHealf(email: email, password: password)
+        vc.loginToHealf()
+      }, onCompleted: {
+        self.customView.activityIndicator.stopAnimating()
+        
+        self.customView.emailTextField.text = nil
+        self.customView.passwordTextField.text = nil
+      })
+      .disposed(by: disposeBag)
+      
+    customView.signupButton
+      .rx.tap
+      .withUnretained(self)
+      .subscribe { (vc , _ ) in
+        vc.signupViewModel.steps.accept(AppStep.signupFlowIsRequired)
+      }
+      .disposed(by: disposeBag)
   }
   
-  // MARK: - setupLayout
-  func setupLayout(){
-    [
-      titleLabel,
-      emailTextField,
-      passwordTextField,
-      loginButton,
-      signupButton
-    ].forEach {
-      view.addSubview($0)
-    }
-  }
-  
-  // MARK: - makeUI
-  func makeUI(){
-    titleLabel.snp.makeConstraints {
-      $0.top.equalToSuperview().offset(150)
-      $0.leading.equalToSuperview().offset(20)
-    }
-    
-    emailTextField.snp.makeConstraints {
-      $0.top.equalTo(titleLabel.snp.bottom).offset(100)
-      $0.leading.equalTo(titleLabel.snp.leading)
-      $0.trailing.equalToSuperview().offset(-20)
-    }
-    
-    passwordTextField.isSecureTextEntry = true
-    passwordTextField.snp.makeConstraints {
-      $0.top.equalTo(emailTextField.snp.bottom).offset(50)
-      $0.leading.trailing.equalTo(emailTextField)
-    }
-    
-    loginButton.addAction(UIAction { _ in
-      self.loginToHealf()
-    }, for: .touchUpInside)
-    loginButton.snp.makeConstraints {
-      $0.top.equalTo(passwordTextField.snp.bottom).offset(40)
-      $0.leading.equalTo(emailTextField).offset(20)
-      $0.trailing.equalTo(emailTextField).offset(-20)
-      $0.height.equalTo(48)
-    }
-    
-//    kakaoLoginButton.snp.makeConstraints {
-//      $0.top.equalTo(loginButton.snp.bottom).offset(60)
-//      $0.leading.trailing.equalTo(emailTextField)
-//      //      $0.height.equalTo(48)
-//    }
-//    
-//    appleLoginButton.snp.makeConstraints {
-//      $0.top.equalTo(kakaoLoginButton.snp.bottom).offset(20)
-//      $0.leading.trailing.equalTo(emailTextField)
-//      $0.height.equalTo(48)
-//    }
-    
-    signupButton.snp.makeConstraints {
-      $0.top.equalTo(loginButton.snp.bottom).offset(50)
-      $0.centerX.equalTo(loginButton)
-    }
+  override func loadView() {
+    self.view = customView
   }
   
   // 로그인 중에 다른 버튼 터치 못하게
   func loginToHealf() {
-    guard let email = emailTextField.text?.description,
-          let password = passwordTextField.text?.description else { return }
+    guard let email = customView.emailTextField.text?.description,
+          let password = customView.passwordTextField.text?.description else { return }
     
-    UIApplication.shared.windows.first?.isUserInteractionEnabled = false
     signupViewModel.loginToHealf(email: email, password: password)
-    activityIndicator.stopAnimating()
-    
-    emailTextField.text = nil
-    passwordTextField.text = nil
   }
   
   func kakaoLoginButtonTapped(){
@@ -152,10 +92,7 @@ final class LoginViewController: UIViewController {
   
   // MARK: - signupButtonTapped
   func signupButtonTapped(){
-    let registerEmailVC = UserAgreeViewController()
-    let navigationVC = UINavigationController(rootViewController: registerEmailVC)
-    navigationVC.modalPresentationStyle = .fullScreen
-    self.present(navigationVC, animated: true, completion: nil)
+    self.signupViewModel.steps.accept(AppStep.signupFlowIsRequired)
   }
   
   // 처음에 계정등록절차를 밟으면 될드
@@ -178,33 +115,35 @@ final class LoginViewController: UIViewController {
   func waitingNetworking(){
     UIApplication.shared.windows.first?.isUserInteractionEnabled = false
 
-    view.addSubview(activityIndicator)
+    view.addSubview(customView.activityIndicator)
     
-    activityIndicator.snp.makeConstraints {
+    customView.activityIndicator.snp.makeConstraints {
       $0.centerX.centerY.equalToSuperview()
     }
     
-    activityIndicator.startAnimating()
+    customView.activityIndicator.startAnimating()
   }
 }
 
 extension LoginViewController: LoginViewModelDelegate {
+  
   // MARK: - LoginViewModelDelegate
+  
   func loginDidSucceed(completion: @escaping () -> Void) {
-    let tapbarcontroller = TabBarController()
-    tapbarcontroller.modalPresentationStyle = .fullScreen
-    self.present(tapbarcontroller, animated: true, completion: nil)
-    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
-
-    completion()
-    
+//    let tapbarcontroller = TabBarController()
+//    tapbarcontroller.modalPresentationStyle = .fullScreen
+//    self.present(tapbarcontroller, animated: true, completion: nil)
+//    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+//
+//    completion()
+//    
   }
   
   func loginDidFail(with error: Error) {
     [
-      emailTextField,
-      passwordTextField
-    ].forEach { 
+      customView.emailTextField,
+      customView.passwordTextField
+    ].forEach {
       $0.resignFirstResponder()
     }
     

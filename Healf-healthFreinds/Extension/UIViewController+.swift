@@ -10,8 +10,7 @@ import UIKit
 extension UIViewController: UITextViewDelegate {
   
 // MARK: - 운동종류 선택하는 버튼누를 때
-  func workoutTypeButtonTapped(_ sender: UIButton,
-                               completion: @escaping (([String]) -> Void)) {
+  func workoutTypeButtonTapped(_ sender: UIButton, completion: @escaping (([String]) -> Void)) {
     guard let workout = sender.titleLabel?.text else { return }
     var workouts: [String] = []
     

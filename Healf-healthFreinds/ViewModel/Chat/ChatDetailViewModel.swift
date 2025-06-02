@@ -19,43 +19,57 @@ final class ChatDetailViewModel: CommonViewModel {
   var comments: [ChatModel.Comment] = []
   var userModel: ChatUserModel?
   
+  /// 채팅방 생성 함수
+  /// - Parameters:
+  ///   - destinationUid: 채팅을 시작할 상대방의 UID
+  ///   - completion: 채팅방 생성 성공 여부를 반환하는 클로저
   func createRoom(_ destinationUid: String,
                   completion: @escaping (Bool) -> Void) {
+    
+    // 사용자가 자기 자신과 채팅을 시도하는 경우 생성 불가
     if self.uid == destinationUid {
-      print("나 자신임")
       completion(false)
       return
     }
     
+    // 차단 목록을 확인하여 상대방과 채팅이 가능한지 검사
     checkBlockList(to: destinationUid) { result in
-      if result {
+      if result { // 차단 목록에 없는 경우 진행
+        // 기존에 동일한 채팅방이 존재하는지 확인
         self.checkChatRoom(self.uid ?? "", destinationUid) { chatRoomId in
           if let roomId = chatRoomId {
-            // 이미 채팅방이 존재하는 경우
-            print("이미 채팅방이 존재합니다.")
+            // 이미 채팅방이 존재하는 경우 생성하지 않고 종료
             completion(false)
           } else {
-            // 채팅방 생성
-            let createRoomInfo = [ "UserData": [ "\(self.uid ?? "")": true,
-                                                 "\(destinationUid)": true] ]
+            // 새로운 채팅방을 생성
+            let createRoomInfo = [
+              "UserData": [
+                "\(self.uid ?? "")": true,  // 현재 사용자 UID
+                "\(destinationUid)": true  // 상대방 UID
+              ]
+            ]
+            
+            // Firebase - chatrooms에 새로운 채팅방 생성
             self.ref.child("chatrooms").childByAutoId().setValue(createRoomInfo) { err, ref in
               if err == nil {
+                // 채팅방 생성이 성공하면 다시 확인 후 완료 처리
                 self.checkChatRoom(self.uid ?? "", destinationUid) { _ in
                   completion(true)
                 }
               } else {
-                completion(false)
+                completion(false) // 오류 발생 시 실패 처리
               }
             }
           }
         }
         
-        completion(true)
+        completion(true) // 차단되지 않은 경우 true 반환
       } else {
-        completion(false)
+        completion(false) // 차단된 경우 false 반환
       }
     }
   }
+
   
   func checkMessageOption(destinationUid: String,
                           completion: @escaping (String?) -> Void) {
@@ -102,27 +116,38 @@ final class ChatDetailViewModel: CommonViewModel {
     
   }
   
-  // 체크 쳇룸 함수-> 쳇룸아이디 바다와야함 ->갯 목적지 uid 함수 -> 유저 모델에 값넣기-> 겟 메세지리스트 함수-> 메세지 추가 -> 챗 테이블 리로드
+  /// 특정 사용자 간의 채팅방 존재 여부 확인
+  /// - Parameters:
+  ///   - uid: 현재 사용자의 고유 ID
+  ///   - destinationUid: 상대방 사용자의 고유 ID
+  ///   - completion: 기존 채팅방의 ID를 반환하거나, 존재하지 않으면 nil을 반환하는 클로저
   func checkChatRoom(_ uid: String,
                      _ destinationUid: String,
                      completion: @escaping (String?) -> Void) {
-    ref.child("chatrooms").observeSingleEvent(of: .value, with: { snapshot in
-      for child in snapshot.children {
-        guard let chatSnapshot = child as? DataSnapshot,
-              let chatData = chatSnapshot.value as? [String: Any] else {
-          continue
-        }
-        if let chatModel = ChatModel(JSON: chatData),
-           chatModel.users[uid] == true,
-           chatModel.users[destinationUid] == true {
-          completion(chatSnapshot.key)
-          return
-        }
-      }
-      // 채팅방을 찾지 못한 경우 nil 반환
-      completion(nil)
-    })
+      
+      // Firebase - chatrooms 노드에서 단일 조회 이벤트 수행
+      ref.child("chatrooms").observeSingleEvent(of: .value, with: { snapshot in
+          // 채팅방 목록을 순회하면서 특정 사용자 간의 채팅방이 존재하는지 확인
+          for child in snapshot.children {
+              guard let chatSnapshot = child as? DataSnapshot,
+                    let chatData = chatSnapshot.value as? [String: Any] else {
+                  continue
+              }
+              
+              // Firebase 데이터에서 ChatModel 객체로 변환
+              if let chatModel = ChatModel(JSON: chatData),
+                 chatModel.users[uid] == true,          // 현재 사용자가 해당 채팅방에 존재하는지 확인
+                 chatModel.users[destinationUid] == true { // 상대방 사용자가 해당 채팅방에 존재하는지 확인
+                  completion(chatSnapshot.key) // 채팅방 ID 반환
+                  return
+              }
+          }
+          
+          // 해당 사용자 간의 채팅방을 찾지 못한 경우 nil 반환
+          completion(nil)
+      })
   }
+
   
   func getDestinationInfo(_ destinationUid: String,
                           completion: @escaping ([String: Any]) -> Void){
@@ -137,40 +162,67 @@ final class ChatDetailViewModel: CommonViewModel {
       })
   }
   
+  /// 특정 채팅방의 메시지 목록 가져오기
+  /// - Parameters:
+  ///   - chatRoomUid: 가져올 채팅방의 고유 ID
+  ///   - completion: 메시지 배열을 반환하는 클로저
   func getMessageList(_ chatRoomUid: String,
-                      completion: @escaping ([ChatModel.Comment]) -> Void){
+                      completion: @escaping ([ChatModel.Comment]) -> Void) {
+    
+    // Firebase - chatrooms 에서 해당 채팅방의 comments 하위 노드 관찰
     ref.child("chatrooms").child(chatRoomUid).child("comments")
       .observe(DataEventType.value, with: { (datasnapshot) in
         
+        // 기존에 저장된 메시지 목록을 초기화
         self.comments.removeAll()
         
+        // 데이터 스냅샷을 순회하며 각 댓글을 가져와 배열에 추가
         for item in datasnapshot.children.allObjects as! [DataSnapshot] {
           let comment = ChatModel.Comment(JSON: item.value as! [String: AnyObject])
           self.comments.append(comment!)
         }
+        
+        // 메시지 목록 반환
         completion(self.comments)
       })
   }
+
   
+  /// 메시지 전송 함수
+  /// - Parameters:
+  ///   - uid: 현재 사용자의 고유 ID
+  ///   - message: 전송할 메시지 내용
+  ///   - chatRoomUid: 메시지를 보낼 채팅방의 고유 ID
+  ///   - destinationUid: 메시지를 받을 대상 사용자의 고유 ID
+  ///   - completion: 메시지 전송 성공 여부를 반환하는 클로저
   func sendMessage(_ uid: String,
                    _ message: String,
                    _ chatRoomUid: String,
                    destinationUid: String,
-                   completion: @escaping (Bool) -> Void){
+                   completion: @escaping (Bool) -> Void) {
+    
+    // 대상 사용자가 차단 목록에 있는지 확인
     checkBlockList(to: destinationUid) { result in
       if result {
-        let value: Dictionary<String,Any> = [
-          "uid": uid,
-          "message": message,
-          "timeStamp": ServerValue.timestamp()
+        let value: Dictionary<String, Any> = [
+          "uid": uid,                     // 보낸 사람의 UID
+          "message": message,             // 메시지 내용
+          "timeStamp": ServerValue.timestamp() // 서버의 현재 타임스탬프
         ]
-        self.ref.child("chatrooms").child(chatRoomUid).child("comments").childByAutoId().setValue(value)
+        
+        // Firebase의 해당 채팅방 comments 노드에 새로운 메시지 추가
+        self.ref.child("chatrooms").child(chatRoomUid).child("comments")
+          .childByAutoId().setValue(value)
+        
+        // 메시지 전송 성공 시 true 반환
         completion(true)
       } else {
+        // 차단된 경우 메시지 전송 불가
         completion(false)
       }
     }
   }
+
   
   func deleteChatroom(otherUserUID: String,
                       completion: @escaping () -> Void) {

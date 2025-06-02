@@ -10,16 +10,20 @@ import UIKit
 import SnapKit
 import Then
 
-final class UserAgreeViewController: NaviHelper {
+/// Healf-front-SignupFlow
+/// Healf-front-UserAgreementScreen
+/// 이용약관동의화면
+final class UserAgreeViewController: UIViewController {
   var serviceAgreeButtonChecked = false
   var personalInfoAgreeButtonChecked = false
   var moveToPersonalInfoAgreeButtonEnabled = false
   
-  private lazy var titleLabel = uihelper.createMultipleLineLabel(
-    "이용약관에 동의해주세요\n서비스 이용을 위해서 약관 동의가 필요해요",
-    .black,
-    .boldSystemFont(ofSize: 20),
-    .left)
+  private lazy var titleLabel = UILabel().then {
+    $0.text = "이용약관에 동의해주세요\n서비스 이용을 위해서 약관 동의가 필요해요"
+    $0.textColor = .black
+    $0.font = .boldSystemFont(ofSize: 20)
+    $0.numberOfLines = 0
+  }
   
   private lazy var serviceAgreeButton = UIButton().then {
     $0.setImage(UIImage(named: "EmptyCheckboxImg"), for: .normal)
@@ -31,9 +35,9 @@ final class UserAgreeViewController: NaviHelper {
   private lazy var moveToServiceAgreeButton = UIButton().then {
     $0.setImage(UIImage(named: "RightArrowImg"), for: .normal)
     $0.setTitleColor(.black, for: .normal)
-    $0.addAction(UIAction { _ in
-      self.moveToSafari(url: URLSet.seriveInfo.rawValue)
-    }, for: .touchUpInside)
+//    $0.addAction(UIAction { _ in
+//      self.moveToSafari(url: URLSet.seriveInfo.rawValue)
+//    }, for: .touchUpInside)
   }
 
   private lazy var personalInfoAgreeButton = UIButton().then {
@@ -46,84 +50,60 @@ final class UserAgreeViewController: NaviHelper {
   private lazy var moveToPersonalInfoAgreeButton = UIButton().then {
     $0.setImage(UIImage(named: "RightArrowImg"), for: .normal)
     $0.setTitleColor(.black, for: .normal)
-    $0.addAction(UIAction { _ in
-      self.moveToSafari(url: URLSet.personInfo.rawValue)
-    }, for: .touchUpInside)
+    $0.isEnabled = false
+//    $0.addAction(UIAction { _ in
+//      self.moveToSafari(url: URLSet.personInfo.rawValue)
+//    }, for: .touchUpInside)
   }
   
-  private lazy var moveToNextVCButton = uihelper.createHealfButton("다음", .lightGray, .white)
+  private lazy var moveToNextVCButton = UIHelper.shared.createHealfButton("로그인", .lightGray, .white)
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     view.backgroundColor = .white
-    
-    navigationItemSetting()
-    
-    setupLayout()
+        
     makeUI()
   }
   
-  override func navigationItemSetting() {
-    super.navigationItemSetting()
-    
-    navigationItem.rightBarButtonItem = .none
-  }
-  
-  func setupLayout(){
-    [
-      titleLabel,
-      serviceAgreeButton,
-      moveToServiceAgreeButton,
-      personalInfoAgreeButton,
-      moveToPersonalInfoAgreeButton,
-      moveToNextVCButton
-    ].forEach {
-      view.addSubview($0)
-    }
-  }
-  
   func makeUI(){
+    view.addSubview(titleLabel)
     titleLabel.snp.makeConstraints {
       $0.top.equalToSuperview().offset(150)
       $0.leading.equalToSuperview().offset(30)
     }
     
+    view.addSubview(serviceAgreeButton)
     serviceAgreeButton.snp.makeConstraints {
       $0.top.equalTo(titleLabel.snp.bottom).offset(50)
       $0.leading.equalTo(titleLabel.snp.leading)
     }
     
+    view.addSubview(moveToServiceAgreeButton)
     moveToServiceAgreeButton.snp.makeConstraints {
       $0.top.equalTo(serviceAgreeButton)
       $0.trailing.equalToSuperview().offset(-10)
     }
     
+    view.addSubview(personalInfoAgreeButton)
     personalInfoAgreeButton.snp.makeConstraints {
       $0.top.equalTo(serviceAgreeButton.snp.bottom).offset(20)
       $0.leading.equalTo(titleLabel.snp.leading)
     }
     
+    view.addSubview(moveToPersonalInfoAgreeButton)
     moveToPersonalInfoAgreeButton.snp.makeConstraints {
       $0.top.equalTo(personalInfoAgreeButton)
       $0.trailing.equalToSuperview().offset(-10)
     }
     
-    moveToNextVCButton.isEnabled = false
-    moveToNextVCButton.addAction(UIAction { _ in
-      self.moveToSignupVC()
-    }, for: .touchUpInside)
+    view.addSubview(moveToNextVCButton)
     moveToNextVCButton.snp.makeConstraints {
       $0.bottom.equalTo(view.snp.bottom).offset(-50)
       $0.leading.equalToSuperview().offset(30)
       $0.trailing.equalToSuperview().offset(-30)
       $0.height.equalTo(50)
     }
-  }
-  
-  func moveToSignupVC(){
-    let signupVC = SignuplViewController()
-    self.navigationController?.pushViewController(signupVC, animated: true)
   }
   
   @objc func agreeButtonTapped(_ sender: UIButton) {
@@ -142,9 +122,5 @@ final class UserAgreeViewController: NaviHelper {
     moveToPersonalInfoAgreeButtonEnabled = serviceAgreeButtonChecked && personalInfoAgreeButtonChecked
     moveToNextVCButton.isEnabled = moveToPersonalInfoAgreeButtonEnabled
     moveToNextVCButton.backgroundColor = moveToPersonalInfoAgreeButtonEnabled ? .mainBlue : .lightGray
-  }
-  
-  override func leftButtonTapped(_ sender: UIBarButtonItem) {
-    dismiss(animated: true)
   }
 }

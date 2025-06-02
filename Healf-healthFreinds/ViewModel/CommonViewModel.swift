@@ -69,6 +69,11 @@ class CommonViewModel {
         startDate[1] = month
       }
       // 년도 -> 월 -> 선택한 날짜의 데이터만 뽑기
+      
+      guard let uid = self.uid else {
+        return  Disposables.create()
+      }
+      
       let ref = self.ref.child("History").child(self.uid!).child(startDate[0]).child(startDate[1])
       ref.observeSingleEvent(of: .value) { snapshot in
         if let value = snapshot.value as? [String: Any] {
@@ -163,7 +168,7 @@ class CommonViewModel {
   func getUserDataFromUserDataInfo(dataType: String,
                                    uid: String,
                                    completion: @escaping (String?) -> Void) {
-    ref.child("UserDataInfo").child(uid ?? "").observeSingleEvent(of: .value) { snapshot in
+    ref.child("UserDataInfo").child(uid).observeSingleEvent(of: .value) { snapshot in
       guard let userData = snapshot.value as? [String: Any],
             let data = userData[dataType] as? String else {
         completion(nil) // 사용자 또는 위치 정보를 찾을 수 없을 때 nil 반환

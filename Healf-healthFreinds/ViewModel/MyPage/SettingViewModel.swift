@@ -40,8 +40,6 @@ class SettingViewModel: CommonViewModel {
   // 로그아웃과 같이 login화면으로 나가야함, 데이터 삭제 필요
   
   func removeAccount() {
-    // Delete other information from the database...
-    // Sign out on FirebaseAuth
     [
       "UserData",
       "UserDataInfo",
@@ -54,7 +52,6 @@ class SettingViewModel: CommonViewModel {
     getUserData(dataType: "location") { location in
       self.deleteUserData(forValue: location ?? "") { err in
         guard let error = err else {
-          print("데이터를 찾을 수 없습니다.")
           return
         }
         print("삭제완료")

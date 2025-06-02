@@ -28,7 +28,7 @@ class MypageViewModel: CommonViewModel {
   
   override init() {
     super.init()
-    updatesMyInfomation()
+//    updatesMyInfomation()
   }
   
   func updatesMyInfomation(){
@@ -177,7 +177,6 @@ class MypageViewModel: CommonViewModel {
         return
       }
       
-      //원래 56 56
       let processor = ResizingImageProcessor(referenceSize: CGSize(width: width, height: hegiht))
       
       KingfisherManager.shared.cache.removeImage(forKey: imageURL.absoluteString)
