@@ -121,22 +121,24 @@ class AppFlow: Flow {
   
   /// 로그인 화면 표시
   func loginScreenIsRequired() -> FlowContributors {
-    let viewModel: SignupViewModel = SignupViewModel(checkDuplicationUseCase: )
-    let vc = LoginViewController(viewModel)
+    let reactor = AuthDIContainer.makeLoginReactor()
+    let vc = LoginViewController()
+    vc.userAuthReactor = reactor
     rootViewController.pushViewController(vc, animated: false)
-    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: viewModel))
+    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
   }
   
   
   /// 회원가입 Flow 띄우기
   func signupScreenIsRequired() -> FlowContributors {
-    let signupFlow: AuthFlow = AuthFlow()
-    
-    Flows.use(signupFlow, when: .ready) { [unowned self] root in
-      root.modalPresentationStyle = .fullScreen
-      self.rootViewController.present(root, animated: true)
-    }
-    return .one(flowContributor: .contribute(withNextPresentable: signupFlow, withNextStepper: OneStepper(withSingleStep: AuthStep.agreementScreenIsReuqired)))
+//    let signupFlow: AuthFlow = AuthFlow(<#SignupViewModel#>)
+//
+//    Flows.use(signupFlow, when: .ready) { [unowned self] root in
+//      root.modalPresentationStyle = .fullScreen
+//      self.rootViewController.present(root, animated: true)
+//    }
+//    return .one(flowContributor: .contribute(withNextPresentable: signupFlow, withNextStepper: OneStepper(withSingleStep: AuthStep.agreementScreenIsReuqired)))
+    return .none
   }
 }
 
@@ -154,5 +156,30 @@ class AppStepper: Stepper {
   func navigate(to step: AppStep){
     self.steps.accept(step)
   }
+}
+
+
+
+final class AuthDIContainer {
+  
+  class func makeLoginReactor() -> LoginReactor {
+    return LoginReactor(loginWithEmailUseCase: makeLoginWithEmailUseCase())
+  }
+
+  private static func makeLoginWithEmailUseCase() -> LoginWithEmailUseCase {
+    return LoginWithEmailUseCaseImpl(repository: makeLoginWithEmailRepository())
+  }
+
+  private static func makeLoginWithEmailRepository() -> LoginWithEmailRepository {
+    return LoginWithEmailImpl(apiService: makeAuthNetwork())
+  }
+  
+  private static func makeAuthNetwork() -> AuthNetwork {
+    return AuthNetwork()
+  }
+  
+//  class func makeSignupWithEmailUseCase() -> SignupWithEmailUseCase {
+//    return SignupWithEmailUseCaseImpl(repository: SignupRepositoryImpl())
+//  }
 }
 

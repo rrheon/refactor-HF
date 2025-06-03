@@ -34,6 +34,10 @@
 		EE24514A2DED84C300CA1C5C /* AuthNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2451492DED84C300CA1C5C /* AuthNetwork.swift */; };
 		EE24514C2DEDDA5C00CA1C5C /* LoginWithEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE24514B2DEDDA5C00CA1C5C /* LoginWithEmailUseCase.swift */; };
 		EE24514E2DEDDCEE00CA1C5C /* LoginWithEmailImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE24514D2DEDDCEE00CA1C5C /* LoginWithEmailImpl.swift */; };
+		EE2451502DEF0BA100CA1C5C /* SignupWithEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE24514F2DEF0BA100CA1C5C /* SignupWithEmailUseCase.swift */; };
+		EE2451522DEF0DB700CA1C5C /* SignupUserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2451512DEF0DB700CA1C5C /* SignupUserEntity.swift */; };
+		EE2451542DEF0EA800CA1C5C /* SignupWithEmailImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2451532DEF0EA800CA1C5C /* SignupWithEmailImpl.swift */; };
+		EE2451682DEF29C100CA1C5C /* SignupReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2451672DEF29C100CA1C5C /* SignupReactor.swift */; };
 		EE2E08D02BEB55E70087E735 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */; };
 		EE33D44A2B99D340002BA16C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE33D4492B99D340002BA16C /* GoogleService-Info.plist */; };
 		EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */; };
@@ -129,6 +133,10 @@
 		EE2451492DED84C300CA1C5C /* AuthNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNetwork.swift; sourceTree = "<group>"; };
 		EE24514B2DEDDA5C00CA1C5C /* LoginWithEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWithEmailUseCase.swift; sourceTree = "<group>"; };
 		EE24514D2DEDDCEE00CA1C5C /* LoginWithEmailImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginWithEmailImpl.swift; sourceTree = "<group>"; };
+		EE24514F2DEF0BA100CA1C5C /* SignupWithEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupWithEmailUseCase.swift; sourceTree = "<group>"; };
+		EE2451512DEF0DB700CA1C5C /* SignupUserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupUserEntity.swift; sourceTree = "<group>"; };
+		EE2451532DEF0EA800CA1C5C /* SignupWithEmailImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupWithEmailImpl.swift; sourceTree = "<group>"; };
+		EE2451672DEF29C100CA1C5C /* SignupReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupReactor.swift; sourceTree = "<group>"; };
 		EE2E08CF2BEB55E70087E735 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		EE33D4492B99D340002BA16C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EE4E36662BA279D000FB60FC /* WriteHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteHistoryViewModel.swift; sourceTree = "<group>"; };
@@ -275,6 +283,7 @@
 		EE2451352DED6BE200CA1C5C /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				EE2451672DEF29C100CA1C5C /* SignupReactor.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -302,6 +311,7 @@
 			children = (
 				EE2451402DED7D6100CA1C5C /* CheckDuplicationUseCase.swift */,
 				EE24514B2DEDDA5C00CA1C5C /* LoginWithEmailUseCase.swift */,
+				EE24514F2DEF0BA100CA1C5C /* SignupWithEmailUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -311,6 +321,7 @@
 			children = (
 				EE2451462DED845A00CA1C5C /* CheckDuplicationImpl.swift */,
 				EE24514D2DEDDCEE00CA1C5C /* LoginWithEmailImpl.swift */,
+				EE2451532DEF0EA800CA1C5C /* SignupWithEmailImpl.swift */,
 			);
 			name = Repositories;
 			path = Respositories;
@@ -319,6 +330,7 @@
 		EE24513C2DED762C00CA1C5C /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				EE2451512DEF0DB700CA1C5C /* SignupUserEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -737,6 +749,7 @@
 				EE4E368A2BABE73A00FB60FC /* MypageViewModel.swift in Sources */,
 				EE24514E2DEDDCEE00CA1C5C /* LoginWithEmailImpl.swift in Sources */,
 				EE2450F32DD89FDD00CA1C5C /* LoginView.swift in Sources */,
+				EE2451682DEF29C100CA1C5C /* SignupReactor.swift in Sources */,
 				EE4E36822BA6F4E100FB60FC /* HomeViewModel.swift in Sources */,
 				EE2451412DED7D6100CA1C5C /* CheckDuplicationUseCase.swift in Sources */,
 				EE4E36882BA99E4D00FB60FC /* Calendar.swift in Sources */,
@@ -753,9 +766,11 @@
 				EED75DCE2B9AC76900594C68 /* ChatDetailViewModel.swift in Sources */,
 				EEC434E62B9FFC6100FED4EB /* CreatePostModel.swift in Sources */,
 				EEA8ACB72B8CDB5000FD2A72 /* UILabel+.swift in Sources */,
+				EE2451502DEF0BA100CA1C5C /* SignupWithEmailUseCase.swift in Sources */,
 				EE4E36932BB2D13700FB60FC /* MapPersonCell.swift in Sources */,
 				EE4E369B2BBE805200FB60FC /* EditMyProfileViewController.swift in Sources */,
 				EEDD81072B70D0D40022302E /* UITextField+.swift in Sources */,
+				EE2451542DEF0EA800CA1C5C /* SignupWithEmailImpl.swift in Sources */,
 				EECC03082B90CDD4003ECF95 /* PostedCell.swift in Sources */,
 				EE4E36802BA6E98C00FB60FC /* UIViewController+.swift in Sources */,
 				EE4E36842BA8330700FB60FC /* HistoryModel.swift in Sources */,
@@ -763,6 +778,7 @@
 				EE2451182DDCBFEF00CA1C5C /* HomeFlow.swift in Sources */,
 				EEC142BE2BEC56FE002FC9A7 /* SettingViewModel.swift in Sources */,
 				EE98B1D32B4FDFC30025C4F8 /* LoginViewController.swift in Sources */,
+				EE2451522DEF0DB700CA1C5C /* SignupUserEntity.swift in Sources */,
 				EE98B1CF2B4FDFC30025C4F8 /* AppDelegate.swift in Sources */,
 				EEA8ACB52B8CD70700FD2A72 /* UIHelper.swift in Sources */,
 				EE4E36672BA279D000FB60FC /* WriteHistoryViewModel.swift in Sources */,

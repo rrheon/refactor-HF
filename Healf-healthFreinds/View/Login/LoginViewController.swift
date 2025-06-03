@@ -23,13 +23,11 @@ final class LoginViewController: UIViewController {
   
   var disposeBag: DisposeBag = DisposeBag()
   
-  var signupViewModel: SignupViewModel
+  var userAuthReactor: LoginReactor?
   
   private var customView = LoginView()
   
-  init(_ viewModel : SignupViewModel){
-    self.signupViewModel = viewModel
-    
+  init(){
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -68,7 +66,7 @@ final class LoginViewController: UIViewController {
       .rx.tap
       .withUnretained(self)
       .subscribe { (vc , _ ) in
-        vc.signupViewModel.steps.accept(AppStep.signupFlowIsRequired)
+        vc.userAuthReactor?.steps.accept(AppStep.signupFlowIsRequired)
       }
       .disposed(by: disposeBag)
   }
@@ -82,17 +80,17 @@ final class LoginViewController: UIViewController {
     guard let email = customView.emailTextField.text?.description,
           let password = customView.passwordTextField.text?.description else { return }
     
-    signupViewModel.loginToHealf(email: email, password: password)
+//    userAuthReactor.loginToHealf(email: email, password: password)
   }
   
   func kakaoLoginButtonTapped(){
     waitingNetworking()
-    signupViewModel.kakaoLogin()
+//    signupViewModel.kakaoLogin()
   }
   
   // MARK: - signupButtonTapped
   func signupButtonTapped(){
-    self.signupViewModel.steps.accept(AppStep.signupFlowIsRequired)
+//    self.signupViewModel.steps.accept(AppStep.signupFlowIsRequired)
   }
   
   // 처음에 계정등록절차를 밟으면 될드
@@ -161,13 +159,13 @@ extension LoginViewController: ASAuthorizationControllerDelegate,
   
   func authorizationController(controller: ASAuthorizationController,
                                didCompleteWithAuthorization authorization: ASAuthorization) {
-    signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
-      self.loginDidSucceed {
-        UIApplication.shared.windows.first?.isUserInteractionEnabled = true
-
-        self.signupViewModel.searchUID()
-      }
-    }
+//    signupViewModel.appleLogin(authorization: authorization, currentNonce: currentNonce) {
+//      self.loginDidSucceed {
+//        UIApplication.shared.windows.first?.isUserInteractionEnabled = true
+//
+//        self.signupViewModel.searchUID()
+//      }
+//    }
   }
   
   func authorizationController(controller: ASAuthorizationController,
