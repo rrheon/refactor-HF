@@ -23,11 +23,13 @@ final class LoginViewController: UIViewController {
   
   var disposeBag: DisposeBag = DisposeBag()
   
-  var userAuthReactor: LoginReactor?
+  var reactor: LoginReactor
   
   private var customView = LoginView()
   
-  init(){
+  init(_ reactor: LoginReactor){
+    self.reactor = reactor
+    
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -40,58 +42,37 @@ final class LoginViewController: UIViewController {
     
     self.view.backgroundColor = .white
     
-    customView.loginButton
-      .rx.tap
+    customView.loginButton.rx.tap
       .withUnretained(self)
-      .filter({ vc, _ in
+      .compactMap { vc, _ in
         guard let email = vc.customView.emailTextField.text,
               let password = vc.customView.passwordTextField.text,
               !email.isEmpty,
-              !password.isEmpty else { return false }
-        return true
-      })
-      .subscribe(onNext: { vc, _ in
-        UIApplication.shared.windows.first?.isUserInteractionEnabled = false
-//        signupViewModel.loginToHealf(email: email, password: password)
-        vc.loginToHealf()
-      }, onCompleted: {
-        self.customView.activityIndicator.stopAnimating()
-        
-        self.customView.emailTextField.text = nil
-        self.customView.passwordTextField.text = nil
-      })
+              !password.isEmpty else { return nil }
+        return LoginReactor.Action.loginWithEmail(email: email, password: password)
+      }
+      .bind(to: reactor.action)
       .disposed(by: disposeBag)
-      
+
+
     customView.signupButton
       .rx.tap
-      .withUnretained(self)
-      .subscribe { (vc , _ ) in
-        vc.userAuthReactor?.steps.accept(AppStep.signupFlowIsRequired)
-      }
+      .map { LoginReactor.Action.signupBtnTapped }
+      .bind(to: reactor.action)
       .disposed(by: disposeBag)
+    
   }
   
   override func loadView() {
     self.view = customView
   }
-  
-  // 로그인 중에 다른 버튼 터치 못하게
-  func loginToHealf() {
-    guard let email = customView.emailTextField.text?.description,
-          let password = customView.passwordTextField.text?.description else { return }
-    
-//    userAuthReactor.loginToHealf(email: email, password: password)
-  }
+
   
   func kakaoLoginButtonTapped(){
     waitingNetworking()
 //    signupViewModel.kakaoLogin()
   }
-  
-  // MARK: - signupButtonTapped
-  func signupButtonTapped(){
-//    self.signupViewModel.steps.accept(AppStep.signupFlowIsRequired)
-  }
+
   
   // 처음에 계정등록절차를 밟으면 될드
   func appleLogin(){

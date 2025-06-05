@@ -27,7 +27,7 @@ enum AuthStep: Step{
 /// 회원가입 Flow
 class AuthFlow: Flow {
   
-  let viewModel: SignupViewModel
+  let reactor: SignupReactor
   
   var root: any RxFlow.Presentable {
     return rootViewController
@@ -35,9 +35,9 @@ class AuthFlow: Flow {
   
   lazy var rootViewController: UINavigationController = UINavigationController()
   
-  init(_ viewModel: SignupViewModel){
+  init(_ reactor: SignupReactor){
     print(#fileID, #function, #line, "- ")
-    self.viewModel = viewModel
+    self.reactor = reactor
   }
   
   func navigate(to step: any RxFlow.Step) -> RxFlow.FlowContributors {
@@ -58,13 +58,13 @@ class AuthFlow: Flow {
   func setupAgreementScreen() -> FlowContributors {
     let vc = UserAgreeViewController()
     rootViewController.pushViewController(vc, animated: false)
-    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: viewModel))
+    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
   }
   
   
   /// 사용자 정보 입력 화면
   func navToInputUserInfoScreen() -> FlowContributors {
-    let vc = InputUserInfoViewController(viewModel)
+    let vc = InputUserInfoViewController(reactor)
     rootViewController.pushViewController(vc, animated: true)
     return .none
   }
