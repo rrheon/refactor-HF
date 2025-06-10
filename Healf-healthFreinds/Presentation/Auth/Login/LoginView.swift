@@ -15,7 +15,7 @@ final class LoginView: UIView {
   
   /// 메인 타이틀 라벨
   private lazy var titleLabel = UILabel().then {
-    $0.text = "나만을 위한 헬스 친구 찾기,\nHeal F 🏋🏻"
+    $0.text = LabelTitle.loginTitle
     $0.textColor = .black
     $0.font = .boldSystemFont(ofSize: 16)
     $0.numberOfLines = 0
@@ -24,7 +24,7 @@ final class LoginView: UIView {
   
   /// 이메일 입력 TextField
   lazy var emailTextField = UITextField().then {
-    $0.placeholder = "이메일"
+    $0.placeholder = TextFieldPlaceholder.email
     $0.font = .systemFont(ofSize: 15)
     $0.autocorrectionType = .no
     $0.autocapitalizationType = .none
@@ -33,7 +33,7 @@ final class LoginView: UIView {
   
   /// 비밀번호 입력 TextField
   lazy var passwordTextField = UITextField().then {
-    $0.placeholder = "비밀번호"
+    $0.placeholder = TextFieldPlaceholder.password
     $0.font = .systemFont(ofSize: 15)
     $0.autocorrectionType = .no
     $0.autocapitalizationType = .none
@@ -42,20 +42,20 @@ final class LoginView: UIView {
   }
   
   /// 이메일로 로그인버튼
-  lazy var loginButton = UIHelper.shared.createHealfButton("로그인", .mainBlue, .white)
+  lazy var loginButton = UIHelper.shared.createHealfButton(BtnTitle.next, .mainBlue, .white)
   
   /// 키키오로 로그인버튼
   lazy var kakaoLoginButton = UIButton().then {
-    $0.setImage(UIImage(named: "KakaoLoginImg"), for: .normal)
+    $0.setImage(UIImage(named: BtnImages.kakaoLogin), for: .normal)
   }
   /// 애플로 로그인버튼
   lazy var appleLoginButton = UIButton().then {
-    $0.setImage(UIImage(named: "AppleLoginImg"), for: .normal)
+    $0.setImage(UIImage(named: BtnImages.appleLogin), for: .normal)
   }
   
   /// 회원가입
   lazy var signupButton = UIButton().then {
-    $0.setTitle("이메일로 회원가입", for: .normal)
+    $0.setTitle(BtnTitle.signup, for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.setUnderline(.gray)
   }

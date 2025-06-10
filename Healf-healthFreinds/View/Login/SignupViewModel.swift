@@ -23,86 +23,7 @@ protocol LoginViewModelDelegate: AnyObject {
   func loginDidFail(with error: Error)
 }
 
-/// LoginReactor
-/// - 사용자 로그인 리액터
-final class LoginReactor: Reactor, Stepper {
-  var steps: PublishRelay = PublishRelay<Step>()
-  
-  private let loginWithEmailUseCase: LoginWithEmailUseCase
-  
-  // 사용자와의 interaction
-  enum Action {
-    case userEmail(text: String)
-    case userPassword(text: String)
-    case loginWithEmail
-//    case loginWithKakao
-//    case signupWithKakao
-//    case loginWithApple
-//    case signupWithApple
-  }
-  
-  // Router 내에서 값 가공
-  enum Mutation {
-    case setEmail(String)
-    case setPassword(String)
-    case setLoginResult(Bool)
-    case setError(String)
-  }
-  
-  // 화면에 보여줄 정보
-  struct State {
-    var userEmail: String?
-    var userPassword: String?
-    var isLoginSuccess: Bool?
-    var errorMessage: String?
-  }
 
-  var initialState: State
-
-  init(loginWithEmailUseCase: LoginWithEmailUseCase) {
-    self.loginWithEmailUseCase = loginWithEmailUseCase
-    self.initialState = State()
-  }
-  
-  // Action -> Mutation
-  func mutate(action: Action) -> Observable<Mutation> {
-    switch action {
-      
-    case .loginWithEmail:
-      guard let email = currentState.userEmail,
-            let password = currentState.userPassword else {
-        return .just(Mutation.setLoginResult(false))
-      }
-      
-      return loginWithEmailUseCase.execute(email: email, password: password)
-        .asObservable()
-        .map { Mutation.setLoginResult($0) }
-        .catch { .just(.setError($0.localizedDescription)) }
-      
-    case .userEmail(let text):
-      return .just(.setEmail(text))
-      
-    case .userPassword(let text):
-      return .just(.setPassword(text))
-    }
-  }
-  
-  // Mutation -> State
-  func reduce(state: State, mutation: Mutation) -> State {
-    var newState = state
-    switch mutation {
-    case .setEmail(let text):
-      newState.userEmail = text
-    case .setPassword(let text):
-      newState.userPassword = text
-    case .setLoginResult(let result):
-      newState.isLoginSuccess = result
-    case .setError(let message):
-      newState.errorMessage = message
-    }
-    return state
-  }
-}
 
 class SignupViewModel: CommonViewModel, Stepper {
   var steps: RxRelay.PublishRelay<any RxFlow.Step> = PublishRelay()
@@ -115,7 +36,7 @@ class SignupViewModel: CommonViewModel, Stepper {
     self.checkDuplicationUseCase = checkDuplicationUseCase
   }
   
-  /// 중복 체크 함수 ( 이메일, 닉네임 ) ㅇㅋ
+  /// 중복 체크 함수 ( 이메일, 닉네임 )
   /// - Parameters:
   ///   - checkType: nickname, email
   ///   - checkValue: 중복여부를 체크할 값

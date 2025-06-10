@@ -48,7 +48,7 @@ final class LoginViewController: UIViewController {
         guard let email = vc.customView.emailTextField.text,
               let password = vc.customView.passwordTextField.text,
               !email.isEmpty,
-              !password.isEmpty else { return nil }
+              !password.isEmpty else { return nil ㅋㅋ}
         return LoginReactor.Action.loginWithEmail(email: email, password: password)
       }
       .bind(to: reactor.action)
@@ -60,6 +60,7 @@ final class LoginViewController: UIViewController {
       .map { LoginReactor.Action.signupBtnTapped }
       .bind(to: reactor.action)
       .disposed(by: disposeBag)
+
     
   }
   

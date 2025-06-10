@@ -19,20 +19,20 @@ final class CompleteSignupViewController: UIViewController {
   var disposeBag: DisposeBag = DisposeBag()
   
   private lazy var completedSignupImage = UIImageView().then {
-    $0.image = UIImage(named: "CompleteSignupImg")
+    $0.image = UIImage(named: BtnImages.completedSignupBtn)
   }
   
   private lazy var mainImageView = UIImageView().then {
-    $0.image = UIImage(named: "MainTitleImg")
+    $0.image = UIImage(named: BtnImages.completedSingupMainImg)
   }
   
   private lazy var mainTitleLabel = UILabel().then {
-    $0.text =  "가입을 완료했어요 🎉\n로그인하여 운동친구를 찾아보세요."
+    $0.text =  LabelTitle.completedSignupTitle
     $0.textColor = .black
     $0.font = .boldSystemFont(ofSize: 17)
   }
   
-  private lazy var startButton = UIHelper.shared.createHealfButton("시작하기", .mainBlue, .white)
+  private lazy var startButton = UIHelper.shared.createHealfButton(BtnTitle.startBtn, .mainBlue, .white)
 
   // MARK: - viewDidLoad
   
@@ -48,7 +48,7 @@ final class CompleteSignupViewController: UIViewController {
     // 회원가입 Flow 종료
     startButton.rx.tap
       .subscribe(onDisposed: {
-        self.navigationController?.dismiss(animated: true)
+        self.dismiss(animated: true)
       })
       .disposed(by: disposeBag)
   }

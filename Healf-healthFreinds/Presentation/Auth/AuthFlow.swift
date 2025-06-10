@@ -16,10 +16,11 @@ import RxRelay
 
 
 /// 회원가입 Step
-enum AuthStep: Step{
+enum AuthStep: Step {
   case agreementScreenIsReuqired  // 약관동의화면
   case inputUserInfoScreenIsReuqired  // 유저정보입력화면
   case completeSignupIsRequired   // 회원가입완료화면
+  case safariScreenIsRequired(url: String) // 사파리화면
 }
 
 // MARK: Flow
@@ -49,23 +50,41 @@ class AuthFlow: Flow {
     case .inputUserInfoScreenIsReuqired:
       return navToInputUserInfoScreen()
     case .completeSignupIsRequired:
-      return .none
+      return navToCompletedSignupScreen()
+    case .safariScreenIsRequired(let url):
+      return presentSafariScreen(url: url)
     }
   }
   
   
   /// 이용약관 동의화면
-  func setupAgreementScreen() -> FlowContributors {
-    let vc = UserAgreeViewController()
+  private func setupAgreementScreen() -> FlowContributors {
+    let vc = UserAgreeViewController(reactor)
     rootViewController.pushViewController(vc, animated: false)
     return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
   }
   
   
   /// 사용자 정보 입력 화면
-  func navToInputUserInfoScreen() -> FlowContributors {
+  private func navToInputUserInfoScreen() -> FlowContributors {
     let vc = InputUserInfoViewController(reactor)
     rootViewController.pushViewController(vc, animated: true)
+    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+  }
+  
+  /// 회원가입 완료 화면
+  private func navToCompletedSignupScreen() -> FlowContributors {
+    let vc = CompleteSignupViewController()
+    rootViewController.pushViewController(vc, animated: true)
+    return .none
+  }
+  
+  /// 사파리 화면 띄우기 - 개인정보처리방침, 서비스이용약관, 개발자연락
+  /// - Parameter url: 이동할 url
+  private func presentSafariScreen(url: String) -> FlowContributors {
+    guard let url = URL(string: url) else { return .none }
+    let urlView = SFSafariViewController(url: url)
+    self.rootViewController.present(urlView, animated: true)
     return .none
   }
   

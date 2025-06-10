@@ -22,7 +22,7 @@ final class AuthNetwork {
   ///   - checkType: nickname, email
   ///   - checkValue: 중복여부를 체크할 값
   func checkDuplication(checkType: DuplicationCheckType,
-                              checkValue: String) -> Single<Bool> {
+                        checkValue: String) -> Single<Bool> {
     return Single.create { single in
       let ref = Database.database().reference()
 

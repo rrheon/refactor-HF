@@ -15,6 +15,10 @@ enum BtnImages {
   static let kakaoLogin = "KakaoLoginImg"
   static let appleLogin = "AppleLoginImg"
   static let backBtn = "backButtonImg"
+  
+  static let completedSignupBtn = "CompleteSignupImg"
+  static let completedSingupMainImg = "MainTitleImg"
+  
 }
 
 

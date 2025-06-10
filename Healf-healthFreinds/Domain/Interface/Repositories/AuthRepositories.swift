@@ -22,7 +22,6 @@ protocol LoginWithEmailRepository {
   func loginWithEmail(email: String, password: String) -> Single<Bool>
 }
 
-
 /// 이메일로 회원가입 InterfaceRepository
 protocol SignupWithEmailRepository {
   func signupWithEmail(userData: SignupUserEntity) -> Single<Bool>

@@ -39,7 +39,7 @@ class SettingViewController: NaviHelper {
     $0.setTitle(" 개인정보 처리방침", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-      self.moveToSafari(url: URLSet.personInfo.rawValue)
+//      self.moveToSafari(url: URLSet.personInfo.rawValue)
     }, for: .touchUpInside)
   }
   
@@ -48,7 +48,7 @@ class SettingViewController: NaviHelper {
     $0.setTitle(" 서비스 이용방침", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-      self.moveToSafari(url: URLSet.seriveInfo.rawValue)
+//      self.moveToSafari(url: URLSet.seriveInfo.rawValue)
     }, for: .touchUpInside)
   }
   
@@ -57,7 +57,7 @@ class SettingViewController: NaviHelper {
     $0.setTitle(" 문의하기", for: .normal)
     $0.setTitleColor(.black, for: .normal)
     $0.addAction(UIAction { _ in
-      self.moveToSafari(url: URLSet.contact.rawValue)
+//      self.moveToSafari(url: URLSet.contact.rawValue)
     }, for: .touchUpInside)
   }
   

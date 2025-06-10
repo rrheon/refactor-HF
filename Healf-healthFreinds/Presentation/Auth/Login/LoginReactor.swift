@@ -61,8 +61,16 @@ final class LoginReactor: Reactor, Stepper {
       
       return loginWithEmailUseCase.execute(email: email, password: password)
         .asObservable()
-        .map { Mutation.setLoginResult($0) }
-        .catch { .just(.setError($0.localizedDescription)) }
+        .map { sucess -> LoginReactor.Mutation in
+          if sucess {
+            self.steps.accept(AppStep.mainTabIsRequired)
+          }
+          
+          return .setError("로그인실패")
+        }
+        .catch { _ in
+          return .just(.setLoginResult(false))
+        }
       
     case .signupBtnTapped:
       self.steps.accept(AppStep.signupFlowIsRequired)

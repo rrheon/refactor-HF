@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension Notification.Name {
+  
+  /// 사파리  화면으로 이동
+  static let navToSafariScreen = Notification.Name("navToSafariScreen")
+}

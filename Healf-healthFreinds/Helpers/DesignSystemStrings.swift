@@ -13,6 +13,7 @@ enum BtnTitle {
   static let personalInfoAgreement = " [필수] 개인정보 수집 및 이용 동의"
   static let next = "다음"
   static let signup = "이메일로 회원가입"
+  static let startBtn = "시작하기"
 }
 
 
@@ -20,7 +21,8 @@ enum BtnTitle {
 enum LabelTitle {
   static let loginTitle = "나만을 위한 헬스 친구 찾기,\nHeal F 🏋🏻"
   static let userAgreementTitle = "이용약관에 동의해주세요\n서비스 이용을 위해서 약관 동의가 필요해요"
-  static let inputEmail = "사용하실 이메일 주소를 입력해주세요."
+  static let inputEmail = "이메일로 회원가입"
+  static let completedSignupTitle = "가입을 완료했어요 🎉\n로그인하여 운동친구를 찾아보세요."
   
 }
 
@@ -30,5 +32,8 @@ enum TextFieldPlaceholder {
   static let email = "이메일"
   static let password = "비밀번호"
   static let inputEmail = "이메일을 입력해주세요."
-  static let inputPassword = "비밀번호를 다시 입력해주세요."
+  static let inputPassword = "비밀번호를 입력해주세요."
+  static let inputCheckPassword = "비밀번호를 다시 입력해주세요."
+  static let inputNickname = "사용하실 닉네임을 입력해주세요."
+
 }
