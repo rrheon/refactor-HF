@@ -250,17 +250,17 @@ class SettingViewController: NaviHelper {
   }
   
   func showPopupView(_ desc: String, action: (() -> Void)?) {
-    let popupVC = PopupViewController(title: "✅",
-                                      desc: desc,
-                                      rightButtonTilte: "확인",
-                                      checkCompleteButton: false)
-    popupVC.modalPresentationStyle = .overFullScreen
-    popupVC.popupView.rightButtonAction = { [weak self] in
-      self?.dismiss(animated: true) {
-        action?()
-      }
-    }
-    self.present(popupVC, animated: false)
+//    let popupVC = PopupViewController(title: "✅",
+//                                      desc: desc,
+//                                      rightButtonTilte: "확인",
+//                                      checkCompleteButton: false)
+//    popupVC.modalPresentationStyle = .overFullScreen
+//    popupVC.popupView.rightButtonAction = { [weak self] in
+//      self?.dismiss(animated: true) {
+//        action?()
+//      }
+//    }
+//    self.present(popupVC, animated: false)
   }
   
   @objc func settingOptions(){

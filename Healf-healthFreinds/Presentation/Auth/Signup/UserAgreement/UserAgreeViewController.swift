@@ -20,7 +20,8 @@ final class UserAgreeViewController: UIViewController {
   
   let disposeBag: DisposeBag = DisposeBag()
   
-  var reactor: SignupReactor
+  private let stepper: AuthStepper
+  private let reactor: UserAgreementReactor
   
   private lazy var titleLabel = UILabel().then {
     $0.text = LabelTitle.userAgreementTitle
@@ -56,8 +57,9 @@ final class UserAgreeViewController: UIViewController {
   
   private lazy var nextButton = UIHelper.shared.createHealfButton(BtnTitle.next, .lightGray, .white)
   
-  init(_ reactor: SignupReactor) {
+  init(reactor: UserAgreementReactor, stepper: AuthStepper) {
     self.reactor = reactor
+    self.stepper = stepper
     
     super.init(nibName: nil, bundle: nil)
   }
@@ -117,33 +119,34 @@ final class UserAgreeViewController: UIViewController {
     }
   }
   
-  private func bind(reactor: SignupReactor) {
+  private func bind(reactor: UserAgreementReactor) {
     // 서비스이용약관 동의버튼
     serviceAgreeButton.rx.tap
-      .map { SignupReactor.Action.toggleServiceAgree }
+      .map { UserAgreementReactor.Action.toggleServiceAgree }
       .bind(to: reactor.action)
       .disposed(by: disposeBag)
     
     moveToServicePageButton.rx.tap
-      .map { SignupReactor.Action.servicePageTapped }
+      .map { UserAgreementReactor.Action.servicePageTapped }
       .bind(to: reactor.action)
       .disposed(by: disposeBag)
     
     // 개인정보활용 동의버튼
     personalInfoAgreeButton.rx.tap
-      .map { SignupReactor.Action.togglePersonalAgree }
+      .map { UserAgreementReactor.Action.togglePersonalAgree }
       .bind(to: reactor.action)
       .disposed(by: disposeBag)
 
     moveToPersonalInfoPageButton.rx.tap
-      .map { SignupReactor.Action.personalInfoPageTapped }
+      .map { UserAgreementReactor.Action.personalInfoPageTapped }
       .bind(to: reactor.action)
       .disposed(by: disposeBag)
     
     // 다음 버튼
     nextButton.rx.tap
-      .map { SignupReactor.Action.nextBtnTapped }
-      .bind(to: reactor.action)
+      .subscribe(onNext: { _ in
+        self.stepper.steps.accept(AuthStep.inputUserInfoScreenIsRequired)
+      })
       .disposed(by: disposeBag)
     
     
@@ -156,6 +159,14 @@ final class UserAgreeViewController: UIViewController {
     reactor.state
       .map { $0.isPersonalAgreed }
       .bind(to: personalInfoAgreeButton.rx.isSelected )
+      .disposed(by: disposeBag)
+    
+    reactor.state
+      .compactMap(\.url)
+      .distinctUntilChanged()
+      .subscribe(onNext: { url in
+        self.stepper.steps.accept(AuthStep.safariScreenIsRequired(url: url))
+      })
       .disposed(by: disposeBag)
     
     reactor.state

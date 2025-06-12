@@ -23,13 +23,15 @@ final class LoginViewController: UIViewController {
   
   var disposeBag: DisposeBag = DisposeBag()
   
-  var reactor: LoginReactor
+  private let stepper: AppStepper
+  private let reactor: LoginReactor
   
   private var customView = LoginView()
   
-  init(_ reactor: LoginReactor){
+  init(reactor: LoginReactor, stepper: AppStepper){
+    self.stepper = stepper
     self.reactor = reactor
-    
+
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -42,13 +44,15 @@ final class LoginViewController: UIViewController {
     
     self.view.backgroundColor = .white
     
-    customView.loginButton.rx.tap
+    customView.loginButton
+      .rx.tap
       .withUnretained(self)
+      .throttle(.milliseconds(1000), scheduler: MainScheduler.instance)
       .compactMap { vc, _ in
         guard let email = vc.customView.emailTextField.text,
               let password = vc.customView.passwordTextField.text,
               !email.isEmpty,
-              !password.isEmpty else { return nil ㅋㅋ}
+              !password.isEmpty else { return nil }
         return LoginReactor.Action.loginWithEmail(email: email, password: password)
       }
       .bind(to: reactor.action)
@@ -57,11 +61,19 @@ final class LoginViewController: UIViewController {
 
     customView.signupButton
       .rx.tap
-      .map { LoginReactor.Action.signupBtnTapped }
-      .bind(to: reactor.action)
+      .subscribe(onNext: { _ in
+        self.stepper.steps.accept(AppStep.signupFlowIsRequired)
+      })
       .disposed(by: disposeBag)
 
-    
+    reactor.state
+      .compactMap(\.isLoginSuccess)
+      .subscribe(onNext: { isLoginSuccess in
+        print("login sucess - \(isLoginSuccess)")
+        let nextStep: AppStep = isLoginSuccess ? .mainTabIsRequired : .popupScreenIsRequired(type: .failToLogin)
+        self.stepper.steps.accept(nextStep)
+      })
+      .disposed(by: disposeBag)
   }
   
   override func loadView() {
@@ -105,33 +117,6 @@ final class LoginViewController: UIViewController {
   }
 }
 
-extension LoginViewController: LoginViewModelDelegate {
-  
-  // MARK: - LoginViewModelDelegate
-  
-  func loginDidSucceed(completion: @escaping () -> Void) {
-//    let tapbarcontroller = TabBarController()
-//    tapbarcontroller.modalPresentationStyle = .fullScreen
-//    self.present(tapbarcontroller, animated: true, completion: nil)
-//    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
-//
-//    completion()
-//    
-  }
-  
-  func loginDidFail(with error: Error) {
-    [
-      customView.emailTextField,
-      customView.passwordTextField
-    ].forEach {
-      $0.resignFirstResponder()
-    }
-    
-    UIApplication.shared.windows.first?.isUserInteractionEnabled = true
-
-    showPopupViewWithOnebuttonAndDisappearVC("아이디,비밀번호를 확인해주세요")
-  }
-}
 
 extension LoginViewController: ASAuthorizationControllerDelegate,
                                ASAuthorizationControllerPresentationContextProviding {
@@ -156,3 +141,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate,
     print("Sign in with Apple errored: \(error)")
   }
 }
+
+// MARK: 팝업뷰 Delegate
+
+extension LoginViewController: PopupViewDelegate {}

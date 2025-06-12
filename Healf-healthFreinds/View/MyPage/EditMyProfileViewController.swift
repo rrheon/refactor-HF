@@ -258,25 +258,25 @@ extension EditMyProfileViewController: BottomSheetDelegate {
   }
   
   func showAccessDeniedAlert() {
-    let popupVC = PopupViewController(
-      title: "사진을 변경하려면 허용이 필요해요",
-      desc: "",
-      leftButtonTitle: "취소",
-      rightButtonTilte: "설정"
-    )
-    
-    popupVC.popupView.leftButtonAction = {
-      self.dismiss(animated: true, completion: nil)
-    }
-    
-    popupVC.popupView.rightButtonAction = {
-      self.dismiss(animated: true) {
-        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-        UIApplication.shared.open(settingsURL)
-      }
-    }
-    popupVC.modalPresentationStyle = .overFullScreen
-    self.present(popupVC, animated: false)
+//    let popupVC = PopupViewController(
+//      title: "사진을 변경하려면 허용이 필요해요",
+//      desc: "",
+//      leftButtonTitle: "취소",
+//      rightButtonTilte: "설정"
+//    )
+//    
+//    popupVC.popupView.leftButtonAction = {
+//      self.dismiss(animated: true, completion: nil)
+//    }
+//    
+//    popupVC.popupView.rightButtonAction = {
+//      self.dismiss(animated: true) {
+//        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+//        UIApplication.shared.open(settingsURL)
+//      }
+//    }
+//    popupVC.modalPresentationStyle = .overFullScreen
+//    self.present(popupVC, animated: false)
   }
 }
 

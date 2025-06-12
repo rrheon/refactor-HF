@@ -238,19 +238,19 @@ final class HomeViewController: NaviHelper {
   
   // MARK: - startButtonTapped
   @objc func startButtonTapped(){
-    let popupVC = PopupViewController(title: "💪🏾",
-                                      desc: "오늘 운동을 기록할까요?")
-    popupVC.modalPresentationStyle = .overFullScreen
-    popupVC.popupView.rightButtonAction = { [weak self] in
-      guard let self = self else { return }
-      self.dismiss(animated: true) {
-        let writeHistoryVC = WriteHistoryViewController()
-        writeHistoryVC.delegate = self
-        writeHistoryVC.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(writeHistoryVC, animated: true)
-      }
-    }
-    self.present(popupVC, animated: false)
+//    let popupVC = PopupViewController(title: "💪🏾",
+//                                      desc: "오늘 운동을 기록할까요?")
+//    popupVC.modalPresentationStyle = .overFullScreen
+//    popupVC.popupView.rightButtonAction = { [weak self] in
+//      guard let self = self else { return }
+//      self.dismiss(animated: true) {
+//        let writeHistoryVC = WriteHistoryViewController()
+//        writeHistoryVC.delegate = self
+//        writeHistoryVC.hidesBottomBarWhenPushed = true
+//        self.navigationController?.pushViewController(writeHistoryVC, animated: true)
+//      }
+//    }
+//    self.present(popupVC, animated: false)
   }
   
   func bindViewModel() {

@@ -52,6 +52,9 @@ enum AppStep: Step {
   /// 회원가입 Flow
   case signupFlowIsRequired
   
+  /// 팝업뷰 띄우기
+  case popupScreenIsRequired(type: PopupCase)
+  
   /// 사파리 화면 띄우기
   case safariScreenIsRequired(url: String)
 }
@@ -79,6 +82,8 @@ class AppFlow: Flow {
       return loginScreenIsRequired()
     case .signupFlowIsRequired:
       return signupScreenIsRequired()
+    case .popupScreenIsRequired(let type):
+      return presentPopupScreen(with: type)
     case .safariScreenIsRequired(let url):
       return presentSafariScreen(url: url)
     }
@@ -127,22 +132,39 @@ class AppFlow: Flow {
   
   /// 로그인 화면 표시
   func loginScreenIsRequired() -> FlowContributors {
+    let stepper: AppStepper = AppStepper()
     let reactor: LoginReactor = AuthDIContainer.makeLoginReactor()
-    let vc = LoginViewController(reactor)
+    let vc = LoginViewController(reactor: reactor, stepper: stepper)
     rootViewController.pushViewController(vc, animated: false)
-    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: stepper))
   }
   
   
   /// 회원가입 Flow 띄우기
   func signupScreenIsRequired() -> FlowContributors {
-    let signupFlow: AuthFlow = AuthFlow(AuthDIContainer.makeSignupWithEmailReactor())
+    let signupFlow: AuthFlow = AuthFlow()
     Flows.use(signupFlow, when: .ready) { [unowned self] root in
       root.modalPresentationStyle = .fullScreen
       self.rootViewController.present(root, animated: true)
     }
     return .one(flowContributor: .contribute(withNextPresentable: signupFlow,
-                                             withNextStepper: OneStepper(withSingleStep: AuthStep.agreementScreenIsReuqired)))
+                                             withNextStepper: OneStepper(withSingleStep: AuthStep.agreementScreenIsRequired)))
+  }
+  
+  
+  /// 팝업 뷰 띄우기
+  /// - Parameter popupCase: 팝업의 종류
+  func presentPopupScreen(with popupCase: PopupCase) -> FlowContributors {
+    let popupVC = PopupViewController(with: popupCase)
+    
+    if let topVC = topMostViewController(),
+       let delegateVC = topVC as? PopupViewDelegate {
+      popupVC.popupView.delegate = delegateVC
+    }
+    
+    popupVC.modalPresentationStyle = .overFullScreen
+    self.rootViewController.present(popupVC, animated: false)
+    return .none
   }
   
   /// 사파리 화면 띄우기
@@ -180,7 +202,18 @@ class AppStepper: Stepper {
         .rx
         .notification(.navToSafariScreen)
         .compactMap { $0.userInfo?["url"] as? String  }
-        .map { AppStep.safariScreenIsRequired(url: $0) }
+        .map { AppStep.safariScreenIsRequired(url: $0) },
+      
+      /// popupView 띄우기
+      NotificationCenter.default
+        .rx
+        .notification(.presentPopupScreen)
+        .compactMap { notification in
+          guard let popupCase = notification.userInfo?["popupCase"] as? PopupCase else {
+            return nil
+          }
+          return AppStep.popupScreenIsRequired(type: popupCase)
+        }
     )
     .bind(to: self.steps)
     .disposed(by: disposBag)

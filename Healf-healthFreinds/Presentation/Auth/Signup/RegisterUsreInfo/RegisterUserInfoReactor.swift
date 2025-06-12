@@ -7,29 +7,20 @@
 
 import Foundation
 
-import RxFlow
 import RxSwift
 import RxRelay
 import ReactorKit
 
 
-/// SignupReactor
-/// - 사용자 회원가입 리액터
-final class SignupReactor: Reactor, Stepper {
-  
-  var steps: PublishRelay = PublishRelay<Step>()
-  
+/// RegisterUserInfoReactor
+/// - 사용자 정보 등록 리액터
+final class RegisterUserInfoReactor: Reactor {
+    
   private let checkDuplicationUseCase: CheckDuplicationUseCase
   private let signupWithEmailUseCase: SignupWithEmailUseCase
   
   // 사용자와의 interaction
   enum Action {
-    case toggleServiceAgree
-    case togglePersonalAgree
-    case servicePageTapped
-    case personalInfoPageTapped
-    case nextBtnTapped
-    
     case userEmail(String)
     case userPassword(String)
     case userNickname(String)
@@ -39,8 +30,6 @@ final class SignupReactor: Reactor, Stepper {
   
   // Reactor 내에서 값 가공
   enum Mutation {
-    case setServiceAgree(Bool)
-    case setPersonalAgree(Bool)
     case setUserEmail(String)
     case setUserPassword(String)
     case setUserNickname(String)
@@ -52,10 +41,6 @@ final class SignupReactor: Reactor, Stepper {
   
   // 화면에 보여줄 정보
   struct State {
-    var isServiceAgreed: Bool = false
-    var isPersonalAgreed: Bool = false
-    var isNextEnable: Bool { isServiceAgreed && isPersonalAgreed }
-    
     var userEmail: String?
     var userPassword: String?
     var userNickname: String?
@@ -88,24 +73,7 @@ final class SignupReactor: Reactor, Stepper {
   // Action -> Mutation
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .toggleServiceAgree:
-      return .just(.setServiceAgree(!currentState.isServiceAgreed))
-      
-    case .togglePersonalAgree:
-      return .just(.setPersonalAgree(!currentState.isPersonalAgreed))
-      
-    case .servicePageTapped:
-      return moveToSafari(url: UrlType.seriveInfo)
-      
-    case .personalInfoPageTapped:
-      return moveToSafari(url: UrlType.personInfo)
-      
-    case .nextBtnTapped:
-      steps.accept(AuthStep.inputUserInfoScreenIsReuqired)
-      return .empty()
-      
-      
-      // 사용자의 이메일이 들어왔을 경우
+    // 사용자의 이메일이 들어왔을 경우
     case .userEmail(let email):
       let isValid = Validators.checkValidEmail(email: email)
       // 이메일 형식 검사
@@ -174,7 +142,7 @@ final class SignupReactor: Reactor, Stepper {
                                                      password: password,
                                                      nickname: nickname)
       
-      // 성공 시 화면전환 , 실패 시 팝업 띄우기
+      // 성공 시 화면전환 , 실패 시 팝업 띄우
       return signupWithEmailUseCase.execute(userData: value)
         .asObservable()
         .map { Mutation.setSignupResult($0) }
@@ -186,10 +154,6 @@ final class SignupReactor: Reactor, Stepper {
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
     switch mutation {
-    case .setServiceAgree(let agreed):
-      newState.isServiceAgreed = agreed
-    case .setPersonalAgree(let agreed):
-      newState.isPersonalAgreed = agreed
     case .setValidtaion(let result):
       newState.validationMessagee = result
     case .setSignupResult(let result):
@@ -206,16 +170,5 @@ final class SignupReactor: Reactor, Stepper {
       newState.isEqualPassword = result
     }
     return newState
-  }
-  
-  
-  /// 사파리화면으로 이동
-  /// - Parameter url: urlType (서비스이용약관, 개인정보처리방침, 개발자연락)
-  private func moveToSafari(url: String) -> Observable<Mutation> {
-    guard let url = DataLoaderFromPlist.loadURLs()?[url] else {
-      return .empty()
-    }
-    steps.accept(AuthStep.safariScreenIsRequired(url: url))
-    return .empty()
   }
 }

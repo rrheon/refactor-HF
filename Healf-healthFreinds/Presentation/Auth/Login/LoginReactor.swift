@@ -61,15 +61,8 @@ final class LoginReactor: Reactor, Stepper {
       
       return loginWithEmailUseCase.execute(email: email, password: password)
         .asObservable()
-        .map { sucess -> LoginReactor.Mutation in
-          if sucess {
-            self.steps.accept(AppStep.mainTabIsRequired)
-          }
-          
-          return .setError("로그인실패")
-        }
-        .catch { _ in
-          return .just(.setLoginResult(false))
+        .map { sucess in
+          Mutation.setLoginResult(sucess)
         }
       
     case .signupBtnTapped:
@@ -88,6 +81,6 @@ final class LoginReactor: Reactor, Stepper {
     case .setError(let message):
       newState.errorMessage = message
     }
-    return state
+    return newState
   }
 }

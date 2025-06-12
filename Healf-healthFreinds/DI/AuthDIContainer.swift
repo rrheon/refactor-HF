@@ -27,9 +27,9 @@ final class AuthDIContainer {
     return AuthNetwork()
   }
   
-  /// SignupReactor 주입
-  class func makeSignupWithEmailReactor() -> SignupReactor {
-    return SignupReactor(checkDuplicationUseCase: makeCheckDuplicationUseCase(),
+  /// RegisterUserInfoReactor 주입
+  class func makeSignupWithEmailReactor() -> RegisterUserInfoReactor {
+    return RegisterUserInfoReactor(checkDuplicationUseCase: makeCheckDuplicationUseCase(),
                          signupWithEmailUseCase: makeSignupWithEmailUseCase())
   }
   

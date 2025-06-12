@@ -92,5 +92,10 @@ final class AuthTextField: UIView {
     validationLabel.text = message
     validationLabel.isHidden = isHidden
   }
+  
+  /// TextField secure 처리
+  func setSecureTextField(){
+    self.textField.isSecureTextEntry = true
+  }
 }
 

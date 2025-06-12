@@ -17,8 +17,9 @@ import RxRelay
 
 /// 회원가입 Step
 enum AuthStep: Step {
-  case agreementScreenIsReuqired  // 약관동의화면
-  case inputUserInfoScreenIsReuqired  // 유저정보입력화면
+  case agreementScreenIsRequired  // 약관동의화면
+  case inputUserInfoScreenIsRequired  // 유저정보입력화면
+  case popupScreenIsRequired(type: PopupCase) // 팝업화면
   case completeSignupIsRequired   // 회원가입완료화면
   case safariScreenIsRequired(url: String) // 사파리화면
 }
@@ -28,7 +29,7 @@ enum AuthStep: Step {
 /// 회원가입 Flow
 class AuthFlow: Flow {
   
-  let reactor: SignupReactor
+  private let stepper: AuthStepper
   
   var root: any RxFlow.Presentable {
     return rootViewController
@@ -36,40 +37,44 @@ class AuthFlow: Flow {
   
   lazy var rootViewController: UINavigationController = UINavigationController()
   
-  init(_ reactor: SignupReactor){
+  init(){
     print(#fileID, #function, #line, "- ")
-    self.reactor = reactor
+    self.stepper = AuthStepper()
   }
   
   func navigate(to step: any RxFlow.Step) -> RxFlow.FlowContributors {
     guard let step = step as? AuthStep else { return .none }
     
     switch step {
-    case .agreementScreenIsReuqired:
+    case .agreementScreenIsRequired:
       return setupAgreementScreen()
-    case .inputUserInfoScreenIsReuqired:
+    case .inputUserInfoScreenIsRequired:
       return navToInputUserInfoScreen()
     case .completeSignupIsRequired:
       return navToCompletedSignupScreen()
     case .safariScreenIsRequired(let url):
       return presentSafariScreen(url: url)
+    case .popupScreenIsRequired(let type):
+      return presentPopupScreen(with: type)
     }
   }
   
   
   /// 이용약관 동의화면
   private func setupAgreementScreen() -> FlowContributors {
-    let vc = UserAgreeViewController(reactor)
+    let reactor: UserAgreementReactor = UserAgreementReactor()
+    let vc = UserAgreeViewController(reactor: reactor, stepper: stepper)
     rootViewController.pushViewController(vc, animated: false)
-    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: stepper))
   }
   
   
   /// 사용자 정보 입력 화면
   private func navToInputUserInfoScreen() -> FlowContributors {
-    let vc = InputUserInfoViewController(reactor)
+    let reactor: RegisterUserInfoReactor = AuthDIContainer.makeSignupWithEmailReactor()
+    let vc = RegisterUserInfoViewController(reactor: reactor, stepper: stepper)
     rootViewController.pushViewController(vc, animated: true)
-    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: reactor))
+    return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: stepper))
   }
   
   /// 회원가입 완료 화면
@@ -78,6 +83,22 @@ class AuthFlow: Flow {
     rootViewController.pushViewController(vc, animated: true)
     return .none
   }
+  
+  /// 팝업 뷰 띄우기
+  /// - Parameter popupCase: 팝업의 종류
+  func presentPopupScreen(with popupCase: PopupCase) -> FlowContributors {
+    let popupVC = PopupViewController(with: popupCase)
+    
+    if let topVC = topMostViewController(),
+       let delegateVC = topVC as? PopupViewDelegate {
+      popupVC.popupView.delegate = delegateVC
+    }
+    
+    popupVC.modalPresentationStyle = .overFullScreen
+    self.rootViewController.present(popupVC, animated: false)
+    return .none
+  }
+  
   
   /// 사파리 화면 띄우기 - 개인정보처리방침, 서비스이용약관, 개발자연락
   /// - Parameter url: 이동할 url
@@ -98,7 +119,7 @@ class AuthStepper: Stepper {
   let steps: RxRelay.PublishRelay<any RxFlow.Step> = PublishRelay()
   
   var initialStep: Step {
-    return AuthStep.agreementScreenIsReuqired
+    return AuthStep.agreementScreenIsRequired
   }
   
   func navigate(to step: AppStep) {

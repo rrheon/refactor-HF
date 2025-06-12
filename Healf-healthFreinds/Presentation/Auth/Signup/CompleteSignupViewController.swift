@@ -44,11 +44,13 @@ final class CompleteSignupViewController: UIViewController {
     
     makeUI()
     
+    self.navigationController?.navigationBar.isHidden = true
+    
     // 시작버튼 탭
     // 회원가입 Flow 종료
     startButton.rx.tap
-      .subscribe(onDisposed: {
-        self.dismiss(animated: true)
+      .subscribe(onNext: {
+        self.navigationController?.dismiss(animated: true)
       })
       .disposed(by: disposeBag)
   }
@@ -76,10 +78,9 @@ final class CompleteSignupViewController: UIViewController {
     
     view.addSubview(startButton)
     startButton.snp.makeConstraints {
-      $0.bottom.equalToSuperview().offset(-150)
-      $0.centerX.equalToSuperview()
-      $0.leading.trailing.equalTo(mainTitleLabel)
-      $0.height.equalTo(50)
+      $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+      $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+      $0.height.equalTo(48)
     }
   }
 }
